@@ -1,7 +1,9 @@
+// Functionality: Employee Model (structure for Employee Data)
 import 'package:flutter/material.dart';
 import 'employee_model.dart';
 import 'profile_edit_page.dart';
 import 'package:uuid/uuid.dart';
+import 'api_service.dart'; // Adjust the path as needed
 
 class EmployeeListPage extends StatefulWidget {
   const EmployeeListPage({super.key});
@@ -11,45 +13,34 @@ class EmployeeListPage extends StatefulWidget {
 }
 
 class _EmployeeListPageState extends State<EmployeeListPage> {
-  final List<Employee> employees = [
-    Employee(
-      id: const Uuid().v4(),
-      firstName: 'John Paul',
-      middleName: 'Delos Reyes',
-      lastName: 'Polendey',
-      suffix: '',
-      nickname: 'JP',
-      birthday: 'Nov 26',
-      age: 'Secret',
-      birthPlace: 'Badoc, Ilocos Norte',
-      civilStatus: 'Single',
-      companyEmail: 'creatives03@kelinph.com',
-      personalEmail: 'johnpaulpolendey22@gmail.com',
-      mobileNumber: '',
-      permanentAddress: 'Caloocan City',
-      temporaryAddress: 'N/A',
-      mother: 'Maribel Delos Reyes',
-      father: 'Mark Zuckerberg',
-      brother: 'Christian Polendey',
-      college: 'UCC',
-      shs: 'OLFU',
-      highSchool: 'BHS',
-      bankName: 'John Paul D. Polendey',
-      bankNumber: '**** **** **** ****',
-      eeId: 'KG-0751',
-      position: 'Front-End Dev.',
-      department: 'MIS',
-      dateHired: '08 - 13 - 2024',
-      dateRegular: '01 - 09 - 2025',
-      employmentStatus: 'Regular',
-      supervisor: 'Joyce S. Cambel',
-      familyMembers: [
-        {'relation': 'Mother', 'name': 'Maribel Delos Reyes'},
-        {'relation': 'Father', 'name': 'Mark Zuckerberg'},
-        {'relation': 'Brother', 'name': 'Christian Polendey'},
-      ],
-    ),
-  ];
+  final List<Employee> employees = [];
+  bool isLoading = true;
+  String? errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchEmployees();
+  }
+
+  Future<void> fetchEmployees() async {
+    try {
+      final fetchedEmployees = await ApiService().fetchAllEmployees();
+      setState(() {
+        employees.clear();
+        employees.addAll(fetchedEmployees);
+        isLoading = false;
+      });
+    } catch (e, stack) {
+      print("Fetch Error: $e");
+      print("Stack Trace: $stack");
+
+      setState(() {
+        errorMessage = "Exception: $e";
+        isLoading = false;
+      });
+    }
+  }
 
   void addOrUpdateEmployee(Employee emp) {
     setState(() {
@@ -97,38 +88,45 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Employee Directory')),
-      body: ListView.builder(
-        itemCount: employees.length,
-        itemBuilder: (context, index) {
-          final emp = employees[index];
-          return ListTile(
-            title: Text('${emp.firstName} ${emp.lastName}'),
-            subtitle: Text(emp.position),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit, color: Colors.blue),
-                  onPressed: () async {
-                    final updatedEmp = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ProfileEditPage(employee: emp),
-                      ),
-                    );
-                    if (updatedEmp != null) addOrUpdateEmployee(updatedEmp);
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => confirmDelete(context, emp),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+      appBar: AppBar(title: const Text("Employees")),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : errorMessage != null
+              ? Center(child: Text("Error: $errorMessage"))
+              : employees.isEmpty
+                  ? const Center(child: Text("No employees found."))
+                  : ListView.builder(
+                      itemCount: employees.length,
+                      itemBuilder: (context, index) {
+                        final emp = employees[index];
+
+                        return ListTile(
+                          title: Text("${emp.firstName} ${emp.lastName}"),
+                          subtitle: Text("${emp.position} - ${emp.department}"),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                onPressed: () async {
+                                  final updatedEmp = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => ProfileEditPage(employee: emp),
+                                    ),
+                                  );
+                                  if (updatedEmp != null) addOrUpdateEmployee(updatedEmp);
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () => confirmDelete(context, emp),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {
