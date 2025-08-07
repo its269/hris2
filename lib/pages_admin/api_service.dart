@@ -5,6 +5,9 @@ import 'employee_model.dart';
 class ApiService {
   // ⚠️ Use http://10.0.2.2 if testing on Android Emulator!
   final String apiUrl = "http://10.0.2.2";
+  
+  // For actual device or web, use your server's IP or domain
+  // final String apiUrl = "http://your-server-ip-or-domain";
 
   Future<Map<String, dynamic>?> signIn(String username, String password) async {
     try {
