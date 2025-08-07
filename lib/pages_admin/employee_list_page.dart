@@ -1,9 +1,7 @@
-// Functionality: Employee Model (structure for Employee Data)
 import 'package:flutter/material.dart';
 import 'employee_model.dart';
 import 'profile_edit_page.dart';
-import 'package:uuid/uuid.dart';
-import 'api_service.dart'; // Adjust the path as needed
+import 'api_service.dart';
 
 class EmployeeListPage extends StatefulWidget {
   const EmployeeListPage({super.key});
@@ -23,6 +21,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     fetchEmployees();
   }
 
+  // Fetch employees from API
   Future<void> fetchEmployees() async {
     try {
       final fetchedEmployees = await ApiService().fetchAllEmployees();
@@ -42,23 +41,48 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     }
   }
 
-  void addOrUpdateEmployee(Employee emp) {
-    setState(() {
-      final index = employees.indexWhere((e) => e.id == emp.id);
-      if (index >= 0) {
-        employees[index] = emp;
+  // Add or Update employee via API
+  void addOrUpdateEmployee(Employee emp) async {
+    final api = ApiService();
+    final index = employees.indexWhere((e) => e.id == emp.id);
+    bool success;
+
+    if (index >= 0) {
+      success = await api.updateEmployee(emp);
+      if (success) {
+        setState(() {
+          employees[index] = emp;
+        });
       } else {
-        employees.add(emp);
+        _showSnackBar("Failed to update employee");
       }
-    });
+    } else {
+      success = await api.addEmployee(emp);
+      if (success) {
+        setState(() {
+          employees.add(emp);
+        });
+      } else {
+        _showSnackBar("Failed to add employee");
+      }
+    }
   }
 
-  void deleteEmployee(String id) {
-    setState(() {
-      employees.removeWhere((e) => e.id == id);
-    });
+  // Delete employee
+  void deleteEmployee(String id) async {
+    final api = ApiService();
+    bool success = await api.deleteEmployee(id);
+
+    if (success) {
+      setState(() {
+        employees.removeWhere((e) => e.id == id);
+      });
+    } else {
+      _showSnackBar("Failed to delete employee");
+    }
   }
 
+  // Show confirmation dialog before delete
   Future<void> confirmDelete(BuildContext context, Employee emp) async {
     final confirm = await showDialog<bool>(
       context: context,
@@ -85,6 +109,14 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     }
   }
 
+  // Show snackbar
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  // UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,30 +131,34 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                       itemCount: employees.length,
                       itemBuilder: (context, index) {
                         final emp = employees[index];
-
-                        return ListTile(
-                          title: Text("${emp.firstName} ${emp.lastName}"),
-                          subtitle: Text("${emp.position} - ${emp.department}"),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.blue),
-                                onPressed: () async {
-                                  final updatedEmp = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => ProfileEditPage(employee: emp),
-                                    ),
-                                  );
-                                  if (updatedEmp != null) addOrUpdateEmployee(updatedEmp);
-                                },
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
-                                onPressed: () => confirmDelete(context, emp),
-                              ),
-                            ],
+                        return Card(
+                          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          child: ListTile(
+                            title: Text("${emp.firstName} ${emp.lastName}"),
+                            subtitle: Text("${emp.position} - ${emp.department}"),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit, color: Colors.blue),
+                                  onPressed: () async {
+                                    final updatedEmp = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => ProfileEditPage(employee: emp),
+                                      ),
+                                    );
+                                    if (updatedEmp != null) {
+                                      addOrUpdateEmployee(updatedEmp);
+                                    }
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () => confirmDelete(context, emp),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -134,7 +170,9 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
             context,
             MaterialPageRoute(builder: (_) => const ProfileEditPage()),
           );
-          if (newEmp != null) addOrUpdateEmployee(newEmp);
+          if (newEmp != null) {
+            addOrUpdateEmployee(newEmp);
+          }
         },
       ),
     );

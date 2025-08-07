@@ -1,16 +1,15 @@
-// API Service overall
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'employee_model.dart'; 
+import 'employee_model.dart';
 
 class ApiService {
   // ⚠️ Use http://10.0.2.2 if testing on Android Emulator!
-  final String apiUrl = "http://10.0.2.2/login.php";
+  final String apiUrl = "http://10.0.2.2";
 
   Future<Map<String, dynamic>?> signIn(String username, String password) async {
     try {
       final response = await http.post(
-        Uri.parse(apiUrl),
+        Uri.parse('$apiUrl/login.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'username': username, 'password': password}),
       );
@@ -29,7 +28,7 @@ class ApiService {
   }
 
   Future<List<Employee>> fetchAllEmployees() async {
-    final url = Uri.parse('http://10.0.2.2/employee.php'); // Use 10.0.2.2 for localhost in emulator
+    final url = Uri.parse('$apiUrl/employee.php');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -40,4 +39,33 @@ class ApiService {
     }
   }
 
+  Future<bool> addEmployee(Employee emp) async {
+    final response = await http.post(
+      Uri.parse('$apiUrl/employee.php'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(emp.toJson()),
+    );
+
+    return response.statusCode == 200;
+  }
+
+  Future<bool> updateEmployee(Employee emp) async {
+    final response = await http.put(
+      Uri.parse('$apiUrl/employee.php'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(emp.toJson()),
+    );
+
+    return response.statusCode == 200;
+  }
+
+  Future<bool> deleteEmployee(String id) async {
+    final response = await http.delete(
+      Uri.parse('$apiUrl/employee.php'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'id': id}),
+    );
+
+    return response.statusCode == 200;
+  }
 }
