@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'employee_model.dart';
 import 'package:uuid/uuid.dart';
+import 'employee_model.dart';
+import 'api_service.dart';
 
 class ProfileEditPage extends StatefulWidget {
   final Employee? employee;
@@ -16,7 +17,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   final _uuid = const Uuid();
 
   late Map<String, TextEditingController> controllers;
-
   List<Map<String, dynamic>> familyMembers = [];
 
   @override
@@ -59,7 +59,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       'supervisor': TextEditingController(text: emp?.supervisor ?? ''),
     };
 
-    // Sample initialization if needed
     familyMembers = emp?.familyMembers ?? [];
   }
 
@@ -71,7 +70,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     super.dispose();
   }
 
-  void save() {
+  Future<void> _save() async {
     if (_formKey.currentState!.validate()) {
       final emp = Employee(
         id: widget.employee?.id ?? _uuid.v4(),
@@ -89,9 +88,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         mobileNumber: controllers['mobileNumber']!.text,
         permanentAddress: controllers['permanentAddress']!.text,
         temporaryAddress: controllers['temporaryAddress']!.text,
-        mother: '', // deprecated
-        father: '', // deprecated
-        brother: '', // deprecated
+        mother: '',
+        father: '',
+        brother: '',
         college: controllers['college']!.text,
         shs: controllers['shs']!.text,
         highSchool: controllers['highSchool']!.text,
@@ -107,11 +106,19 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         familyMembers: familyMembers,
       );
 
-      Navigator.pop(context, emp);
+      if (widget.employee == null) {
+        await ApiService.addEmployee(emp);
+      } else {
+        await ApiService.updateEmployee(emp);
+      }
+
+      if (mounted) {
+        Navigator.pop(context, emp);
+      }
     }
   }
 
-  Widget buildField(
+  Widget _buildField(
     String label,
     String key, {
     TextInputType inputType = TextInputType.text,
@@ -122,7 +129,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         controller: controllers[key],
         decoration: InputDecoration(
           labelText: label,
-          border: const OutlineInputBorder(),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
         ),
         keyboardType: inputType,
         validator: (value) =>
@@ -131,30 +140,32 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 
-  Widget buildDateField(String label, String key) {
+  Widget _buildDateField(String label, String key) {
     return GestureDetector(
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
           context: context,
           initialDate:
-              DateTime.tryParse(controllers[key]?.text ?? '') ?? DateTime(1990),
+              DateTime.tryParse(controllers[key]?.text ?? '') ?? DateTime.now(),
           firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
+          lastDate: DateTime(2101),
         );
         if (pickedDate != null) {
-          controllers[key]?.text = pickedDate
-              .toIso8601String()
-              .split('T')
-              .first;
+          setState(() {
+            controllers[key]?.text = pickedDate
+                .toIso8601String()
+                .split('T')
+                .first;
+          });
         }
       },
       child: AbsorbPointer(
-        child: buildField(label, key, inputType: TextInputType.datetime),
+        child: _buildField(label, key, inputType: TextInputType.datetime),
       ),
     );
   }
 
-  Widget buildFamilyField(int index) {
+  Widget _buildFamilyField(int index) {
     return Row(
       children: [
         Expanded(
@@ -163,7 +174,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             value: familyMembers[index]['relation'],
             decoration: const InputDecoration(
               labelText: 'Relation',
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
             ),
             items: ['Mother', 'Father', 'Brother', 'Sister', 'Spouse', 'Child']
                 .map(
@@ -187,7 +200,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             initialValue: familyMembers[index]['name'],
             decoration: const InputDecoration(
               labelText: 'Name',
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
             ),
             onChanged: (value) {
               familyMembers[index]['name'] = value;
@@ -223,50 +238,55 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               ExpansionTile(
                 initiallyExpanded: true,
                 leading: const Icon(Icons.person),
-                title: const Text("Personal Information"),
+                title: const Text(
+                  "Personal Information",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 children: [
                   const SizedBox(height: 5),
-                  buildField('First Name', 'firstName'),
-                  buildField('Middle Name', 'middleName'),
-                  buildField('Last Name', 'lastName'),
-                  buildField('Suffix', 'suffix'),
-                  buildField('Nickname', 'nickname'),
-                  buildDateField('Birthday', 'birthday'),
-                  buildField('Age', 'age', inputType: TextInputType.number),
-                  buildField('Birth Place', 'birthPlace'),
-                  buildField('Civil Status', 'civilStatus'),
-                  buildField(
+                  _buildField('First Name', 'firstName'),
+                  _buildField('Middle Name', 'middleName'),
+                  _buildField('Last Name', 'lastName'),
+                  _buildField('Suffix', 'suffix'),
+                  _buildField('Nickname', 'nickname'),
+                  _buildDateField('Birthday', 'birthday'),
+                  _buildField('Age', 'age', inputType: TextInputType.number),
+                  _buildField('Birth Place', 'birthPlace'),
+                  _buildField('Civil Status', 'civilStatus'),
+                  _buildField(
                     'Company Email',
                     'companyEmail',
                     inputType: TextInputType.emailAddress,
                   ),
-                  buildField(
+                  _buildField(
                     'Personal Email',
                     'personalEmail',
                     inputType: TextInputType.emailAddress,
                   ),
-                  buildField(
+                  _buildField(
                     'Mobile Number',
                     'mobileNumber',
                     inputType: TextInputType.phone,
                   ),
-                  buildField('Permanent Address', 'permanentAddress'),
-                  buildField('Temporary Address', 'temporaryAddress'),
+                  _buildField('Permanent Address', 'permanentAddress'),
+                  _buildField('Temporary Address', 'temporaryAddress'),
                 ],
               ),
               ExpansionTile(
                 leading: const Icon(Icons.family_restroom),
-                title: const Text("Family"),
+                title: const Text(
+                  "Family",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 children: [
                   const SizedBox(height: 5),
                   ...List.generate(
                     familyMembers.length,
                     (index) => Padding(
                       padding: const EdgeInsets.only(bottom: 10.0),
-                      child: buildFamilyField(index),
+                      child: _buildFamilyField(index),
                     ),
                   ),
-
                   const SizedBox(height: 8),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -284,45 +304,59 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               ),
               ExpansionTile(
                 leading: const Icon(Icons.school),
-                title: const Text("Education"),
+                title: const Text(
+                  "Education",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 children: [
                   const SizedBox(height: 5),
-                  buildField('College', 'college'),
-                  buildField('SHS', 'shs'),
-                  buildField('High School', 'highSchool'),
+                  _buildField('College', 'college'),
+                  _buildField('SHS', 'shs'),
+                  _buildField('High School', 'highSchool'),
                 ],
               ),
               ExpansionTile(
                 leading: const Icon(Icons.account_balance),
-                title: const Text("Bank Information"),
+                title: const Text(
+                  "Bank Information",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 children: [
                   const SizedBox(height: 5),
-                  buildField('Bank Name', 'bankName'),
-                  buildField('Bank Number', 'bankNumber'),
+                  _buildField('Bank Name', 'bankName'),
+                  _buildField('Bank Number', 'bankNumber'),
                 ],
               ),
               ExpansionTile(
                 leading: const Icon(Icons.work),
-                title: const Text("Employment Info"),
+                title: const Text(
+                  "Employment Info",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 children: [
                   const SizedBox(height: 5),
-                  buildField('EE ID', 'eeId'),
-                  buildField('Position', 'position'),
-                  buildField('Department', 'department'),
-                  buildDateField('Date Hired', 'dateHired'),
-                  buildDateField('Date Regular', 'dateRegular'),
-                  buildField('Employment Status', 'employmentStatus'),
-                  buildField('Immediate Supervisor', 'supervisor'),
+                  _buildField('EE ID', 'eeId'),
+                  _buildField('Position', 'position'),
+                  _buildField('Department', 'department'),
+                  _buildDateField('Date Hired', 'dateHired'),
+                  _buildDateField('Date Regular', 'dateRegular'),
+                  _buildField('Employment Status', 'employmentStatus'),
+                  _buildField('Immediate Supervisor', 'supervisor'),
                 ],
               ),
               const SizedBox(height: 24),
               ElevatedButton.icon(
-                onPressed: save,
+                onPressed: _save,
                 icon: Icon(isEdit ? Icons.save : Icons.add),
                 label: Text(isEdit ? 'Update Profile' : 'Add Employee'),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(50),
                   textStyle: const TextStyle(fontSize: 16),
+                  backgroundColor: Colors.blueAccent,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
             ],
@@ -332,5 +366,3 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 }
-
-extension on Employee? {}
