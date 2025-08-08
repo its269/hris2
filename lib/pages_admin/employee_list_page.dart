@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'employee_model.dart';
 import 'profile_edit_page.dart';
-import 'employee_api_service.dart';
+import 'package:uuid/uuid.dart';
 
 class EmployeeListPage extends StatefulWidget {
   const EmployeeListPage({super.key});
@@ -11,21 +11,64 @@ class EmployeeListPage extends StatefulWidget {
 }
 
 class _EmployeeListPageState extends State<EmployeeListPage> {
-  late Future<List<Employee>> _employeesFuture;
+  final List<Employee> employees = [
+    Employee(
+      id: const Uuid().v4(),
+      firstName: 'John Paul',
+      middleName: 'Delos Reyes',
+      lastName: 'Polendey',
+      suffix: '',
+      nickname: 'JP',
+      birthday: 'Nov 26',
+      age: 'Secret',
+      birthPlace: 'Badoc, Ilocos Norte',
+      civilStatus: 'Single',
+      companyEmail: 'creatives03@kelinph.com',
+      personalEmail: 'johnpaulpolendey22@gmail.com',
+      mobileNumber: '',
+      permanentAddress: 'Caloocan City',
+      temporaryAddress: 'N/A',
+      mother: 'Maribel Delos Reyes',
+      father: 'Mark Zuckerberg',
+      brother: 'Christian Polendey',
+      college: 'UCC',
+      shs: 'OLFU',
+      highSchool: 'BHS',
+      bankName: 'John Paul D. Polendey',
+      bankNumber: '**** **** **** ****',
+      eeId: 'KG-0751',
+      position: 'Front-End Dev.',
+      department: 'MIS',
+      dateHired: '08 - 13 - 2024',
+      dateRegular: '01 - 09 - 2025',
+      employmentStatus: 'Regular',
+      supervisor: 'Joyce S. Cambel',
+      familyMembers: [
+        {'relation': 'Mother', 'name': 'Maribel Delos Reyes'},
+        {'relation': 'Father', 'name': 'Mark Zuckerberg'},
+        {'relation': 'Brother', 'name': 'Christian Polendey'},
+      ],
+    ),
+  ];
 
-  @override
-  void initState() {
-    super.initState();
-    _employeesFuture = ApiService.fetchEmployees();
-  }
-
-  void _refreshEmployeeList() {
+  void addOrUpdateEmployee(Employee emp) {
     setState(() {
-      _employeesFuture = ApiService.fetchEmployees();
+      final index = employees.indexWhere((e) => e.id == emp.id);
+      if (index >= 0) {
+        employees[index] = emp;
+      } else {
+        employees.add(emp);
+      }
     });
   }
 
-  Future<void> _confirmDelete(BuildContext context, Employee emp) async {
+  void deleteEmployee(String id) {
+    setState(() {
+      employees.removeWhere((e) => e.id == id);
+    });
+  }
+
+  Future<void> confirmDelete(BuildContext context, Employee emp) async {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -47,8 +90,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     );
 
     if (confirm == true) {
-      await ApiService.deleteEmployee(emp.id);
-      _refreshEmployeeList();
+      deleteEmployee(emp.id);
     }
   }
 
@@ -56,78 +98,46 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Employee Directory')),
-      body: FutureBuilder<List<Employee>>(
-        future: _employeesFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No employees found.'));
-          } else {
-            final employees = snapshot.data!;
-            return ListView.builder(
-              itemCount: employees.length,
-              itemBuilder: (context, index) {
-                final emp = employees[index];
-                return Card(
-                  elevation: 2,
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    title: Text(
-                      '${emp.firstName} ${emp.lastName}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(emp.position),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.blue),
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => ProfileEditPage(employee: emp),
-                              ),
-                            );
-                            _refreshEmployeeList();
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => _confirmDelete(context, emp),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          }
+      body: ListView.builder(
+        itemCount: employees.length,
+        itemBuilder: (context, index) {
+          final emp = employees[index];
+          return ListTile(
+            title: Text('${emp.firstName} ${emp.lastName}'),
+            subtitle: Text(emp.position),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit, color: Colors.blue),
+                  onPressed: () async {
+                    final updatedEmp = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ProfileEditPage(employee: emp),
+                      ),
+                    );
+                    if (updatedEmp != null) addOrUpdateEmployee(updatedEmp);
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () => confirmDelete(context, emp),
+                ),
+              ],
+            ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueAccent,
+        child: const Icon(Icons.add),
         onPressed: () async {
-          await Navigator.push(
+          final newEmp = await Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => const ProfileEditPage()),
           );
-          _refreshEmployeeList();
+          if (newEmp != null) addOrUpdateEmployee(newEmp);
         },
-        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

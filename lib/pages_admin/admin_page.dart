@@ -4,6 +4,7 @@ import '../pages_employee/training_page.dart';
 import 'policy_page.dart';
 import 'hr_page.dart';
 import 'employee_list_page.dart';
+import 'admin_approval_page.dart';
 import '../main.dart'; // Assuming MyApp is here
 
 // Placeholder notification page
@@ -44,6 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return const PolicyPage();
       case 'HR Related Forms':
         return const HRPage();
+      case 'Request':
+        return const AdminApprovalPage();
       default:
         return const Center(child: Text('Page Not Found'));
     }
@@ -128,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _buildDrawerItem(Icons.school, 'Training Portal'),
             _buildDrawerItem(Icons.policy, 'Corporate Policy'),
             _buildDrawerItem(Icons.people_alt, 'HR Related Forms'),
+            _buildDrawerItem(Icons.people_alt, 'Request'),
 
             // Log out option
             ListTile(

@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 class Employee {
   final String id;
   final String firstName;
@@ -69,48 +66,40 @@ class Employee {
   });
 
   factory Employee.fromJson(Map<String, dynamic> json) {
-    List<Map<String, dynamic>> members = [];
-    if (json['familyMembers'] != null && json['familyMembers'].isNotEmpty) {
-      try {
-        final List<dynamic> familyList = jsonDecode(json['familyMembers']);
-        members = familyList.cast<Map<String, dynamic>>();
-      } catch (e) {
-        print('Failed to parse familyMembers: $e');
-      }
-    }
-
     return Employee(
-      id: json['id'] as String,
-      firstName: json['firstName'] as String,
-      middleName: json['middleName'] as String,
-      lastName: json['lastName'] as String,
-      suffix: json['suffix'] as String,
-      nickname: json['nickname'] as String,
-      birthday: json['birthday'] as String,
-      age: json['age'] as String,
-      birthPlace: json['birthPlace'] as String,
-      civilStatus: json['civilStatus'] as String,
-      companyEmail: json['companyEmail'] as String,
-      personalEmail: json['personalEmail'] as String,
-      mobileNumber: json['mobileNumber'] as String,
-      permanentAddress: json['permanentAddress'] as String,
-      temporaryAddress: json['temporaryAddress'] as String,
-      mother: json['mother'] as String,
-      father: json['father'] as String,
-      brother: json['brother'] as String,
-      college: json['college'] as String,
-      shs: json['shs'] as String,
-      highSchool: json['highSchool'] as String,
-      bankName: json['bankName'] as String,
-      bankNumber: json['bankNumber'] as String,
-      eeId: json['eeId'] as String,
-      position: json['position'] as String,
-      department: json['department'] as String,
-      dateHired: json['dateHired'] as String,
-      dateRegular: json['dateRegular'] as String,
-      employmentStatus: json['employmentStatus'] as String,
-      supervisor: json['supervisor'] as String,
-      familyMembers: members,
+      id: json['id'],
+      firstName: json['firstName'],
+      middleName: json['middleName'],
+      lastName: json['lastName'],
+      suffix: json['suffix'],
+      nickname: json['nickname'],
+      birthday: json['birthday'],
+      age: json['age'],
+      birthPlace: json['birthPlace'],
+      civilStatus: json['civilStatus'],
+      companyEmail: json['companyEmail'],
+      personalEmail: json['personalEmail'],
+      mobileNumber: json['mobileNumber'],
+      permanentAddress: json['permanentAddress'],
+      temporaryAddress: json['temporaryAddress'],
+      mother: json['mother'],
+      father: json['father'],
+      brother: json['brother'],
+      college: json['college'],
+      shs: json['shs'],
+      highSchool: json['highSchool'],
+      bankName: json['bankName'],
+      bankNumber: json['bankNumber'],
+      eeId: json['eeId'],
+      position: json['position'],
+      department: json['department'],
+      dateHired: json['dateHired'],
+      dateRegular: json['dateRegular'],
+      employmentStatus: json['employmentStatus'],
+      supervisor: json['supervisor'],
+      familyMembers: List<Map<String, dynamic>>.from(
+        json['familyMembers'] ?? [],
+      ),
     );
   }
 
@@ -146,7 +135,7 @@ class Employee {
       'dateRegular': dateRegular,
       'employmentStatus': employmentStatus,
       'supervisor': supervisor,
-      'familyMembers': jsonEncode(familyMembers),
+      'familyMembers': familyMembers,
     };
   }
 }

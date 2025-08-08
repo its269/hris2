@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'leave_status.dart';
 
 class RequestLeavePage extends StatefulWidget {
@@ -45,22 +47,39 @@ class _RequestLeavePageState extends State<RequestLeavePage> {
     }
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      print("Leave Type: $_leaveType");
-      print("Start Date: $_startDate");
-      print("End Date: $_endDate");
-      print("Reason: $_reason");
+      final url = Uri.parse(
+        'http://10.0.2.2/submit_leave.php',
+      ); // Use '10.0.2.2' for Android emulator
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'leave_type': _leaveType,
+          'start_date': _formatDate(_startDate),
+          'end_date': _formatDate(_endDate),
+          'reason': _reason,
+        }),
+      );
 
-      setState(() {
-        _status = "Pending Approval";
-      });
+      final data = jsonDecode(response.body);
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Leave Request Submitted')));
+      if (data['success']) {
+        setState(() {
+          _status = "Pending Approval";
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Leave Request Submitted')),
+        );
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: ${data['message']}')));
+      }
     }
   }
 
@@ -98,7 +117,6 @@ class _RequestLeavePageState extends State<RequestLeavePage> {
               ),
               const SizedBox(height: 16),
 
-              // Start Date Picker
               ListTile(
                 title: const Text('Start Date'),
                 subtitle: Text(
@@ -111,7 +129,6 @@ class _RequestLeavePageState extends State<RequestLeavePage> {
               ),
               const SizedBox(height: 8),
 
-              // End Date Picker
               ListTile(
                 title: const Text('End Date'),
                 subtitle: Text(
