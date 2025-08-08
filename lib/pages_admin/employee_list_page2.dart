@@ -39,6 +39,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
       bankNumber: '**** **** **** ****',
       eeId: 'KG-0751',
       position: 'Front-End Dev.',
+      branch: 'Main Branch',
       department: 'MIS',
       dateHired: '08 - 13 - 2024',
       dateRegular: '01 - 09 - 2025',

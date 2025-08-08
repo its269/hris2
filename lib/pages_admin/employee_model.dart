@@ -24,6 +24,7 @@ class Employee {
   final String bankNumber;
   final String eeId;
   final String position;
+  final String branch;
   final String department;
   final String dateHired;
   final String dateRegular;
@@ -57,6 +58,7 @@ class Employee {
     required this.bankNumber,
     required this.eeId,
     required this.position,
+    required this.branch,
     required this.department,
     required this.dateHired,
     required this.dateRegular,
@@ -92,6 +94,7 @@ class Employee {
       bankNumber: json['bankNumber'] ?? '',
       eeId: json['eeId'] ?? '',
       position: json['position'] ?? '',
+      branch: json['branch'] ?? '',
       department: json['department'] ?? '',
       dateHired: json['dateHired'] ?? '',
       dateRegular: json['dateRegular'] ?? '',

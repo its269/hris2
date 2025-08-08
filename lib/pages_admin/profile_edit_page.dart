@@ -100,6 +100,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         bankNumber: controllers['bankNumber']!.text,
         eeId: controllers['eeId']!.text,
         position: controllers['position']!.text,
+        branch: controllers['branch']!.text,
         department: controllers['department']!.text,
         dateHired: controllers['dateHired']!.text,
         dateRegular: controllers['dateRegular']!.text,
