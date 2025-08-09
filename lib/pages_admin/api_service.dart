@@ -9,27 +9,30 @@ class ApiService {
   // For actual device or web, use your server's IP or domain
   // final String apiUrl = "http://your-server-ip-or-domain";
 
-  Future<Map<String, dynamic>?> signIn(String username, String password) async {
+  // Sign in method
+  Future<Map<String, dynamic>?> signIn(String employeeId, String password) async {
+    final url = Uri.parse("$apiUrl/login.php");
     try {
       final response = await http.post(
-        Uri.parse('$apiUrl/login.php'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'username': username, 'password': password}),
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"EmployeeID": employeeId, "password": password}),
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data != null && data['username'] != null) {
-          return {'username': data['username'], 'role': data['role']};
-        }
+        return jsonDecode(response.body);
+      } else {
+        print("Login failed: ${response.body}");
+        return null;
       }
     } catch (e) {
-      print("API Error: $e");
+      print("Error in signIn: $e");
+      return null;
     }
-
-    return null;
   }
 
+
+  // Fetch all employees
   Future<List<Employee>> fetchAllEmployees() async {
     final url = Uri.parse('$apiUrl/employee.php');
     final response = await http.get(url);
@@ -42,6 +45,7 @@ class ApiService {
     }
   }
 
+  // Add a new employee
   Future<bool> addEmployee(Employee emp) async {
     final response = await http.post(
       Uri.parse('$apiUrl/employee.php'),
@@ -52,6 +56,7 @@ class ApiService {
     return response.statusCode == 200;
   }
 
+  // Update an existing employee
   Future<bool> updateEmployee(Employee emp) async {
     final response = await http.put(
       Uri.parse('$apiUrl/employee.php'),
@@ -62,13 +67,27 @@ class ApiService {
     return response.statusCode == 200;
   }
 
+  // Delete an employee by ID
   Future<bool> deleteEmployee(String id) async {
     final response = await http.delete(
       Uri.parse('$apiUrl/employee.php'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'id': id}),
+      body: jsonEncode({'EmployeeID': id}),
     );
 
     return response.statusCode == 200;
+  }
+
+  // Fetch attendance records with leave status
+  Future<List<Map<String, dynamic>>> fetchAttendanceWithLeave() async {
+    final url = Uri.parse("http://10.0.2.2/attendance.php"); 
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(data);
+    } else {
+      throw Exception('Failed to fetch attendance data');
+    }
   }
 }

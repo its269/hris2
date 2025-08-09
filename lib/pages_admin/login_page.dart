@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hris/pages_admin/attendance_page.dart';
 import 'api_service.dart';
 import 'admin_page.dart';
 import '../pages_employee/user_page.dart';
@@ -11,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _usernameController = TextEditingController();
+  final _employeeIdController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -23,23 +24,39 @@ class _LoginPageState extends State<LoginPage> {
       _errorMessage = null;
     });
 
+    final employeeId = _employeeIdController.text.trim();
+    final password = _passwordController.text;
+
+    if (employeeId.isEmpty || password.isEmpty) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = "Please enter both Employee ID and password";
+      });
+      return;
+    }
+
     final api = ApiService();
-    final result = await api.signIn(
-      _usernameController.text.trim(),
-      _passwordController.text,
-    );
+    final result = await api.signIn(employeeId, password);
 
     setState(() {
       _isLoading = false;
     });
 
     if (result != null) {
-      if (result['role'] == 'admin') {
+      final role = result['role'] ?? '';
+      final employeeId = result['EmployeeID'] ?? '';
+
+      if (role == 'Admin') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MyHomePage()),
+          MaterialPageRoute(
+            builder: (_) => MyHomePage(
+              role: role,
+              employeeId: employeeId,
+            ),
+          ),
         );
-      } else if (result['role'] == 'user') {
+      } else if (role == 'Employee') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const UserPage()),
@@ -47,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
       setState(() {
-        _errorMessage = "Invalid username or password";
+        _errorMessage = "Invalid Employee ID or password";
       });
     }
   }
@@ -82,12 +99,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 32),
 
-              // Username Field
+              // Employee ID Field
               TextField(
-                controller: _usernameController,
+                controller: _employeeIdController,
                 decoration: InputDecoration(
-                  labelText: 'Username',
-                  prefixIcon: const Icon(Icons.person),
+                  labelText: 'Employee ID',
+                  prefixIcon: const Icon(Icons.badge),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

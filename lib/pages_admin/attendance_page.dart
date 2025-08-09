@@ -24,24 +24,24 @@ class _AttendancePageState extends State<AttendancePage> {
     Branch(
       name: "Kelin Graphics System - Main",
       departments: [
-        Department(name: "IT", students: generateStudents()),
-        Department(name: "Marketing", students: generateStudents()),
-        Department(name: "Accounting", students: generateStudents()),
-        Department(name: "E - Commerce", students: generateStudents()),
+        Department(name: "IT", Employees: generateStudents()),
+        Department(name: "Marketing", Employees: generateStudents()),
+        Department(name: "Accounting", Employees: generateStudents()),
+        Department(name: "E - Commerce", Employees: generateStudents()),
       ],
     ),
     Branch(
       name: "Kelin Graphics System - CDO",
       departments: [
-        Department(name: "HR", students: generateStudents()),
-        Department(name: "Finance", students: generateStudents()),
+        Department(name: "HR", Employees: generateStudents()),
+        Department(name: "Finance", Employees: generateStudents()),
       ],
     ),
     Branch(
       name: "Kelin Graphics System - Davao",
       departments: [
-        Department(name: "Sales", students: generateStudents()),
-        Department(name: "Support", students: generateStudents()),
+        Department(name: "Sales", Employees: generateStudents()),
+        Department(name: "Support", Employees: generateStudents()),
       ],
     ),
   ];
@@ -49,13 +49,13 @@ class _AttendancePageState extends State<AttendancePage> {
   Branch? selectedBranch;
   Department? selectedDepartment;
 
-  static List<Student> generateStudents() {
+  static List<Employee> generateStudents() {
     final Random random = Random();
     final List<String> statusList = ['Present', 'Absent', 'Leave'];
-    final List<Student> students = [];
+    final List<Employee> Employees = [];
 
     for (int i = 1; i <= 5; i++) {
-      final studentName = "Employee $i";
+      final employeeName = "Employee $i";
       final attendanceRecords = <AttendanceRecord>[];
 
       for (int j = 1; j <= 30; j++) {
@@ -77,11 +77,11 @@ class _AttendancePageState extends State<AttendancePage> {
         );
       }
 
-      students.add(
-        Student(name: studentName, attendanceRecords: attendanceRecords),
+      Employees.add(
+        Employee(name: employeeName, attendanceRecords: attendanceRecords),
       );
     }
-    return students;
+    return Employees;
   }
 
   @override
@@ -160,9 +160,9 @@ class _AttendancePageState extends State<AttendancePage> {
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ListView.builder(
           padding: const EdgeInsets.all(12),
-          itemCount: selectedDepartment!.students.length,
+          itemCount: selectedDepartment!.Employees.length,
           itemBuilder: (context, index) {
-            final student = selectedDepartment!.students[index];
+            final Employee = selectedDepartment!.Employees[index];
             return Card(
               margin: const EdgeInsets.only(bottom: 12),
               elevation: 3,
@@ -171,8 +171,8 @@ class _AttendancePageState extends State<AttendancePage> {
               ),
               child: ExpansionTile(
                 leading: const CircleAvatar(child: Icon(Icons.person)),
-                title: Text(student.name),
-                children: student.attendanceRecords
+                title: Text(Employee.name),
+                children: Employee.attendanceRecords
                     .map(_buildAttendanceTile)
                     .toList(),
               ),
@@ -226,16 +226,16 @@ class Branch {
 
 class Department {
   final String name;
-  final List<Student> students;
+  final List<Employee> Employees;
 
-  Department({required this.name, required this.students});
+  Department({required this.name, required this.Employees});
 }
 
-class Student {
+class Employee {
   final String name;
   final List<AttendanceRecord> attendanceRecords;
 
-  Student({required this.name, required this.attendanceRecords});
+  Employee({required this.name, required this.attendanceRecords});
 }
 
 class AttendanceRecord {

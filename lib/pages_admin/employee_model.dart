@@ -1,5 +1,5 @@
 class Employee {
-  final String id;
+  final String employeeID;
   final String firstName;
   final String middleName;
   final String lastName;
@@ -14,15 +14,11 @@ class Employee {
   final String mobileNumber;
   final String permanentAddress;
   final String temporaryAddress;
-  final String mother;
-  final String father;
-  final String brother;
   final String college;
   final String shs;
   final String highSchool;
   final String bankName;
   final String bankNumber;
-  final String eeId;
   final String position;
   final String branch;
   final String department;
@@ -33,7 +29,7 @@ class Employee {
   final List<Map<String, dynamic>> familyMembers;
 
   Employee({
-    required this.id,
+    required this.employeeID,
     required this.firstName,
     required this.middleName,
     required this.lastName,
@@ -48,15 +44,11 @@ class Employee {
     required this.mobileNumber,
     required this.permanentAddress,
     required this.temporaryAddress,
-    required this.mother,
-    required this.father,
-    required this.brother,
     required this.college,
     required this.shs,
     required this.highSchool,
     required this.bankName,
     required this.bankNumber,
-    required this.eeId,
     required this.position,
     required this.branch,
     required this.department,
@@ -69,7 +61,7 @@ class Employee {
 
   factory Employee.fromJson(Map<String, dynamic> json) {
     return Employee(
-      id: json['id'] ?? '',
+      employeeID: json['EmployeeID']?.toString() ?? '',
       firstName: json['firstName'] ?? '',
       middleName: json['middleName'] ?? '',
       lastName: json['lastName'] ?? '',
@@ -84,15 +76,11 @@ class Employee {
       mobileNumber: json['mobileNumber'] ?? '',
       permanentAddress: json['permanentAddress'] ?? '',
       temporaryAddress: json['temporaryAddress'] ?? '',
-      mother: json['mother'] ?? '',
-      father: json['father'] ?? '',
-      brother: json['brother'] ?? '',
       college: json['college'] ?? '',
       shs: json['shs'] ?? '',
       highSchool: json['highSchool'] ?? '',
       bankName: json['bankName'] ?? '',
       bankNumber: json['bankNumber'] ?? '',
-      eeId: json['eeId'] ?? '',
       position: json['position'] ?? '',
       branch: json['branch'] ?? '',
       department: json['department'] ?? '',
@@ -106,7 +94,7 @@ class Employee {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'EmployeeID': employeeID,
       'firstName': firstName,
       'middleName': middleName,
       'lastName': lastName,
@@ -121,16 +109,13 @@ class Employee {
       'mobileNumber': mobileNumber,
       'permanentAddress': permanentAddress,
       'temporaryAddress': temporaryAddress,
-      'mother': mother,
-      'father': father,
-      'brother': brother,
       'college': college,
       'shs': shs,
       'highSchool': highSchool,
       'bankName': bankName,
       'bankNumber': bankNumber,
-      'eeId': eeId,
       'position': position,
+      'branch': branch,
       'department': department,
       'dateHired': dateHired,
       'dateRegular': dateRegular,
