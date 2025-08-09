@@ -52,7 +52,7 @@ class _RequestLeavePageState extends State<RequestLeavePage> {
       _formKey.currentState!.save();
 
       final url = Uri.parse(
-        'http://10.0.2.2/submit_leave.php',
+        'http://10.0.2.2/user_leave_requests/submit_leave.php',
       ); // Use '10.0.2.2' for Android emulator
       final response = await http.post(
         url,

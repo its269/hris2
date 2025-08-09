@@ -1,4 +1,3 @@
-// Admin > Profile Edit and Add Page (Employee Model and Employee List)
 import 'package:flutter/material.dart';
 import 'employee_model.dart';
 import 'package:uuid/uuid.dart';
@@ -100,7 +99,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         bankNumber: controllers['bankNumber']!.text,
         eeId: controllers['eeId']!.text,
         position: controllers['position']!.text,
-        branch: controllers['branch']!.text,
         department: controllers['department']!.text,
         dateHired: controllers['dateHired']!.text,
         dateRegular: controllers['dateRegular']!.text,
@@ -156,66 +154,59 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 
- Widget buildFamilyField(int index) {
-  final relations = ['Mother', 'Father', 'Brother', 'Sister', 'Spouse', 'Child'];
-  final selectedRelation = relations.contains(familyMembers[index]['relation'])
-      ? familyMembers[index]['relation']
-      : null;
-
-  return Row(
-    children: [
-      Expanded(
-        flex: 2,
-        child: DropdownButtonFormField<String>(
-          value: selectedRelation,
-          decoration: const InputDecoration(
-            labelText: 'Relation',
-            border: OutlineInputBorder(),
+  Widget buildFamilyField(int index) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: DropdownButtonFormField<String>(
+            value: familyMembers[index]['relation'],
+            decoration: const InputDecoration(
+              labelText: 'Relation',
+              border: OutlineInputBorder(),
+            ),
+            items: ['Mother', 'Father', 'Brother', 'Sister', 'Spouse', 'Child']
+                .map(
+                  (relation) =>
+                      DropdownMenuItem(value: relation, child: Text(relation)),
+                )
+                .toList(),
+            onChanged: (value) {
+              setState(() {
+                familyMembers[index]['relation'] = value;
+              });
+            },
+            validator: (value) =>
+                value == null || value.isEmpty ? 'Required' : null,
           ),
-          items: relations
-              .toSet()
-              .map(
-                (relation) =>
-                    DropdownMenuItem(value: relation, child: Text(relation)),
-              )
-              .toList(),
-          onChanged: (value) {
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          flex: 3,
+          child: TextFormField(
+            initialValue: familyMembers[index]['name'],
+            decoration: const InputDecoration(
+              labelText: 'Name',
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (value) {
+              familyMembers[index]['name'] = value;
+            },
+            validator: (value) =>
+                value == null || value.isEmpty ? 'Required' : null,
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.delete, color: Colors.red),
+          onPressed: () {
             setState(() {
-              familyMembers[index]['relation'] = value;
+              familyMembers.removeAt(index);
             });
           },
-          validator: (value) =>
-              value == null || value.isEmpty ? 'Required' : null,
         ),
-      ),
-      const SizedBox(width: 8),
-      Expanded(
-        flex: 3,
-        child: TextFormField(
-          initialValue: familyMembers[index]['name'],
-          decoration: const InputDecoration(
-            labelText: 'Name',
-            border: OutlineInputBorder(),
-          ),
-          onChanged: (value) {
-            familyMembers[index]['name'] = value;
-          },
-          validator: (value) =>
-              value == null || value.isEmpty ? 'Required' : null,
-        ),
-      ),
-      IconButton(
-        icon: const Icon(Icons.delete, color: Colors.red),
-        onPressed: () {
-          setState(() {
-            familyMembers.removeAt(index);
-          });
-        },
-      ),
-    ],
-  );
-}
-
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

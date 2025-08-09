@@ -24,7 +24,6 @@ class Employee {
   final String bankNumber;
   final String eeId;
   final String position;
-  final String branch;
   final String department;
   final String dateHired;
   final String dateRegular;
@@ -58,7 +57,6 @@ class Employee {
     required this.bankNumber,
     required this.eeId,
     required this.position,
-    required this.branch,
     required this.department,
     required this.dateHired,
     required this.dateRegular,
@@ -69,38 +67,39 @@ class Employee {
 
   factory Employee.fromJson(Map<String, dynamic> json) {
     return Employee(
-      id: json['id'] ?? '',
-      firstName: json['firstName'] ?? '',
-      middleName: json['middleName'] ?? '',
-      lastName: json['lastName'] ?? '',
-      suffix: json['suffix'] ?? '',
-      nickname: json['nickname'] ?? '',
-      birthday: json['birthday'] ?? '',
-      age: json['age'] ?? '',
-      birthPlace: json['birthPlace'] ?? '',
-      civilStatus: json['civilStatus'] ?? '',
-      companyEmail: json['companyEmail'] ?? '',
-      personalEmail: json['personalEmail'] ?? '',
-      mobileNumber: json['mobileNumber'] ?? '',
-      permanentAddress: json['permanentAddress'] ?? '',
-      temporaryAddress: json['temporaryAddress'] ?? '',
-      mother: json['mother'] ?? '',
-      father: json['father'] ?? '',
-      brother: json['brother'] ?? '',
-      college: json['college'] ?? '',
-      shs: json['shs'] ?? '',
-      highSchool: json['highSchool'] ?? '',
-      bankName: json['bankName'] ?? '',
-      bankNumber: json['bankNumber'] ?? '',
-      eeId: json['eeId'] ?? '',
-      position: json['position'] ?? '',
-      branch: json['branch'] ?? '',
-      department: json['department'] ?? '',
-      dateHired: json['dateHired'] ?? '',
-      dateRegular: json['dateRegular'] ?? '',
-      employmentStatus: json['employmentStatus'] ?? '',
-      supervisor: json['supervisor'] ?? '',
-      familyMembers: List<Map<String, dynamic>>.from(json['familyMembers'] ?? []),
+      id: json['id'],
+      firstName: json['firstName'],
+      middleName: json['middleName'],
+      lastName: json['lastName'],
+      suffix: json['suffix'],
+      nickname: json['nickname'],
+      birthday: json['birthday'],
+      age: json['age'],
+      birthPlace: json['birthPlace'],
+      civilStatus: json['civilStatus'],
+      companyEmail: json['companyEmail'],
+      personalEmail: json['personalEmail'],
+      mobileNumber: json['mobileNumber'],
+      permanentAddress: json['permanentAddress'],
+      temporaryAddress: json['temporaryAddress'],
+      mother: json['mother'],
+      father: json['father'],
+      brother: json['brother'],
+      college: json['college'],
+      shs: json['shs'],
+      highSchool: json['highSchool'],
+      bankName: json['bankName'],
+      bankNumber: json['bankNumber'],
+      eeId: json['eeId'],
+      position: json['position'],
+      department: json['department'],
+      dateHired: json['dateHired'],
+      dateRegular: json['dateRegular'],
+      employmentStatus: json['employmentStatus'],
+      supervisor: json['supervisor'],
+      familyMembers: List<Map<String, dynamic>>.from(
+        json['familyMembers'] ?? [],
+      ),
     );
   }
 
