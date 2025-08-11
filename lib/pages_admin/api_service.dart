@@ -47,35 +47,79 @@ class ApiService {
 
   // Add a new employee
   Future<bool> addEmployee(Employee emp) async {
-    final response = await http.post(
-      Uri.parse('$apiUrl/employee.php'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(emp.toJson()),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('$apiUrl/employee.php'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(emp.toJson()),
+      );
 
-    return response.statusCode == 200;
+      print('Add Employee Response: ${response.statusCode}');
+      print('Add Employee Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        print('Response data: $responseData');
+        return responseData['success'] == true;
+      } else {
+        print('Add Employee failed with status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+      return false;
+    } catch (e) {
+      print('Error in addEmployee: $e');
+      return false;
+    }
   }
 
   // Update an existing employee
   Future<bool> updateEmployee(Employee emp) async {
-    final response = await http.put(
-      Uri.parse('$apiUrl/employee.php'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(emp.toJson()),
-    );
+    try {
+      final response = await http.put(
+        Uri.parse('$apiUrl/employee.php'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(emp.toJson()),
+      );
 
-    return response.statusCode == 200;
+      print('Update Employee Response: ${response.statusCode}');
+      print('Update Employee Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        print('Response data: $responseData');
+        return responseData['success'] == true;
+      } else {
+        print('Update Employee failed with status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+      return false;
+    } catch (e) {
+      print('Error in updateEmployee: $e');
+      return false;
+    }
   }
 
   // Delete an employee by ID
   Future<bool> deleteEmployee(String id) async {
-    final response = await http.delete(
-      Uri.parse('$apiUrl/employee.php'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'EmployeeID': id}),
-    );
+    try {
+      final response = await http.delete(
+        Uri.parse('$apiUrl/employee.php'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'EmployeeID': id}),
+      );
 
-    return response.statusCode == 200;
+      print('Delete Employee Response: ${response.statusCode}');
+      print('Delete Employee Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        return responseData['success'] == true;
+      }
+      return false;
+    } catch (e) {
+      print('Error in deleteEmployee: $e');
+      return false;
+    }
   }
 
   // Fetch attendance records with leave status

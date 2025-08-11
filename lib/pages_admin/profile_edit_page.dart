@@ -55,6 +55,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       'employmentStatus':
           TextEditingController(text: emp?.employmentStatus ?? ''),
       'supervisor': TextEditingController(text: emp?.supervisor ?? ''),
+      'role': TextEditingController(text: emp?.role ?? ''),
+      'password': TextEditingController(text: emp?.password ?? ''),
     };
 
     familyMembers = emp?.familyMembers ?? [];
@@ -70,53 +72,91 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   void save() {
     if (_formKey.currentState!.validate()) {
-      // ---------------------------
-      // FIX: prefer the typed EmployeeID in the form if present.
-      // If editing, keep existing widget.employee.employeeID.
-      // If neither exists, fall back to a generated UUID.
-      // ---------------------------
       final typedEmployeeId = controllers['EmployeeID']?.text.trim() ?? '';
       final employeeId = (widget.employee?.employeeID != null && widget.employee!.employeeID.isNotEmpty)
           ? widget.employee!.employeeID
           : (typedEmployeeId.isNotEmpty ? typedEmployeeId : _uuid.v4());
 
+      // Validate family members (only if any were added)
+      bool hasInvalidFamilyMembers = false;
+      for (var member in familyMembers) {
+        if ((member['relation'] != null && member['relation'].toString().isNotEmpty) ||
+            (member['name'] != null && member['name'].toString().trim().isNotEmpty)) {
+          // If either field has content, both should be filled
+          if (member['relation'] == null || member['relation'].toString().isEmpty ||
+              member['name'] == null || member['name'].toString().trim().isEmpty) {
+            hasInvalidFamilyMembers = true;
+            break;
+          }
+        }
+      }
+
+      if (hasInvalidFamilyMembers) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please complete all family member information or remove incomplete entries.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      // Remove empty family members
+      final validFamilyMembers = familyMembers.where((member) => 
+        member['relation'] != null && member['relation'].toString().isNotEmpty &&
+        member['name'] != null && member['name'].toString().trim().isNotEmpty
+      ).toList();
+
       final emp = Employee(
         employeeID: employeeId,
-        firstName: controllers['firstName']!.text,
-        middleName: controllers['middleName']!.text,
-        lastName: controllers['lastName']!.text,
-        suffix: controllers['suffix']!.text,
-        nickname: controllers['nickname']!.text,
-        birthday: controllers['birthday']!.text,
-        age: controllers['age']!.text,
-        birthPlace: controllers['birthPlace']!.text,
-        civilStatus: controllers['civilStatus']!.text,
-        companyEmail: controllers['companyEmail']!.text,
-        personalEmail: controllers['personalEmail']!.text,
-        mobileNumber: controllers['mobileNumber']!.text,
-        permanentAddress: controllers['permanentAddress']!.text,
-        temporaryAddress: controllers['temporaryAddress']!.text,
-        college: controllers['college']!.text,
-        shs: controllers['shs']!.text,
-        highSchool: controllers['highSchool']!.text,
-        bankName: controllers['bankName']!.text,
-        bankNumber: controllers['bankNumber']!.text,
-        position: controllers['position']!.text,
-        branch: controllers['branch']!.text,
-        department: controllers['department']!.text,
-        dateHired: controllers['dateHired']!.text,
-        dateRegular: controllers['dateRegular']!.text,
-        employmentStatus: controllers['employmentStatus']!.text,
-        supervisor: controllers['supervisor']!.text,
-        familyMembers: familyMembers,
+        firstName: controllers['firstName']!.text.trim(),
+        middleName: controllers['middleName']!.text.trim(),
+        lastName: controllers['lastName']!.text.trim(),
+        suffix: controllers['suffix']!.text.trim(),
+        nickname: controllers['nickname']!.text.trim(),
+        birthday: controllers['birthday']!.text.trim(),
+        age: controllers['age']!.text.trim(),
+        birthPlace: controllers['birthPlace']!.text.trim(),
+        civilStatus: controllers['civilStatus']!.text.trim(),
+        companyEmail: controllers['companyEmail']!.text.trim(),
+        personalEmail: controllers['personalEmail']!.text.trim(),
+        mobileNumber: controllers['mobileNumber']!.text.trim(),
+        permanentAddress: controllers['permanentAddress']!.text.trim(),
+        temporaryAddress: controllers['temporaryAddress']!.text.trim(),
+        college: controllers['college']!.text.trim(),
+        shs: controllers['shs']!.text.trim(),
+        highSchool: controllers['highSchool']!.text.trim(),
+        bankName: controllers['bankName']!.text.trim(),
+        bankNumber: controllers['bankNumber']!.text.trim(),
+        position: controllers['position']!.text.trim(),
+        branch: controllers['branch']!.text.trim(),
+        department: controllers['department']!.text.trim(),
+        dateHired: controllers['dateHired']!.text.trim(),
+        dateRegular: controllers['dateRegular']!.text.trim(),
+        employmentStatus: controllers['employmentStatus']!.text.trim(),
+        supervisor: controllers['supervisor']!.text.trim(),
+        familyMembers: validFamilyMembers,
+        role: controllers['role']!.text.trim(),
+        password: controllers['password']!.text.trim(),
       );
 
-      Navigator.pop(context, emp);
+      Navigator.pop(context, {
+        'employee': emp,
+        'isNew': widget.employee == null, // true if adding, false if updating
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all required fields correctly.'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
+
   Widget buildField(String label, String key,
-      {TextInputType inputType = TextInputType.text}) {
+      {TextInputType inputType = TextInputType.text, bool isRequired = true}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
@@ -127,12 +167,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         ),
         keyboardType: inputType,
         validator: (value) =>
-            value == null || value.isEmpty ? 'Required' : null,
+            isRequired && (value == null || value.isEmpty) ? 'Required' : null,
       ),
     );
   }
 
-  Widget buildDateField(String label, String key) {
+  Widget buildDateField(String label, String key, {bool isRequired = true}) {
     return GestureDetector(
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
@@ -149,7 +189,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         }
       },
       child: AbsorbPointer(
-        child: buildField(label, key, inputType: TextInputType.datetime),
+        child: buildField(label, key, inputType: TextInputType.datetime, isRequired: isRequired),
       ),
     );
   }
@@ -179,9 +219,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               border: OutlineInputBorder(),
             ),
             items: relations
-                .toSet()
                 .map(
-                  (relation) => DropdownMenuItem(
+                  (relation) => DropdownMenuItem<String>(
                       value: relation, child: Text(relation)),
                 )
                 .toList(),
@@ -222,6 +261,41 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 
+  Widget buildDropdownField(
+    String label,
+    String key,
+    List<String> options, {
+    bool isRequired = true,
+    }) {
+      final currentValue = controllers[key]!.text;
+      final validValue = options.contains(currentValue) ? currentValue : null;
+      
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: DropdownButtonFormField<String>(
+          value: validValue,
+          decoration: InputDecoration(
+            labelText: label,
+            border: const OutlineInputBorder(),
+          ),
+          items: options
+              .map((option) =>
+                  DropdownMenuItem(value: option, child: Text(option)))
+              .toList(),
+          onChanged: (value) {
+            setState(() {
+              controllers[key]!.text = value ?? '';
+            });
+          },
+          validator: (value) {
+            if (isRequired && (value == null || value.isEmpty)) {
+              return 'Required';
+            }
+            return null;
+          },
+        ),
+      );
+    }
   @override
   Widget build(BuildContext context) {
     final isEdit = widget.employee != null;
@@ -241,22 +315,22 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 children: [
                   const SizedBox(height: 5),
                   buildField('First Name', 'firstName'),
-                  buildField('Middle Name', 'middleName'),
+                  buildField('Middle Name', 'middleName', isRequired: false),
                   buildField('Last Name', 'lastName'),
-                  buildField('Suffix', 'suffix'),
-                  buildField('Nickname', 'nickname'),
-                  buildDateField('Birthday', 'birthday'),
-                  buildField('Age', 'age', inputType: TextInputType.number),
-                  buildField('Birth Place', 'birthPlace'),
-                  buildField('Civil Status', 'civilStatus'),
+                  buildField('Suffix', 'suffix', isRequired: false),
+                  buildField('Nickname', 'nickname', isRequired: false),
+                  buildDateField('Birthday', 'birthday', isRequired: false),
+                  buildField('Age', 'age', inputType: TextInputType.number, isRequired: false),
+                  buildField('Birth Place', 'birthPlace', isRequired: false),
+                  buildField('Civil Status', 'civilStatus', isRequired: false),
                   buildField('Company Email', 'companyEmail',
                       inputType: TextInputType.emailAddress),
                   buildField('Personal Email', 'personalEmail',
-                      inputType: TextInputType.emailAddress),
+                      inputType: TextInputType.emailAddress, isRequired: false),
                   buildField('Mobile Number', 'mobileNumber',
-                      inputType: TextInputType.phone),
-                  buildField('Permanent Address', 'permanentAddress'),
-                  buildField('Temporary Address', 'temporaryAddress'),
+                      inputType: TextInputType.phone, isRequired: false),
+                  buildField('Permanent Address', 'permanentAddress', isRequired: false),
+                  buildField('Temporary Address', 'temporaryAddress', isRequired: false),
                 ],
               ),
               ExpansionTile(
@@ -292,9 +366,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 title: const Text("Education"),
                 children: [
                   const SizedBox(height: 5),
-                  buildField('College', 'college'),
-                  buildField('SHS', 'shs'),
-                  buildField('High School', 'highSchool'),
+                  buildField('College', 'college', isRequired: false),
+                  buildField('SHS', 'shs', isRequired: false),
+                  buildField('High School', 'highSchool', isRequired: false),
                 ],
               ),
               ExpansionTile(
@@ -302,8 +376,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 title: const Text("Bank Information"),
                 children: [
                   const SizedBox(height: 5),
-                  buildField('Bank Name', 'bankName'),
-                  buildField('Bank Number', 'bankNumber'),
+                  buildField('Bank Name', 'bankName', isRequired: false),
+                  buildField('Bank Number', 'bankNumber', isRequired: false),
                 ],
               ),
               ExpansionTile(
@@ -327,12 +401,35 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                     ),
                   ),
                   buildField('Position', 'position'),
-                  buildField('Department', 'department'),
-                  buildField('Branch', 'branch'),
+                  buildDropdownField('Department', 'department', [
+                    'MIS',
+                    'HR',
+                    'Accounting',
+                    'Marketing',
+                    'Finance',
+                    'Sales',
+                    'Support',
+                    'E - Commerce'
+                  ]),
+
+                  buildDropdownField('Branch', 'branch', [
+                    'KGS - Main',
+                    'KGS - Davao',
+                    'KGS - CDO',
+                  ]),
+
+                  buildDropdownField('Employment Status', 'employmentStatus', [
+                    'Probationary',
+                    'Regular',
+                  ]),
                   buildDateField('Date Hired', 'dateHired'),
-                  buildDateField('Date Regular', 'dateRegular'),
-                  buildField('Employment Status', 'employmentStatus'),
-                  buildField('Immediate Supervisor', 'supervisor'),
+                  buildDateField('Date Regular', 'dateRegular', isRequired: false),
+                  buildField('Immediate Supervisor', 'supervisor', isRequired: false),
+                  buildDropdownField('Role', 'role', [
+                    'Admin',
+                    'Employee',
+                  ]),
+                  buildField('Password', 'password'),
                 ],
               ),
               const SizedBox(height: 24),

@@ -24,24 +24,24 @@ class _AttendancePageState extends State<AttendancePage> {
     Branch(
       name: "Kelin Graphics System - Main",
       departments: [
-        Department(name: "IT", Employees: generateStudents()),
-        Department(name: "Marketing", Employees: generateStudents()),
-        Department(name: "Accounting", Employees: generateStudents()),
-        Department(name: "E - Commerce", Employees: generateStudents()),
+        Department(name: "IT", Employees: generateEmployees()),
+        Department(name: "Marketing", Employees: generateEmployees()),
+        Department(name: "Accounting", Employees: generateEmployees()),
+        Department(name: "E - Commerce", Employees: generateEmployees()),
       ],
     ),
     Branch(
       name: "Kelin Graphics System - CDO",
       departments: [
-        Department(name: "HR", Employees: generateStudents()),
-        Department(name: "Finance", Employees: generateStudents()),
+        Department(name: "HR", Employees: generateEmployees()),
+        Department(name: "Finance", Employees: generateEmployees()),
       ],
     ),
     Branch(
       name: "Kelin Graphics System - Davao",
       departments: [
-        Department(name: "Sales", Employees: generateStudents()),
-        Department(name: "Support", Employees: generateStudents()),
+        Department(name: "Sales", Employees: generateEmployees()),
+        Department(name: "Support", Employees: generateEmployees()),
       ],
     ),
   ];
@@ -49,7 +49,7 @@ class _AttendancePageState extends State<AttendancePage> {
   Branch? selectedBranch;
   Department? selectedDepartment;
 
-  static List<Employee> generateStudents() {
+  static List<Employee> generateEmployees() {
     final Random random = Random();
     final List<String> statusList = ['Present', 'Absent', 'Leave'];
     final List<Employee> Employees = [];

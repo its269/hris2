@@ -79,8 +79,14 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     setState(() {
       searchQuery = query.toLowerCase();
       filteredEmployees = employees.where((e) {
-        final fullName = '${e.firstName} ${e.lastName}'.toLowerCase();
-        return fullName.contains(searchQuery);
+        final matchesSearch = ('${e.firstName} ${e.lastName}')
+            .toLowerCase()
+            .contains(searchQuery);
+        final matchesBranch = selectedBranch == null ||
+            e.branch == selectedBranch!.name;
+        final matchesDepartment = selectedDepartment == null ||
+            e.department == selectedDepartment!.name;
+        return matchesSearch && matchesBranch && matchesDepartment;
       }).toList();
     });
   }
@@ -90,42 +96,100 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     final index = employees.indexWhere((e) => e.employeeID == emp.employeeID);
     bool success;
 
-    if (index >= 0) {
-      success = await api.updateEmployee(emp);
-      if (success) {
-        setState(() {
-          employees[index] = emp;
-          search(searchQuery);
-        });
+    try {
+      if (index >= 0) {
+        // UPDATE
+        success = await api.updateEmployee(emp);
+        if (success) {
+          setState(() {
+            employees[index] = emp;
+            search(searchQuery);
+          });
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Employee "${emp.firstName} ${emp.lastName}" updated successfully.',
+                ),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          }
+        } else {
+          _showSnackBar("Failed to update employee. Please try again.", isError: true);
+        }
       } else {
-        _showSnackBar("Failed to update employee");
+        // CREATE
+        success = await api.addEmployee(emp);
+        if (success) {
+          setState(() {
+            employees.add(emp);
+            search(searchQuery);
+          });
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Employee "${emp.firstName} ${emp.lastName}" added successfully.',
+                ),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          }
+        } else {
+          _showSnackBar("Failed to add employee. Please try again.", isError: true);
+        }
       }
-    } else {
-      success = await api.addEmployee(emp);
-      if (success) {
-        setState(() {
-          employees.add(emp);
-          search(searchQuery);
-        });
-      } else {
-        _showSnackBar("Failed to add employee");
-      }
+    } catch (e) {
+      print('Error in addOrUpdateEmployee: $e');
+      _showSnackBar("An error occurred. Please check your connection and try again.", isError: true);
     }
   }
+
 
   void deleteEmployee(String id) async {
     final api = ApiService();
-    bool success = await api.deleteEmployee(id);
+    
+    try {
+      bool success = await api.deleteEmployee(id);
 
-    if (success) {
-      setState(() {
-        employees.removeWhere((e) => e.employeeID == id);
-        search(searchQuery);
-      });
-    } else {
-      _showSnackBar("Failed to delete employee");
+      if (success) {
+        // find the employee (if present) so we can show their name in the snackbar
+        final index = employees.indexWhere((e) => e.employeeID == id);
+        final Employee? deletedEmp = index != -1 ? employees[index] : null;
+
+        setState(() {
+          employees.removeWhere((e) => e.employeeID == id);
+          search(searchQuery);
+        });
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                deletedEmp != null
+                  ? 'Employee "${deletedEmp.firstName} ${deletedEmp.lastName}" deleted successfully.'
+                  : 'Employee deleted successfully.',
+              ),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
+      } else {
+        _showSnackBar("Failed to delete employee. Please try again.", isError: true);
+      }
+    } catch (e) {
+      print('Error in deleteEmployee: $e');
+      _showSnackBar("An error occurred while deleting. Please check your connection and try again.", isError: true);
     }
   }
+
+
 
   Future<void> confirmDelete(BuildContext context, Employee emp) async {
     final confirm = await showDialog<bool>(
@@ -153,8 +217,16 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     }
   }
 
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  void _showSnackBar(String message, {bool isError = false}) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: isError ? Colors.red : null,
+          duration: Duration(seconds: isError ? 4 : 2),
+        ),
+      );
+    }
   }
 
   // UI Starts
@@ -278,7 +350,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                                       icon: const Icon(Icons.edit,
                                           color: Colors.blue),
                                       onPressed: () async {
-                                        final updatedEmp =
+                                        final result =
                                             await Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -286,8 +358,8 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                                                 ProfileEditPage(employee: emp),
                                           ),
                                         );
-                                        if (updatedEmp != null) {
-                                          addOrUpdateEmployee(updatedEmp);
+                                        if (result != null && result['employee'] != null) {
+                                          addOrUpdateEmployee(result['employee']);
                                         }
                                       },
                                     ),
@@ -310,13 +382,13 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
       floatingActionButton: widget.role.toLowerCase() == 'admin'
           ? FloatingActionButton(
               onPressed: () async {
-                final newEmp = await Navigator.push(
+                final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => const ProfileEditPage()),
                 );
-                if (newEmp != null) {
-                  addOrUpdateEmployee(newEmp);
+                if (result != null && result['employee'] != null) {
+                  addOrUpdateEmployee(result['employee']);
                 }
               },
               child: const Icon(Icons.add),

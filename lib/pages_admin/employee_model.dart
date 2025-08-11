@@ -27,6 +27,8 @@ class Employee {
   final String employmentStatus;
   final String supervisor;
   final List<Map<String, dynamic>> familyMembers;
+  final String role;
+  final String password;
 
   Employee({
     required this.employeeID,
@@ -57,6 +59,8 @@ class Employee {
     required this.employmentStatus,
     required this.supervisor,
     required this.familyMembers,
+    required this.role,
+    required this.password,
   });
 
   factory Employee.fromJson(Map<String, dynamic> json) {
@@ -89,6 +93,8 @@ class Employee {
       employmentStatus: json['employmentStatus'] ?? '',
       supervisor: json['supervisor'] ?? '',
       familyMembers: List<Map<String, dynamic>>.from(json['familyMembers'] ?? []),
+      role: (json['loginRole'] ?? json['role']) ?? '',
+      password: (json['loginPassword'] ?? json['password']) ?? '',
     );
   }
 
@@ -122,6 +128,8 @@ class Employee {
       'employmentStatus': employmentStatus,
       'supervisor': supervisor,
       'familyMembers': familyMembers,
+      'role': role,
+      'password': password,
     };
   }
 }
