@@ -8,19 +8,19 @@ import 'admin_approval_page.dart';
 import '../main.dart'; // Assuming MyApp is here
 
 // Placeholder notification page
-class NotificationsPage extends StatelessWidget {
-  const NotificationsPage({super.key});
+// class NotificationsPage extends StatelessWidget {
+//   const NotificationsPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Leave Request Notifications',
-        style: TextStyle(fontSize: 24),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Text(
+//         'Leave Request Notifications',
+//         style: TextStyle(fontSize: 24),
+//       ),
+//     );
+//   }
+// }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -131,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _buildDrawerItem(Icons.school, 'Training Portal'),
             _buildDrawerItem(Icons.policy, 'Corporate Policy'),
             _buildDrawerItem(Icons.people_alt, 'HR Related Forms'),
-            _buildDrawerItem(Icons.people_alt, 'Request'),
+            // _buildDrawerItem(Icons.people_alt, 'Request'),
 
             // Log out option
             ListTile(
@@ -153,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.all(24.0),
           child: _selectedTabIndex == 0
               ? _getPage(_selectedPage)
-              : const NotificationsPage(), // Show Notifications page
+              : const AdminApprovalPage(), // Show Notifications page
         ),
       ),
 
@@ -165,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.arrow_back), label: 'Prev'),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             label: 'Notifications',
