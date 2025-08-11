@@ -48,26 +48,29 @@ class ApiService {
   // Add a new employee
   Future<bool> addEmployee(Employee emp) async {
     try {
+      print("Adding employee: ${emp.toJson()}");
       final response = await http.post(
         Uri.parse('$apiUrl/employee.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(emp.toJson()),
       );
 
-      print('Add Employee Response: ${response.statusCode}');
-      print('Add Employee Body: ${response.body}');
+      print("Add employee response: ${response.statusCode} - ${response.body}");
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        print('Response data: $responseData');
-        return responseData['success'] == true;
+        if (responseData['success'] == true) {
+          return true;
+        } else {
+          print("Add employee failed: ${responseData}");
+          return false;
+        }
       } else {
-        print('Add Employee failed with status: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        print("Add employee HTTP error: ${response.statusCode} - ${response.body}");
+        return false;
       }
-      return false;
     } catch (e) {
-      print('Error in addEmployee: $e');
+      print("Error in addEmployee: $e");
       return false;
     }
   }
@@ -75,26 +78,29 @@ class ApiService {
   // Update an existing employee
   Future<bool> updateEmployee(Employee emp) async {
     try {
+      print("Updating employee: ${emp.toJson()}");
       final response = await http.put(
         Uri.parse('$apiUrl/employee.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(emp.toJson()),
       );
 
-      print('Update Employee Response: ${response.statusCode}');
-      print('Update Employee Body: ${response.body}');
+      print("Update employee response: ${response.statusCode} - ${response.body}");
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        print('Response data: $responseData');
-        return responseData['success'] == true;
+        if (responseData['success'] == true) {
+          return true;
+        } else {
+          print("Update employee failed: ${responseData}");
+          return false;
+        }
       } else {
-        print('Update Employee failed with status: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        print("Update employee HTTP error: ${response.statusCode} - ${response.body}");
+        return false;
       }
-      return false;
     } catch (e) {
-      print('Error in updateEmployee: $e');
+      print("Error in updateEmployee: $e");
       return false;
     }
   }
@@ -108,16 +114,14 @@ class ApiService {
         body: jsonEncode({'EmployeeID': id}),
       );
 
-      print('Delete Employee Response: ${response.statusCode}');
-      print('Delete Employee Body: ${response.body}');
-
       if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        return responseData['success'] == true;
+        return true;
+      } else {
+        print("Delete failed: ${response.statusCode} - ${response.body}");
+        return false;
       }
-      return false;
     } catch (e) {
-      print('Error in deleteEmployee: $e');
+      print("Error in deleteEmployee: $e");
       return false;
     }
   }

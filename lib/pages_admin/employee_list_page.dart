@@ -23,6 +23,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
   bool isLoading = true;
   String? errorMessage;
   String searchQuery = "";
+  final TextEditingController _searchController = TextEditingController();
 
   Branch? selectedBranch;
   Department? selectedDepartment;
@@ -50,6 +51,12 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     fetchEmployees();
   }
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   Future<void> fetchEmployees() async {
     try {
       final fetchedEmployees = await ApiService().fetchAllEmployees();
@@ -57,9 +64,18 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
       List<Employee> finalList = fetchedEmployees;
 
       if (widget.role.toLowerCase() != 'admin') {
+        // Non-admin users only see their own profile
         finalList = fetchedEmployees
-            .where((e) => e.employeeID == widget.employeeId) // changed here
+            .where((e) => e.employeeID == widget.employeeId)
             .toList();
+      } else {
+        // Admin users see all employees including themselves
+        // Ensure admin's own profile is included
+        final adminProfile = fetchedEmployees.firstWhere(
+          (e) => e.employeeID == widget.employeeId,
+          orElse: () => throw Exception('Admin profile not found'),
+        );
+        print('Admin profile found: ${adminProfile.firstName} ${adminProfile.lastName}');
       }
 
       setState(() {
@@ -78,16 +94,22 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
   void search(String query) {
     setState(() {
       searchQuery = query.toLowerCase();
-      filteredEmployees = employees.where((e) {
-        final matchesSearch = ('${e.firstName} ${e.lastName}')
-            .toLowerCase()
-            .contains(searchQuery);
-        final matchesBranch = selectedBranch == null ||
-            e.branch == selectedBranch!.name;
-        final matchesDepartment = selectedDepartment == null ||
-            e.department == selectedDepartment!.name;
-        return matchesSearch && matchesBranch && matchesDepartment;
-      }).toList();
+      
+      if (selectedBranch == null && selectedDepartment == null) {
+        // Global search - no branch/department filtering
+        filteredEmployees = employees.where((e) {
+          final matchesName = ('${e.firstName} ${e.lastName}').toLowerCase().contains(searchQuery);
+          final matchesId = e.employeeID.toLowerCase().contains(searchQuery);
+          return searchQuery.isEmpty || matchesName || matchesId;
+        }).toList();
+      } else {
+        // Branch/Department specific search - apply search only, let UI handle branch/dept filtering
+        filteredEmployees = employees.where((e) {
+          final matchesName = ('${e.firstName} ${e.lastName}').toLowerCase().contains(searchQuery);
+          final matchesId = e.employeeID.toLowerCase().contains(searchQuery);
+          return searchQuery.isEmpty || matchesName || matchesId;
+        }).toList();
+      }
     });
   }
 
@@ -101,10 +123,8 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
         // UPDATE
         success = await api.updateEmployee(emp);
         if (success) {
-          setState(() {
-            employees[index] = emp;
-            search(searchQuery);
-          });
+          // Refresh the employees list from the database to ensure we have the latest data
+          await fetchEmployees();
 
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -124,10 +144,8 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
         // CREATE
         success = await api.addEmployee(emp);
         if (success) {
-          setState(() {
-            employees.add(emp);
-            search(searchQuery);
-          });
+          // Refresh the employees list from the database to ensure we have the latest data
+          await fetchEmployees();
 
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -229,6 +247,29 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     }
   }
 
+  // Method to find and edit admin's own profile
+  void _editMyProfile() async {
+    try {
+      final myProfile = employees.firstWhere(
+        (e) => e.employeeID == widget.employeeId,
+      );
+
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ProfileEditPage(employee: myProfile),
+        ),
+      );
+      
+      if (result != null && result['employee'] != null) {
+        addOrUpdateEmployee(result['employee']);
+      }
+    } catch (e) {
+      print('Error finding admin profile: $e');
+      _showSnackBar('Could not find your profile. Please ensure you are in the employee database.', isError: true);
+    }
+  }
+
   // UI Starts
   @override
   Widget build(BuildContext context) {
@@ -250,22 +291,226 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
 
   Widget _buildBranchSelection() {
     return Scaffold(
-      appBar: AppBar(title: const Text("Select Branch")),
+      appBar: AppBar(
+        title: const Text("Select Branch"),
+        actions: widget.role.toLowerCase() == 'admin' ? [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            tooltip: 'My Profile',
+            onPressed: _editMyProfile,
+          ),
+        ] : null,
+      ),
       body: ListView(
         padding: const EdgeInsets.all(12),
-        children: branches.map((branch) {
-          return Card(
-            child: ListTile(
-              leading: const Icon(Icons.account_tree),
-              title: Text(branch),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => setState(() {
-                selectedBranch = Branch(branch);
-              }),
+        children: [
+          // Global Search Section
+          Card(
+            color: Colors.blue.shade50,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Row(
+                  //   children: [
+                  //     Icon(Icons.search, color: Colors.blue.shade700, size: 28),
+                  //     const SizedBox(width: 12),
+                  //     Text(
+                  //       'Employee Search',
+                  //       style: TextStyle(
+                  //         fontSize: 18,
+                  //         fontWeight: FontWeight.bold,
+                  //         color: Colors.blue.shade700,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: "Search by employee name or ID...",
+                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      prefixIcon: const Icon(Icons.search, color: Colors.blue),
+                      suffixIcon: searchQuery.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(Icons.clear, color: Colors.grey),
+                              onPressed: () {
+                                _searchController.clear();
+                                search('');
+                              },
+                            )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]!),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.blue, width: 2),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    onChanged: search,
+                  ),
+                  if (searchQuery.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      "Found ${filteredEmployees.length} employee${filteredEmployees.length != 1 ? 's' : ''} matching '$searchQuery'",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 200,
+                      child: filteredEmployees.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.search_off, size: 48, color: Colors.grey[400]),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    "No employees found matching '$searchQuery'",
+                                    style: TextStyle(color: Colors.grey[600]),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: filteredEmployees.length,
+                              itemBuilder: (context, index) {
+                                final emp = filteredEmployees[index];
+                                final isCurrentUser = emp.employeeID == widget.employeeId;
+                                
+                                return Card(
+                                  margin: const EdgeInsets.symmetric(vertical: 4),
+                                  color: isCurrentUser ? Colors.blue.shade50 : null,
+                                  child: ListTile(
+                                    leading: isCurrentUser 
+                                        ? const Icon(Icons.account_circle, color: Colors.blue)
+                                        : const Icon(Icons.person, color: Colors.grey),
+                                    title: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "${emp.firstName} ${emp.lastName}",
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        if (isCurrentUser) ...[
+                                          const SizedBox(width: 4),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: const Text(
+                                              'You',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("ID: ${emp.employeeID}"),
+                                        Text("${emp.position} - ${emp.department}"),
+                                        Text("${emp.branch}"),
+                                      ],
+                                    ),
+                                    trailing: widget.role.toLowerCase() == 'admin'
+                                        ? Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                                onPressed: () async {
+                                                  final result = await Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (_) => ProfileEditPage(employee: emp),
+                                                    ),
+                                                  );
+                                                  if (result != null && result['employee'] != null) {
+                                                    addOrUpdateEmployee(result['employee']);
+                                                  }
+                                                },
+                                              ),
+                                              if (!isCurrentUser)
+                                                IconButton(
+                                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                                  onPressed: () => confirmDelete(context, emp),
+                                                ),
+                                            ],
+                                          )
+                                        : null,
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-          );
-        }).toList(),
+          ),
+          const SizedBox(height: 16),
+          const Divider(),
+          const SizedBox(height: 8),
+          Text(
+            'Or browse by branch:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
+          ),
+          const SizedBox(height: 8),
+          ...branches.map((branch) {
+            return Card(
+              child: ListTile(
+                leading: const Icon(Icons.account_tree),
+                title: Text(branch),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => setState(() {
+                  selectedBranch = Branch(branch);
+                }),
+              ),
+            );
+          }).toList(),
+        ],
       ),
+      floatingActionButton: widget.role.toLowerCase() == 'admin'
+          ? FloatingActionButton(
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ProfileEditPage(),
+                  ),
+                );
+                if (result != null && result['employee'] != null) {
+                  addOrUpdateEmployee(result['employee']);
+                }
+              },
+              backgroundColor: Colors.blue,
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
     );
   }
 
@@ -277,69 +522,252 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => setState(() => selectedBranch = null),
         ),
+        actions: widget.role.toLowerCase() == 'admin' ? [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            tooltip: 'My Profile',
+            onPressed: _editMyProfile,
+          ),
+        ] : null,
       ),
       body: ListView(
         padding: const EdgeInsets.all(12),
-        children: departments.map((dept) {
-          return Card(
+        children: [
+          // Global Search Option
+          Card(
+            color: Colors.blue.shade50,
             child: ListTile(
-              leading: const Icon(Icons.business_center),
-              title: Text(dept),
-              trailing: const Icon(Icons.chevron_right),
+              leading: const Icon(Icons.search, color: Colors.blue, size: 28),
+              title: const Text(
+                'Search All Employees',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
+              subtitle: const Text('Search across all departments and branches'),
+              trailing: const Icon(Icons.arrow_forward, color: Colors.blue),
               onTap: () => setState(() {
-                selectedDepartment = Department(dept);
+                selectedDepartment = Department('All');
               }),
             ),
-          );
-        }).toList(),
+          ),
+          const SizedBox(height: 8),
+          const Divider(),
+          const SizedBox(height: 8),
+          ...departments.map((dept) {
+            return Card(
+              child: ListTile(
+                leading: const Icon(Icons.business_center),
+                title: Text(dept),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => setState(() {
+                  selectedDepartment = Department(dept);
+                }),
+              ),
+            );
+          }).toList(),
+        ],
       ),
     );
   }
 
   Widget _buildEmployeeList() {
-    final deptEmployees = filteredEmployees.where((e) =>
-        e.branch == selectedBranch!.name &&
-        e.department == selectedDepartment!.name).toList();
+    // Handle "Search All" case
+    final deptEmployees = selectedDepartment!.name == 'All' 
+        ? filteredEmployees // Show all filtered employees across all departments/branches
+        : filteredEmployees.where((e) =>
+            e.branch == selectedBranch!.name &&
+            e.department == selectedDepartment!.name).toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${selectedDepartment!.name} - ${selectedBranch!.name}"),
+        title: Text(selectedDepartment!.name == 'All' 
+            ? "All Employees" 
+            : "${selectedDepartment!.name} - ${selectedBranch!.name}"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => setState(() => selectedDepartment = null),
         ),
+        actions: widget.role.toLowerCase() == 'admin' ? [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            tooltip: 'My Profile',
+            onPressed: _editMyProfile,
+          ),
+        ] : null,
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(
-              decoration: const InputDecoration(
-                hintText: "Search employee...",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: selectedDepartment!.name == 'All' 
+                    ? "Search by employee name or ID..."
+                    : "Search employees in ${selectedDepartment!.name} by name or ID...",
+                hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14),
+                prefixIcon: const Icon(Icons.search, color: Colors.white),
+                suffixIcon: searchQuery.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.grey),
+                        onPressed: () {
+                          _searchController.clear();
+                          search('');
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.grey[300]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.blue, width: 2),
+                ),
+                filled: true,
+                fillColor: Colors.grey[50],
+                contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               ),
               onChanged: search,
             ),
           ),
+          // Search results counter
+          if (searchQuery.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                "Found ${deptEmployees.length} employee${deptEmployees.length != 1 ? 's' : ''} matching '$searchQuery'",
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
           Expanded(
             child: deptEmployees.isEmpty
-                ? const Center(child: Text("No employees found."))
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          searchQuery.isNotEmpty ? Icons.search_off : Icons.people_outline,
+                          size: 64,
+                          color: Colors.grey[400],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          searchQuery.isNotEmpty 
+                              ? "No employees found matching '$searchQuery'"
+                              : "No employees found in this department.",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        if (searchQuery.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            "Try searching with different keywords",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[500],
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  )
                 : ListView.builder(
                     itemCount: deptEmployees.length,
                     itemBuilder: (context, index) {
                       final emp = deptEmployees[index];
+                      final isCurrentUser = emp.employeeID == widget.employeeId;
+                      
                       return Card(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 6),
+                        color: isCurrentUser ? Colors.blue.shade50 : null,
                         child: ListTile(
-                          title: Text("${emp.firstName} ${emp.lastName}"),
+                          leading: isCurrentUser 
+                              ? const Icon(Icons.account_circle, color: Colors.blue, size: 32)
+                              : const Icon(Icons.person, color: Colors.grey),
+                          title: Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  "${emp.firstName} ${emp.lastName}",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              if (isCurrentUser) ...[
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Text(
+                                      'You',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Position: ${emp.position}"),
-                              Text("Email: ${emp.companyEmail}"),
-                              Text("Mobile: ${emp.mobileNumber}"),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Position: ${emp.position}",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Email: ${emp.companyEmail}",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Mobile: ${emp.mobileNumber}",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (isCurrentUser)
+                                const Text(
+                                  "This is your profile",
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                             ],
                           ),
                           trailing: widget.role.toLowerCase() == 'admin'
