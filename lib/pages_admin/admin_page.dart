@@ -23,7 +23,14 @@ class NotificationsPage extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  final String role;       
+  final String employeeId;  
+
+    const MyHomePage({
+    super.key,
+    required this.role,
+    required this.employeeId,
+  });
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -36,7 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _getPage(String name) {
     switch (name) {
       case 'Employee Profile':
-        return const EmployeeListPage();
+      return EmployeeListPage(
+        role: widget.role,
+        employeeId: widget.employeeId,
+      );
       case 'Attendance Records':
         return const AttendancePage();
       case 'Training Portal':
