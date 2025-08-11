@@ -9,27 +9,30 @@ class ApiService {
   // For actual device or web, use your server's IP or domain
   // final String apiUrl = "http://your-server-ip-or-domain";
 
-  Future<Map<String, dynamic>?> signIn(String username, String password) async {
+  // Sign in method
+  Future<Map<String, dynamic>?> signIn(String employeeId, String password) async {
+    final url = Uri.parse("$apiUrl/login.php");
     try {
       final response = await http.post(
-        Uri.parse('$apiUrl/login.php'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'username': username, 'password': password}),
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"EmployeeID": employeeId, "password": password}),
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data != null && data['username'] != null) {
-          return {'username': data['username'], 'role': data['role']};
-        }
+        return jsonDecode(response.body);
+      } else {
+        print("Login failed: ${response.body}");
+        return null;
       }
     } catch (e) {
-      print("API Error: $e");
+      print("Error in signIn: $e");
+      return null;
     }
-
-    return null;
   }
 
+
+  // Fetch all employees
   Future<List<Employee>> fetchAllEmployees() async {
     final url = Uri.parse('$apiUrl/employee.php');
     final response = await http.get(url);
@@ -42,33 +45,93 @@ class ApiService {
     }
   }
 
+  // Add a new employee
   Future<bool> addEmployee(Employee emp) async {
-    final response = await http.post(
-      Uri.parse('$apiUrl/employee.php'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(emp.toJson()),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('$apiUrl/employee.php'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(emp.toJson()),
+      );
 
-    return response.statusCode == 200;
+      print('Add Employee Response: ${response.statusCode}');
+      print('Add Employee Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        print('Response data: $responseData');
+        return responseData['success'] == true;
+      } else {
+        print('Add Employee failed with status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+      return false;
+    } catch (e) {
+      print('Error in addEmployee: $e');
+      return false;
+    }
   }
 
+  // Update an existing employee
   Future<bool> updateEmployee(Employee emp) async {
-    final response = await http.put(
-      Uri.parse('$apiUrl/employee.php'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(emp.toJson()),
-    );
+    try {
+      final response = await http.put(
+        Uri.parse('$apiUrl/employee.php'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(emp.toJson()),
+      );
 
-    return response.statusCode == 200;
+      print('Update Employee Response: ${response.statusCode}');
+      print('Update Employee Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        print('Response data: $responseData');
+        return responseData['success'] == true;
+      } else {
+        print('Update Employee failed with status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+      return false;
+    } catch (e) {
+      print('Error in updateEmployee: $e');
+      return false;
+    }
   }
 
+  // Delete an employee by ID
   Future<bool> deleteEmployee(String id) async {
-    final response = await http.delete(
-      Uri.parse('$apiUrl/employee.php'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'id': id}),
-    );
+    try {
+      final response = await http.delete(
+        Uri.parse('$apiUrl/employee.php'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'EmployeeID': id}),
+      );
 
-    return response.statusCode == 200;
+      print('Delete Employee Response: ${response.statusCode}');
+      print('Delete Employee Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        return responseData['success'] == true;
+      }
+      return false;
+    } catch (e) {
+      print('Error in deleteEmployee: $e');
+      return false;
+    }
+  }
+
+  // Fetch attendance records with leave status
+  Future<List<Map<String, dynamic>>> fetchAttendanceWithLeave() async {
+    final url = Uri.parse("http://10.0.2.2/attendance.php"); 
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(data);
+    } else {
+      throw Exception('Failed to fetch attendance data');
+    }
   }
 }
