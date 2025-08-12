@@ -3,26 +3,31 @@ import 'package:http/http.dart' as http;
 import 'employee_model.dart';
 
 class ApiService {
-  // ⚠️ Use http://10.0.2.2 if testing on Android Emulator!
-  final String apiUrl = "http://10.0.2.2";
-
-  // For actual device or web, use your server's IP or domain
-  // final String apiUrl = "http://your-server-ip-or-domain";
-
+  // ⚠️ Base URL for your HRIS API
+  final String baseUrl = "http://190.92.236.127:8080/HRISAPI/Welcome";
+  
   // Sign in method
-  Future<Map<String, dynamic>?> signIn(String employeeId, String password) async {
-    final url = Uri.parse("$apiUrl/login.php");
+  Future<Map<String, dynamic>?> signIn(String username, String password) async {
+    final url = Uri.parse("$baseUrl/login");
+    print("Attempting login to: $url");
+    print("Username: $username");
+    
     try {
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"EmployeeID": employeeId, "password": password}),
+        body: jsonEncode({"username": username, "password": password}),
       );
 
+      print("Login response status: ${response.statusCode}");
+      print("Login response body: ${response.body}");
+
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        final responseData = jsonDecode(response.body);
+        print("Login success: $responseData");
+        return responseData;
       } else {
-        print("Login failed: ${response.body}");
+        print("Login failed with status ${response.statusCode}: ${response.body}");
         return null;
       }
     } catch (e) {
@@ -34,7 +39,7 @@ class ApiService {
 
   // Fetch all employees
   Future<List<Employee>> fetchAllEmployees() async {
-    final url = Uri.parse('$apiUrl/employee.php');
+    final url = Uri.parse('$baseUrl/employee');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -50,7 +55,7 @@ class ApiService {
     try {
       print("Adding employee: ${emp.toJson()}");
       final response = await http.post(
-        Uri.parse('$apiUrl/employee.php'),
+        Uri.parse('$baseUrl/employee'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(emp.toJson()),
       );
@@ -80,7 +85,7 @@ class ApiService {
     try {
       print("Updating employee: ${emp.toJson()}");
       final response = await http.put(
-        Uri.parse('$apiUrl/employee.php'),
+        Uri.parse('$baseUrl/employee'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(emp.toJson()),
       );
@@ -109,7 +114,7 @@ class ApiService {
   Future<bool> deleteEmployee(String id) async {
     try {
       final response = await http.delete(
-        Uri.parse('$apiUrl/employee.php'),
+        Uri.parse('$baseUrl/employee'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'EmployeeID': id}),
       );
@@ -128,7 +133,7 @@ class ApiService {
 
   // Fetch attendance records with leave status
   Future<List<Map<String, dynamic>>> fetchAttendanceWithLeave() async {
-    final url = Uri.parse("http://10.0.2.2/attendance.php"); 
+    final url = Uri.parse("$baseUrl/attendance"); 
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

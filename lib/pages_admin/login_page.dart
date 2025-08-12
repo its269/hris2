@@ -12,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _employeeIdController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -24,47 +24,40 @@ class _LoginPageState extends State<LoginPage> {
       _errorMessage = null;
     });
 
-    final employeeId = _employeeIdController.text.trim();
+    final username = _usernameController.text.trim();
     final password = _passwordController.text;
 
-    if (employeeId.isEmpty || password.isEmpty) {
+    if (username.isEmpty || password.isEmpty) {
       setState(() {
         _isLoading = false;
-        _errorMessage = "Please enter both Employee ID and password";
+        _errorMessage = "Please enter both username and password";
       });
       return;
     }
 
     final api = ApiService();
-    final result = await api.signIn(employeeId, password);
+    final result = await api.signIn(username, password);
 
     setState(() {
       _isLoading = false;
     });
 
     if (result != null) {
-      final role = result['role'] ?? '';
-      final employeeId = result['EmployeeID'] ?? '';
+      final employeeId = result['username'] ?? '';
 
-      if (role == 'Admin') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => MyHomePage(
-              role: role,
-              employeeId: employeeId,
-            ),
+      // Navigate to home page on successful login (no role checking)
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MyHomePage(
+            role: 'Admin', // Default role or you can use result['role'] ?? 'Admin'
+            employeeId: employeeId,
           ),
-        );
-      } else if (role == 'Employee') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const UserPage()),
-        );
-      }
+        ),
+      );
     } else {
       setState(() {
-        _errorMessage = "Invalid Employee ID or password";
+        _errorMessage = "Invalid username or password";
       });
     }
   }
@@ -99,12 +92,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 32),
 
-              // Employee ID Field
+              // Username Field
               TextField(
-                controller: _employeeIdController,
+                controller: _usernameController,
                 decoration: InputDecoration(
-                  labelText: 'Employee ID',
-                  prefixIcon: const Icon(Icons.badge),
+                  labelText: 'Username',
+                  prefixIcon: const Icon(Icons.person),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
