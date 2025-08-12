@@ -25,7 +25,19 @@ class ApiService {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         print("Login success: $responseData");
-        return responseData;
+        
+        // Check if the response indicates success
+        if (responseData != null && responseData.isNotEmpty) {
+          // If there's an error field, return null to indicate failure
+          if (responseData['error'] != null) {
+            print("Login failed with error: ${responseData['error']}");
+            return null;
+          }
+          return responseData;
+        } else {
+          print("Login failed: Empty response");
+          return null;
+        }
       } else {
         print("Login failed with status ${response.statusCode}: ${response.body}");
         return null;

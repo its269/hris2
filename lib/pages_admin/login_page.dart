@@ -42,10 +42,21 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = false;
     });
 
-    if (result != null) {
-      final employeeId = result['username'] ?? '';
+    if (result != null && result.isNotEmpty) {
+      // Check if login was actually successful by verifying we have valid data
+      final employeeId = result['username'] ?? result['EmployeeID'] ?? '';
+      final success = result['success'] ?? true; // Some APIs return success flag
+      final error = result['error'] ?? '';
+      
+      // If there's an error message or no valid employeeId, treat as failed login
+      if (error.isNotEmpty || employeeId.isEmpty || success == false) {
+        setState(() {
+          _errorMessage = error.isNotEmpty ? error : "Invalid username or password";
+        });
+        return;
+      }
 
-      // Navigate to home page on successful login (no role checking)
+      // Navigate to home page on successful login
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
