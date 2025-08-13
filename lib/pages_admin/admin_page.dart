@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'attendance_page.dart';
 import '../pages_employee/training_page.dart';
 import 'policy_page.dart';
 import 'hr_page.dart';
 import 'employee_list_page.dart';
 import 'admin_approval_page.dart';
+import 'dashboard_page.dart';
+import '../theme_provider.dart';
 import '../main.dart'; // Assuming MyApp is here
+// Uncomment when employee names API is implemented
+// import 'api_service.dart';
 
 // Placeholder notification page
 // class NotificationsPage extends StatelessWidget {
@@ -19,7 +24,7 @@ import '../main.dart'; // Assuming MyApp is here
 //         style: TextStyle(fontSize: 24),
 //       ),
 //     );
-//   }
+//   } 
 // }
 
 class MyHomePage extends StatefulWidget {
@@ -37,11 +42,44 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _selectedPage = 'Request';
+  String _selectedPage = 'Dashboard';
   int _selectedTabIndex = 0; // 0 = Home, 1 = Notifications
+  
+  // PLACEHOLDER - Employee name field
+  // Uncomment this field when employee names table is ready:
+  // String? _employeeName;
+  
+  @override
+  void initState() {
+    super.initState();
+    // Uncomment this when employee names table is ready
+    // _loadEmployeeName();
+  }
+  
+  // PLACEHOLDER - Load employee name from API
+  // This method will fetch the actual employee name from another table
+  // using the employeeId. Currently commented out because the separate
+  // employee names table is not yet available.
+  //
+  // Future<void> _loadEmployeeName() async {
+  //   final apiService = ApiService();
+  //   final name = await apiService.fetchEmployeeName(widget.employeeId);
+  //   if (name != null && name.isNotEmpty) {
+  //     setState(() {
+  //       _employeeName = name;
+  //     });
+  //   }
+  // }
 
   Widget _getPage(String name) {
     switch (name) {
+      case 'Dashboard':
+        return DashboardPage(
+          role: widget.role,
+          employeeId: widget.employeeId,
+        );
+      case 'Leave Management':
+        return const AdminApprovalPage();
       case 'Employee Profile':
       return EmployeeListPage(
         role: widget.role,
@@ -95,19 +133,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Kelin Graphic System'),
-            Image.asset(
+        title: const Text('Kelin Graphic System'),
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
+        actions: [
+          // Theme toggle button
+          Consumer<ThemeProvider>(
+            builder: (context, themeProvider, child) {
+              return IconButton(
+                icon: Icon(
+                  themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                ),
+                tooltip: themeProvider.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+                onPressed: () {
+                  themeProvider.toggleTheme();
+                },
+              );
+            },
+          ),
+          // Logo
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Image.asset(
               'assets/kelin.png',
               height: 32,
               errorBuilder: (context, error, stackTrace) => const SizedBox(),
             ),
-          ],
-        ),
-        backgroundColor: colorScheme.primaryContainer,
-        foregroundColor: colorScheme.onPrimaryContainer,
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -127,6 +180,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   const SizedBox(height: 12),
                   Text(
+                    // Use actual employee name when available
+                    // When employee names table is ready, this will show:
+                    // 'Welcome, ${_employeeName ?? widget.employeeId}!'
+                    // For now, using employeeId as the display name
                     'Welcome, ${widget.employeeId}!',
                     style: TextStyle(
                       fontSize: 18,
@@ -144,12 +201,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
+            _buildDrawerItem(Icons.dashboard, 'Dashboard'),
+            _buildDrawerItem(Icons.approval, 'Leave Management'),
             _buildDrawerItem(Icons.person, 'Employee Profile'),
             _buildDrawerItem(Icons.calendar_today, 'Attendance Records'),
             _buildDrawerItem(Icons.school, 'Training Portal'),
             _buildDrawerItem(Icons.policy, 'Corporate Policy'),
             _buildDrawerItem(Icons.people_alt, 'HR Related Forms'),
-            // _buildDrawerItem(Icons.people_alt, 'Request'),
 
             // Log out option
             ListTile(

@@ -155,4 +155,34 @@ class ApiService {
       throw Exception('Failed to fetch attendance data');
     }
   }
+
+  // PLACEHOLDER - Fetch employee full name from separate table
+  // This method will fetch the actual employee name from another table
+  // using the employeeId as the key. For now, this is commented out
+  // because the separate employee names table is not yet available.
+  // 
+  // Future<String?> fetchEmployeeName(String employeeId) async {
+  //   try {
+  //     final url = Uri.parse("$baseUrl/employee-names/$employeeId");
+  //     final response = await http.get(
+  //       url,
+  //       headers: {"Content-Type": "application/json"},
+  //     );
+  //
+  //     print("Fetch employee name response: ${response.statusCode} - ${response.body}");
+  //
+  //     if (response.statusCode == 200) {
+  //       final responseData = jsonDecode(response.body);
+  //       // Assuming the API returns something like:
+  //       // {"employeeId": "12345", "fullName": "John Doe", "firstName": "John", "lastName": "Doe"}
+  //       return responseData['fullName'] ?? responseData['firstName'] ?? '';
+  //     } else {
+  //       print("Failed to fetch employee name: ${response.statusCode} - ${response.body}");
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     print("Error in fetchEmployeeName: $e");
+  //     return null;
+  //   }
+  // }
 }

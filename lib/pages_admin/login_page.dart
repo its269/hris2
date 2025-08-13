@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hris/pages_admin/attendance_page.dart';
+import 'package:provider/provider.dart';
+import '../theme_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // for caching credentials, storing securely
 import 'api_service.dart';
 import 'admin_page.dart';
@@ -167,140 +169,156 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo
-              Image.asset('assets/kelin.png', height: 120),
-              const SizedBox(height: 16),
-
-              // Welcome Text
-              const Text(
-                "Welcome to HRIS!",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                "Sign in to continue",
-                style: TextStyle(fontSize: 16, color: Colors.black54),
-              ),
-              const SizedBox(height: 32),
-
-              // Username Field
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  prefixIcon: const Icon(Icons.person),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Password Field
-              TextField(
-                controller: _passwordController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  prefixIcon: const Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // REMEMBER ME CHECKBOX:
-              // When checked, user credentials will be securely stored and auto-filled
-              // on next app launch. Uses FlutterSecureStorage for encryption.
-              // Unchecking will clear any stored credentials for security.
-              Row(
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        final theme = themeProvider.currentTheme;
+        final colorScheme = theme.colorScheme;
+        final isDark = themeProvider.isDarkMode;
+        return Scaffold(
+          backgroundColor: theme.scaffoldBackgroundColor,
+          body: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Checkbox(
-                    value: _rememberMe,
-                    onChanged: (value) {
-                      setState(() {
-                        _rememberMe = value ?? false;
-                        // If user unchecks while typing, clear stored data immediately
-                        if (!_rememberMe) {
-                          _clearCredentials();
-                        }
-                      });
-                    },
-                  ),
-                  const Text(
-                    'Remember Me',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  // Info icon to explain what "Remember Me" does
-                  const SizedBox(width: 8),
-                  Icon(
-                    Icons.info_outline,
-                    size: 16,
-                    color: Colors.grey[600],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
+                  // Logo
+                  Image.asset('assets/kelin.png', height: 120),
+                  const SizedBox(height: 16),
 
-              // Login Button or Loading
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: _login,
-                        icon: const Icon(Icons.login),
-                        label: const Text('Login'),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          textStyle: const TextStyle(fontSize: 16),
-                        ),
+                  // Welcome Text
+                  Text(
+                    "Welcome to HRIS!",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                      color: colorScheme.onBackground,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Sign in to continue",
+                    style: TextStyle(fontSize: 16, color: colorScheme.onBackground.withOpacity(0.7)),
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Username Field
+                  TextField(
+                    controller: _usernameController,
+                    style: TextStyle(color: colorScheme.onBackground),
+                    decoration: InputDecoration(
+                      labelText: 'Username',
+                      labelStyle: TextStyle(color: colorScheme.onBackground.withOpacity(0.8)),
+                      prefixIcon: Icon(Icons.person, color: colorScheme.primary),
+                      filled: true,
+                      fillColor: isDark ? colorScheme.surface : Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-
-              // Error Message
-              if (_errorMessage != null) ...[
-                const SizedBox(height: 16),
-                Text(
-                  _errorMessage!,
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.w500,
                   ),
-                ),
-              ],
-            ],
+                  const SizedBox(height: 16),
+
+                  // Password Field
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: _obscurePassword,
+                    style: TextStyle(color: colorScheme.onBackground),
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      labelStyle: TextStyle(color: colorScheme.onBackground.withOpacity(0.8)),
+                      prefixIcon: Icon(Icons.lock, color: colorScheme.primary),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: colorScheme.primary,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                      ),
+                      filled: true,
+                      fillColor: isDark ? colorScheme.surface : Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // REMEMBER ME CHECKBOX:
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _rememberMe,
+                        onChanged: (value) {
+                          setState(() {
+                            _rememberMe = value ?? false;
+                            if (!_rememberMe) {
+                              _clearCredentials();
+                            }
+                          });
+                        },
+                        activeColor: colorScheme.primary,
+                        checkColor: colorScheme.onPrimary,
+                      ),
+                      Text(
+                        'Remember Me',
+                        style: TextStyle(fontSize: 16, color: colorScheme.onBackground),
+                      ),
+                      const SizedBox(width: 8),
+                      Icon(
+                        Icons.info_outline,
+                        size: 16,
+                        color: colorScheme.onBackground.withOpacity(0.6),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Login Button or Loading
+                  _isLoading
+                      ? CircularProgressIndicator(color: colorScheme.primary)
+                      : SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: _login,
+                            icon: const Icon(Icons.login),
+                            label: const Text('Login'),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              textStyle: const TextStyle(fontSize: 16),
+                              backgroundColor: colorScheme.primary,
+                              foregroundColor: colorScheme.onPrimary,
+                            ),
+                          ),
+                        ),
+
+                  // Error Message
+                  if (_errorMessage != null) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      _errorMessage!,
+                      style: TextStyle(
+                        color: Colors.red[400],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
