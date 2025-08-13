@@ -127,10 +127,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Welcome!',
+                    'Welcome, ${widget.employeeId}!',
                     style: TextStyle(
                       fontSize: 18,
+                      fontWeight: FontWeight.bold,
                       color: colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                  Text(
+                    'Role: ${widget.role}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onPrimaryContainer.withOpacity(0.8),
                     ),
                   ),
                 ],

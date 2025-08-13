@@ -24,7 +24,7 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        print("Login: $responseData");
+        print("Login result: $responseData");
         
         // Check if the response indicates success
         if (responseData != null && responseData.isNotEmpty) {
