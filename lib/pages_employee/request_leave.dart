@@ -97,8 +97,26 @@ class _RequestLeavePageState extends State<RequestLeavePage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Scaffold(
-      appBar: AppBar(title: const Text("Leave Request Form")),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Icon(Icons.event_note, 
+                 color: colorScheme.onPrimaryContainer, 
+                 size: 24),
+            const SizedBox(width: 8),
+            const Text("Leave Request Form"),
+          ],
+        ),
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(

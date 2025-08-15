@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class AdminApprovalPage extends StatefulWidget {
-  const AdminApprovalPage({super.key});
+  final bool showAppBar;
+  
+  const AdminApprovalPage({super.key, this.showAppBar = true});
 
   @override
   State<AdminApprovalPage> createState() => _AdminApprovalPageState();
@@ -116,9 +118,73 @@ class _AdminApprovalPageState extends State<AdminApprovalPage>
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    Widget bodyContent = TabBarView(
+      controller: tabController,
+      children: [
+        // Pending Requests
+        isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : pendingRequests.isEmpty
+            ? const Center(child: Text("No pending leave requests"))
+            : ListView.builder(
+                padding: const EdgeInsets.all(12.0),
+                itemCount: pendingRequests.length,
+                itemBuilder: (context, index) {
+                  return buildRequestCard(
+                    pendingRequests[index],
+                    showActions: true,
+                  );
+                },
+              ),
+
+        // All Requests
+        allRequests.isEmpty
+            ? const Center(child: Text("No leave requests yet"))
+            : ListView.builder(
+                padding: const EdgeInsets.all(12.0),
+                itemCount: allRequests.length,
+                itemBuilder: (context, index) {
+                  return buildRequestCard(allRequests[index]);
+                },
+              ),
+      ],
+    );
+
+    if (!widget.showAppBar) {
+      return Column(
+        children: [
+          TabBar(
+            controller: tabController,
+            labelColor: colorScheme.primary,
+            tabs: const [
+              Tab(text: "Pending Approvals"),
+              Tab(text: "Request History"),
+            ],
+          ),
+          Expanded(child: bodyContent),
+        ],
+      );
+    }
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Admin Leave Management"),
+        title: Row(
+          children: [
+            Icon(Icons.approval, 
+                 color: colorScheme.onPrimaryContainer, 
+                 size: 24),
+            const SizedBox(width: 8),
+            const Expanded(child: Text("Admin Leave Management")),
+          ],
+        ),
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
         bottom: TabBar(
           controller: tabController,
           tabs: const [
@@ -127,35 +193,7 @@ class _AdminApprovalPageState extends State<AdminApprovalPage>
           ],
         ),
       ),
-      body: TabBarView(
-        controller: tabController,
-        children: [
-          // Pending Requests
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : pendingRequests.isEmpty
-              ? const Center(child: Text("No pending leave requests"))
-              : ListView.builder(
-                  itemCount: pendingRequests.length,
-                  itemBuilder: (context, index) {
-                    return buildRequestCard(
-                      pendingRequests[index],
-                      showActions: true,
-                    );
-                  },
-                ),
-
-          // All Requests
-          allRequests.isEmpty
-              ? const Center(child: Text("No leave requests yet"))
-              : ListView.builder(
-                  itemCount: allRequests.length,
-                  itemBuilder: (context, index) {
-                    return buildRequestCard(allRequests[index]);
-                  },
-                ),
-        ],
-      ),
+      body: bodyContent,
     );
   }
 }

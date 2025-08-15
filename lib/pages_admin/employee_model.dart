@@ -133,3 +133,17 @@ class Employee {
     };
   }
 }
+
+// Branch class for navigation
+class Branch {
+  final String name;
+  
+  Branch(this.name);
+}
+
+// Department class for navigation
+class Department {
+  final String name;
+  
+  Department(this.name);
+}

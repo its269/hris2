@@ -28,8 +28,26 @@ class LeaveStatusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Scaffold(
-      appBar: AppBar(title: const Text("Leave Status")),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Icon(Icons.fact_check, 
+                 color: colorScheme.onPrimaryContainer, 
+                 size: 24),
+            const SizedBox(width: 8),
+            const Text("Leave Status"),
+          ],
+        ),
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

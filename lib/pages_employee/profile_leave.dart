@@ -12,21 +12,36 @@ class ProfileLeave extends StatefulWidget {
 class _ProfileLeaveState extends State<ProfileLeave> {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile & Leave Request'),
-        // backgroundColor: Colors.teal,
+        title: Row(
+          children: [
+            Icon(Icons.assignment, 
+                 color: colorScheme.onPrimaryContainer, 
+                 size: 24),
+            const SizedBox(width: 8),
+            const Expanded(child: Text('Profile & Leave Request')),
+          ],
+        ),
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(12.0),
           child: Card(
             elevation: 8,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(32.0),
+              padding: const EdgeInsets.all(24.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -42,7 +57,7 @@ class _ProfileLeaveState extends State<ProfileLeave> {
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
                   _buildButton(
                     label: 'Leave Request',
                     icon: Icons.calendar_today,

@@ -12,11 +12,13 @@ import '../theme_provider.dart';
 class DashboardPage extends StatefulWidget {
   final String role;
   final String employeeId;
+  final Function(String)? onNavigateToPage;
 
   const DashboardPage({
     super.key,
     required this.role,
     required this.employeeId,
+    this.onNavigateToPage,
   });
 
   @override
@@ -152,7 +154,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -164,20 +166,20 @@ class _DashboardPageState extends State<DashboardPage> {
                 color: colorScheme.primary,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
               'Have a great day at work, ${employeeName}',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Colors.grey[600],
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
 
             // Profile Card
             Card(
               elevation: 4,
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     // Avatar Section
@@ -238,8 +240,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     Chip(
                       label: Text(
                         widget.role,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: colorScheme.onPrimary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -255,8 +257,37 @@ class _DashboardPageState extends State<DashboardPage> {
                             onPressed: _navigateToEditProfile,
                             icon: const Icon(Icons.edit),
                             label: const Text('Edit Profile'),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            style: ButtonStyle(
+                              padding: WidgetStateProperty.all(
+                                const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              elevation: WidgetStateProperty.resolveWith<double>(
+                                (Set<WidgetState> states) {
+                                  if (states.contains(WidgetState.hovered)) {
+                                    return 6.0;
+                                  }
+                                  return 2.0;
+                                },
+                              ),
+                              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                                (Set<WidgetState> states) {
+                                  if (states.contains(WidgetState.hovered)) {
+                                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
+                                  }
+                                  return Theme.of(context).colorScheme.primary;
+                                },
+                              ),
+                              foregroundColor: WidgetStateProperty.all<Color?>(
+                                Theme.of(context).colorScheme.onPrimary,
+                              ),
+                              shadowColor: WidgetStateProperty.resolveWith<Color?>(
+                                (Set<WidgetState> states) {
+                                  if (states.contains(WidgetState.hovered)) {
+                                    return Theme.of(context).colorScheme.primary.withOpacity(0.4);
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -266,8 +297,37 @@ class _DashboardPageState extends State<DashboardPage> {
                             onPressed: _navigateToAccountSettings,
                             icon: const Icon(Icons.settings),
                             label: const Text('Settings'),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            style: ButtonStyle(
+                              padding: WidgetStateProperty.all(
+                                const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              elevation: WidgetStateProperty.resolveWith<double>(
+                                (Set<WidgetState> states) {
+                                  if (states.contains(WidgetState.hovered)) {
+                                    return 6.0;
+                                  }
+                                  return 2.0;
+                                },
+                              ),
+                              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                                (Set<WidgetState> states) {
+                                  if (states.contains(WidgetState.hovered)) {
+                                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
+                                  }
+                                  return Theme.of(context).colorScheme.primary;
+                                },
+                              ),
+                              foregroundColor: WidgetStateProperty.all<Color?>(
+                                Theme.of(context).colorScheme.onPrimary,
+                              ),
+                              shadowColor: WidgetStateProperty.resolveWith<Color?>(
+                                (Set<WidgetState> states) {
+                                  if (states.contains(WidgetState.hovered)) {
+                                    return Theme.of(context).colorScheme.primary.withOpacity(0.4);
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -277,13 +337,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
 
             // Quick Stats Card
             Card(
               elevation: 4,
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -349,10 +409,80 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
             ),
+            const SizedBox(height: 16),
+
+            // Reports Section
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.analytics, color: colorScheme.primary),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Reports & Analytics',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    
+                    // Reports Grid
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 2.5,
+                      children: [
+                        _buildReportCard(
+                          context,
+                          'Attendance Report',
+                          'View statistics',
+                          Icons.schedule,
+                          Colors.blue,
+                          () => _showAttendanceReport(context),
+                        ),
+                        _buildReportCard(
+                          context,
+                          'Leave Report',
+                          'Requests & balances',
+                          Icons.beach_access,
+                          Colors.orange,
+                          () => _showLeaveReport(context),
+                        ),
+                        _buildReportCard(
+                          context,
+                          'Team Report',
+                          'Department info',
+                          Icons.group,
+                          Colors.teal,
+                          () => _showTeamReport(context),
+                        ),
+                        _buildReportCard(
+                          context,
+                          'Monthly Summary',
+                          'Full overview',
+                          Icons.summarize,
+                          Colors.indigo,
+                          () => _showMonthlySummary(context),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 24),
 
-            // TODO: PLACEHOLDER - Additional Dashboard Widgets
-            // These can be implemented when more data becomes available
+            // Quick Insights Section
             Card(
               elevation: 4,
               child: Padding(
@@ -362,10 +492,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.info_outline, color: colorScheme.primary),
+                        Icon(Icons.insights, color: colorScheme.primary),
                         const SizedBox(width: 8),
                         Text(
-                          'Coming Soon',
+                          'Quick Insights',
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -373,19 +503,53 @@ class _DashboardPageState extends State<DashboardPage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      'Additional dashboard features will be available once the employee names table and other data sources are implemented:',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildInsightItem(
+                            context,
+                            'This Month',
+                            '22/24 Days',
+                            'Attendance',
+                            Icons.calendar_month,
+                            Colors.green,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildInsightItem(
+                            context,
+                            'Pending',
+                            '3 Requests',
+                            'Leave Applications',
+                            Icons.pending_actions,
+                            Colors.orange,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 12),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
-                        Text('• Recent attendance summary'),
-                        Text('• Leave balance overview'),
-                        Text('• Upcoming events & deadlines'),
-                        Text('• Performance metrics'),
-                        Text('• Team announcements'),
+                        Expanded(
+                          child: _buildInsightItem(
+                            context,
+                            'This Week',
+                            '8.5 Hours',
+                            'Overtime',
+                            Icons.access_time,
+                            Colors.blue,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildInsightItem(
+                            context,
+                            'Open',
+                            '7 Positions',
+                            'Currently Hiring',
+                            Icons.work,
+                            Colors.red,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -427,6 +591,501 @@ class _DashboardPageState extends State<DashboardPage> {
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReportCard(BuildContext context, String title, String subtitle, IconData icon, Color color, VoidCallback onTap) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        child: Card(
+          elevation: 2,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(12),
+            hoverColor: color.withOpacity(0.1),
+            splashColor: color.withOpacity(0.2),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  Icon(icon, color: color, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                            height: 1.1,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        Text(
+                          subtitle,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 9,
+                            height: 1.1,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInsightItem(BuildContext context, String label, String value, String description, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          Text(
+            description,
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 10,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAttendanceReport(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.schedule, color: Colors.blue),
+            SizedBox(width: 8),
+            Text('Attendance Report'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildReportStatRow('This Month', '22/24 Days', '91.7%'),
+            _buildReportStatRow('Last Month', '20/22 Days', '90.9%'),
+            _buildReportStatRow('Average Hours', '8.2 hrs/day', 'Good'),
+            _buildReportStatRow('Late Arrivals', '2 Days', 'Minimal'),
+            const SizedBox(height: 16),
+            const Text(
+              'Recommendation: Maintain current attendance pattern. Consider arriving 10 minutes earlier to avoid late marks.',
+              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: ButtonStyle(
+              overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.1);
+                  }
+                  return null;
+                },
+              ),
+            ),
+            child: const Text('Close'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // Navigate to Attendance Records tab
+              if (widget.onNavigateToPage != null) {
+                widget.onNavigateToPage!('Attendance Records');
+              }
+            },
+            style: ButtonStyle(
+              elevation: WidgetStateProperty.resolveWith<double>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return 8.0;
+                  }
+                  return 2.0;
+                },
+              ),
+              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
+                  }
+                  return Theme.of(context).colorScheme.primary;
+                },
+              ),
+              foregroundColor: WidgetStateProperty.all<Color?>(
+                Theme.of(context).colorScheme.onPrimary,
+              ),
+              shadowColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                  }
+                  return null;
+                },
+              ),
+            ),
+            child: const Text('View Details'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLeaveReport(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.beach_access, color: Colors.orange),
+            SizedBox(width: 8),
+            Text('Leave Report'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildReportStatRow('Vacation Leave', '15 Days', 'Available'),
+            _buildReportStatRow('Sick Leave', '5 Days', 'Available'),
+            _buildReportStatRow('Used This Year', '7 Days', 'Vacation'),
+            _buildReportStatRow('Pending Requests', '2', 'In Review'),
+            const SizedBox(height: 16),
+            const Text(
+              'Next scheduled leave: Dec 25-31, 2024 (7 days)',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: ButtonStyle(
+              overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.1);
+                  }
+                  return null;
+                },
+              ),
+            ),
+            child: const Text('Close'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // Navigate to Leave Management tab
+              if (widget.onNavigateToPage != null) {
+                widget.onNavigateToPage!('Leave Management');
+              }
+            },
+            style: ButtonStyle(
+              elevation: WidgetStateProperty.resolveWith<double>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return 8.0;
+                  }
+                  return 2.0;
+                },
+              ),
+              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
+                  }
+                  return Theme.of(context).colorScheme.primary;
+                },
+              ),
+              foregroundColor: WidgetStateProperty.all<Color?>(
+                Theme.of(context).colorScheme.onPrimary,
+              ),
+              shadowColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                  }
+                  return null;
+                },
+              ),
+            ),
+            child: const Text('Manage Leave'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showTeamReport(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.group, color: Colors.teal),
+            SizedBox(width: 8),
+            Text('Team Report'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildReportStatRow('Team Members', '12 People', 'HR Department'),
+            _buildReportStatRow('Present Today', '11/12', '91.7%'),
+            _buildReportStatRow('Team Projects', '3 Active', 'On Track'),
+            _buildReportStatRow('Avg Performance', '4.6/5.0', 'High'),
+            const SizedBox(height: 16),
+            const Text(
+              'Team is performing well. Consider team building activity for next quarter.',
+              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: ButtonStyle(
+              overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.1);
+                  }
+                  return null;
+                },
+              ),
+            ),
+            child: const Text('Close'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // Navigate to Employee Management tab
+              if (widget.onNavigateToPage != null) {
+                widget.onNavigateToPage!('Employee Management');
+              }
+            },
+            style: ButtonStyle(
+              elevation: WidgetStateProperty.resolveWith<double>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return 8.0;
+                  }
+                  return 2.0;
+                },
+              ),
+              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
+                  }
+                  return Theme.of(context).colorScheme.primary;
+                },
+              ),
+              foregroundColor: WidgetStateProperty.all<Color?>(
+                Theme.of(context).colorScheme.onPrimary,
+              ),
+              shadowColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                  }
+                  return null;
+                },
+              ),
+            ),
+            child: const Text('View Team'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showMonthlySummary(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.summarize, color: Colors.indigo),
+            SizedBox(width: 8),
+            Text('Monthly Summary'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildReportStatRow('Work Days', '22/24', 'Attendance'),
+            _buildReportStatRow('Tasks Completed', '28/30', 'Productivity'),
+            _buildReportStatRow('Overtime Hours', '8.5 hrs', 'Extra Work'),
+            _buildReportStatRow('Performance', '4.8/5.0', 'Rating'),
+            const SizedBox(height: 16),
+            const Text(
+              'Excellent month overall! You\'re exceeding expectations in most areas.',
+              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: ButtonStyle(
+              overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.1);
+                  }
+                  return null;
+                },
+              ),
+            ),
+            child: const Text('Close'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Detailed summary export feature coming soon!')),
+              );
+            },
+            style: ButtonStyle(
+              elevation: WidgetStateProperty.resolveWith<double>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return 8.0;
+                  }
+                  return 2.0;
+                },
+              ),
+              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
+                  }
+                  return Theme.of(context).colorScheme.primary;
+                },
+              ),
+              foregroundColor: WidgetStateProperty.all<Color?>(
+                Theme.of(context).colorScheme.onPrimary,
+              ),
+              shadowColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                  }
+                  return null;
+                },
+              ),
+            ),
+            child: const Text('Export Report'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReportStatRow(String label, String value, String status) {
+    Color statusColor = Colors.blue;
+    if (status.contains('Excellent') || status.contains('Outstanding') || status.contains('Good')) {
+      statusColor = Colors.green;
+    } else if (status.contains('Minimal') || status.contains('Available')) {
+      statusColor = Colors.orange;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: statusColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                status,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: statusColor,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ],
       ),

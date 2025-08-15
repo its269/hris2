@@ -72,8 +72,26 @@ class _AttendancePageSoloState extends State<AttendancePageSolo> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Scaffold(
-      appBar: AppBar(title: const Text("Attendance: January to December")),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Icon(Icons.calendar_today, 
+                 color: colorScheme.onPrimaryContainer, 
+                 size: 24),
+            const SizedBox(width: 8),
+            const Expanded(child: Text("Attendance: January to December")),
+          ],
+        ),
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: ListView.builder(
         padding: const EdgeInsets.all(12),
         itemCount: months.length,

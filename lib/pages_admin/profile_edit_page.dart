@@ -287,7 +287,23 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     final isEdit = widget.employee != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(isEdit ? 'Edit Profile' : 'Add Employee')),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Icon(isEdit ? Icons.edit : Icons.person_add, 
+                 color: Theme.of(context).colorScheme.onPrimaryContainer, 
+                 size: 24),
+            const SizedBox(width: 8),
+            Text(isEdit ? 'Edit Profile' : 'Add Employee'),
+          ],
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(

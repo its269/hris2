@@ -1,10 +1,24 @@
-import 'package:flutter/material.dart';
+import 'package:flut  Widget _getPage(String name) {
+    switch (name) {
+      case 'Profile':
+        return const ProfileLeave();
+      case 'Attendance Records':
+        return const AttendancePageSoloContent(); // Content only, no AppBar
+      case 'Training Portal':
+        return const TrainingPageContent(); // Content only, no AppBar
+      case 'Corporate Policy':
+        return const PolicyPageContent(); // Content only, no AppBar
+      case 'HR Related Forms':
+        return const HRPageContent(); // Content only, no AppBar
+      default:
+        return const Center(child: Text('Page Not Found'));
+    }
+  }t';
 // import 'profile_page.dart';
 // import '../pages_admin/attendance_page.dart';
 import 'training_page.dart'; // Placeholder for future API data
 import '../pages_admin/policy_page.dart'; // Placeholder for future API data
 import '../pages_admin/hr_page.dart'; // Placeholder for future API data
-import '../pages_admin/notifications_page.dart';
 import 'profile_leave.dart';
 import 'solo_attendance.dart';
 import '../main.dart'; // Assuming MyApp is here
@@ -26,13 +40,30 @@ class _UserPageState extends State<UserPage> {
       case 'Attendance Records':
         return const AttendancePageSolo();
       case 'Training Portal':
-        return const TrainingPage(showAppBar: false);
+        return const TrainingPageContent(); // Content only, no AppBar
       case 'Corporate Policy':
-        return const PolicyPage(showAppBar: false);
+        return const PolicyPageContent(); // Content only, no AppBar
       case 'HR Related Forms':
-        return const HRPage(showAppBar: false);
+        return const HRPageContent(); // Content only, no AppBar
       default:
         return const Center(child: Text('Page Not Found'));
+    }
+  }
+
+  IconData _getPageIcon(String name) {
+    switch (name) {
+      case 'Profile':
+        return Icons.assignment;
+      case 'Attendance Records':
+        return Icons.calendar_today;
+      case 'Training Portal':
+        return Icons.school;
+      case 'Corporate Policy':
+        return Icons.policy;
+      case 'HR Related Forms':
+        return Icons.people;
+      default:
+        return Icons.home;
     }
   }
 
@@ -41,40 +72,6 @@ class _UserPageState extends State<UserPage> {
     setState(() {
       _selectedPage = page;
     });
-  }
-
-  String _getPageTitle(String pageName) {
-    switch (pageName) {
-      case 'Profile':
-        return 'Profile & Leave';
-      case 'Attendance Records':
-        return 'Attendance Records';
-      case 'Training Portal':
-        return 'Training Portal';
-      case 'Corporate Policy':
-        return 'Corporate Policy';
-      case 'HR Related Forms':
-        return 'HR Forms';
-      default:
-        return 'Kelin Graphic System';
-    }
-  }
-
-  IconData _getPageIcon(String pageName) {
-    switch (pageName) {
-      case 'Profile':
-        return Icons.person;
-      case 'Attendance Records':
-        return Icons.calendar_today;
-      case 'Training Portal':
-        return Icons.school;
-      case 'Corporate Policy':
-        return Icons.policy;
-      case 'HR Related Forms':
-        return Icons.people_alt;
-      default:
-        return Icons.business;
-    }
   }
 
   ListTile _buildDrawerItem(IconData icon, String label) {
@@ -105,42 +102,15 @@ class _UserPageState extends State<UserPage> {
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(
-              _getPageIcon(_selectedPage),
-              color: colorScheme.onPrimaryContainer,
-              size: 24,
-            ),
+            Icon(_getPageIcon(_selectedPage), 
+                 color: colorScheme.onPrimaryContainer, 
+                 size: 24),
             const SizedBox(width: 8),
-            Expanded(child: Text(_getPageTitle(_selectedPage))),
-            const Spacer(),
-            GestureDetector(
-              onTap: () {
-                // Navigate to Profile if not already there
-                if (_selectedPage != 'Profile') {
-                  setState(() {
-                    _selectedPage = 'Profile';
-                  });
-                  // Show feedback
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Navigated to Profile'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-                }
-              },
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.transparent,
-                ),
-                child: Image.asset(
-                  'assets/kelin.png',
-                  height: 32,
-                  errorBuilder: (context, error, stackTrace) => const SizedBox(),
-                ),
-              ),
+            Expanded(child: Text(_selectedPage)),
+            Image.asset(
+              'assets/kelin.png',
+              height: 32,
+              errorBuilder: (context, error, stackTrace) => const SizedBox(),
             ),
           ],
         ),
@@ -156,39 +126,13 @@ class _UserPageState extends State<UserPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to Profile if not already there
-                      if (_selectedPage != 'Profile') {
-                        setState(() {
-                          _selectedPage = 'Profile';
-                        });
-                      }
-                      // Close drawer
-                      Navigator.pop(context);
-                      // Show feedback
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Navigated to Profile'),
-                          duration: Duration(seconds: 1),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(54),
-                        color: Colors.transparent,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.asset(
-                          'assets/profile.jpg',
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.asset(
+                      'assets/profile.jpg',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   const SizedBox(height: 12),
