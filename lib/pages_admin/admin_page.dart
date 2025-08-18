@@ -7,7 +7,7 @@ import 'training_management_page.dart';
 import 'policy_page.dart';
 import 'hr_page.dart';
 import 'employee_list_page.dart';
-import 'admin_leave_management_page.dart';
+import 'admin_approval_page.dart';
 import 'dashboard_page.dart';
 import 'schedule_page.dart';
 import 'notifications_page.dart';
@@ -89,10 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         );
       case 'Leave Management':
-        return AdminLeaveManagementPage(
-          employeeId: widget.employeeId,
-          role: widget.role,
-        );
+        return const AdminApprovalPage(showAppBar: false);
       case 'Employee Management':
         return EmployeeListPage(
           role: widget.role,
@@ -108,10 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 'HR Related Forms':
         return const HRPage(showAppBar: false);
       case 'Request':
-        return AdminLeaveManagementPage(
-          employeeId: widget.employeeId,
-          role: widget.role,
-        );
+        return const AdminApprovalPage(showAppBar: false);
       default:
         return const Center(child: Text('Page Not Found'));
     }
@@ -159,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 'Corporate Policy':
         return 'Corporate Policy';
       case 'HR Related Forms':
-        return 'HR Related Forms';
+        return 'HR Management';
       case 'Request':
         return 'Leave Requests';
       case 'Schedule & Calendar':
@@ -174,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 'Dashboard':
         return Icons.dashboard;
       case 'Leave Management':
-        return Icons.event_available;
+        return Icons.approval;
       case 'Employee Management':
         return Icons.people;
       case 'Attendance Records':

@@ -8,7 +8,6 @@ import 'profile_edit_page.dart';
 import 'account_settings_page.dart';
 import 'employee_model.dart';
 import '../theme_provider.dart';
-import 'full_analytics_page.dart';
 
 class DashboardPage extends StatefulWidget {
   final String role;
@@ -142,18 +141,6 @@ class _DashboardPageState extends State<DashboardPage> {
       context,
       MaterialPageRoute(
         builder: (context) => AccountSettingsPage(
-          employeeId: widget.employeeId,
-          role: widget.role,
-        ),
-      ),
-    );
-  }
-
-  void _navigateToFullAnalytics(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => FullAnalyticsPage(
           employeeId: widget.employeeId,
           role: widget.role,
         ),
@@ -350,301 +337,258 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
-            // Main Dashboard Section
+            // Quick Stats Card
             Card(
-              elevation: 6,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      colorScheme.primary.withOpacity(0.02),
-                      colorScheme.primary.withOpacity(0.08),
-                    ],
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header with Quick Stats
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [colorScheme.primary, colorScheme.primary.withOpacity(0.8)],
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: colorScheme.primary.withOpacity(0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: const Icon(Icons.dashboard, color: Colors.white, size: 24),
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.dashboard, color: colorScheme.primary),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Quick Overview',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(width: 16),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatItem(
+                            context,
+                            'Today\'s Date',
+                            DateTime.now().toString().split(' ')[0],
+                            Icons.calendar_today,
+                            colorScheme.primary,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildStatItem(
+                            context,
+                            'Employee ID',
+                            widget.employeeId,
+                            Icons.badge,
+                            colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatItem(
+                            context,
+                            'Status',
+                            'Active',
+                            Icons.check_circle,
+                            Colors.green,
+                          ),
+                        ),
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Dashboard Overview',
-                                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: colorScheme.primary,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Icon(Icons.check_circle, color: Colors.green, size: 16),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      'Active • ${widget.employeeId} • $employeeDepartment',
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: Colors.grey[700],
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                      
-                      // Quick Insights in a compact row
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.7),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: colorScheme.primary.withOpacity(0.1)),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _buildCompactStat('Attendance', '22/24 Days', Icons.calendar_today, Colors.green),
-                            ),
-                            Container(width: 1, height: 40, color: Colors.grey[300]),
-                            Expanded(
-                              child: _buildCompactStat('Leave Requests', '3 Pending', Icons.pending_actions, Colors.orange),
-                            ),
-                            Container(width: 1, height: 40, color: Colors.grey[300]),
-                            Expanded(
-                              child: _buildCompactStat('Overtime', '8.5 Hours', Icons.access_time, Colors.blue),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      
-                      // Reports & Analytics Header
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              colorScheme.primary.withOpacity(0.08),
-                              colorScheme.primary.withOpacity(0.04),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: colorScheme.primary.withOpacity(0.2),
-                            width: 1,
+                          child: _buildStatItem(
+                            context,
+                            'Department',
+                            employeeDepartment,
+                            Icons.business,
+                            Colors.orange,
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    colorScheme.primary,
-                                    colorScheme.primary.withOpacity(0.8),
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: colorScheme.primary.withOpacity(0.3),
-                                    blurRadius: 6,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Icon(
-                                Icons.analytics,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Reports & Analytics',
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: colorScheme.primary,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    'Comprehensive insights and performance metrics',
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            GestureDetector(
-                              onTap: () => _navigateToFullAnalytics(context),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: colorScheme.primary.withOpacity(0.3),
-                                    width: 1,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.1),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      'View All',
-                                      style: TextStyle(
-                                        color: colorScheme.primary,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: colorScheme.primary,
-                                      size: 12,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Reports Section
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.analytics, color: colorScheme.primary),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Reports & Analytics',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      
-                      // Reports Grid - More compact
-                      GridView.count(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 1.5,
-                        children: [
-                          _buildReportCard(
-                            context,
-                            'Attendance Report',
-                            'Daily & monthly trends',
-                            Icons.access_time,
-                            Colors.blue[600]!,
-                            () => _showAttendanceReport(context),
-                          ),
-                          _buildReportCard(
-                            context,
-                            'Leave Management',
-                            'Requests & approvals',
-                            Icons.event_busy,
-                            Colors.orange[600]!,
-                            () => _showLeaveReport(context),
-                          ),
-                          _buildReportCard(
-                            context,
-                            'Team Performance',
-                            'Productivity metrics',
-                            Icons.people_alt,
-                            Colors.teal[600]!,
-                            () => _showTeamReport(context),
-                          ),
-                          _buildReportCard(
-                            context,
-                            'Monthly Summary',
-                            'Comprehensive overview',
-                            Icons.assessment,
-                            Colors.indigo[600]!,
-                            () => _showMonthlySummary(context),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    
+                    // Reports Grid
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 2.5,
+                      children: [
+                        _buildReportCard(
+                          context,
+                          'Attendance Report',
+                          'View statistics',
+                          Icons.schedule,
+                          Colors.blue,
+                          () => _showAttendanceReport(context),
+                        ),
+                        _buildReportCard(
+                          context,
+                          'Leave Report',
+                          'Requests & balances',
+                          Icons.beach_access,
+                          Colors.orange,
+                          () => _showLeaveReport(context),
+                        ),
+                        _buildReportCard(
+                          context,
+                          'Team Report',
+                          'Department info',
+                          Icons.group,
+                          Colors.teal,
+                          () => _showTeamReport(context),
+                        ),
+                        _buildReportCard(
+                          context,
+                          'Monthly Summary',
+                          'Full overview',
+                          Icons.summarize,
+                          Colors.indigo,
+                          () => _showMonthlySummary(context),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
             const SizedBox(height: 24),
+
+            // Quick Insights Section
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.insights, color: colorScheme.primary),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Quick Insights',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildInsightItem(
+                            context,
+                            'This Month',
+                            '22/24 Days',
+                            'Attendance',
+                            Icons.calendar_month,
+                            Colors.green,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildInsightItem(
+                            context,
+                            'Pending',
+                            '3 Requests',
+                            'Leave Applications',
+                            Icons.pending_actions,
+                            Colors.orange,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildInsightItem(
+                            context,
+                            'This Week',
+                            '8.5 Hours',
+                            'Overtime',
+                            Icons.access_time,
+                            Colors.blue,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildInsightItem(
+                            context,
+                            'Open',
+                            '7 Positions',
+                            'Currently Hiring',
+                            Icons.work,
+                            Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCompactStat(String label, String value, IconData icon, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+  Widget _buildStatItem(BuildContext context, String label, String value, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
       child: Column(
         children: [
-          Icon(icon, color: color, size: 20),
+          Icon(icon, color: color, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: color,
-            ),
-          ),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 11,
-              color: Colors.grey[600],
+              fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
@@ -656,85 +600,105 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildReportCard(BuildContext context, String title, String subtitle, IconData icon, Color color, VoidCallback onTap) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
         child: Card(
-          elevation: 4,
-          shadowColor: color.withOpacity(0.2),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  color.withOpacity(0.06),
-                  color.withOpacity(0.12),
+          elevation: 2,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(12),
+            hoverColor: color.withOpacity(0.1),
+            splashColor: color.withOpacity(0.2),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  Icon(icon, color: color, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                            height: 1.1,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        Text(
+                          subtitle,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 9,
+                            height: 1.1,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-              border: Border.all(
-                color: color.withOpacity(0.15),
-                width: 1,
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: color.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(icon, color: color, size: 18),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: color,
-                      size: 14,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Flexible(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: color,
-                          height: 1.0,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 1),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 10,
-                          height: 1.0,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInsightItem(BuildContext context, String label, String value, String description, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          Text(
+            description,
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 10,
+            ),
+          ),
+        ],
       ),
     );
   }
