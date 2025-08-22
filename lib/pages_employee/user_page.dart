@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-// import 'profile_page.dart';
-// import '../pages_admin/attendance_page.dart';
+import 'package:flutter/services.dart';
+import 'package:hris/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'training_page.dart'; // Placeholder for future API data
 import '../pages_admin/policy_page.dart'; // Placeholder for future API data
 import '../pages_admin/hr_page.dart'; // Placeholder for future API data
 import '../pages_admin/notifications_page.dart';
 import 'profile_leave.dart';
 import 'solo_attendance.dart';
+import 'employee_calendar.dart';
+import 'attendance_ot_Request.dart';
+import 'home_page.dart';
 import '../main.dart'; // Assuming MyApp is here
 
 class UserPage extends StatefulWidget {
@@ -21,16 +25,20 @@ class _UserPageState extends State<UserPage> {
 
   Widget _getPage(String name) {
     switch (name) {
+      case 'Home':
+        return const HomePage();
       case 'Profile':
         return const ProfileLeave();
       case 'Attendance Records':
-        return const AttendancePageSolo();
+        return const AttendanceOvertime();
       case 'Training Portal':
         return const TrainingPage(showAppBar: false);
       case 'Corporate Policy':
         return const PolicyPage(showAppBar: false);
       case 'HR Related Forms':
         return const HRPage(showAppBar: false);
+      case 'Calendar':
+        return const EmployeeCalendarPage(showAppBar: false);
       default:
         return const Center(child: Text('Page Not Found'));
     }
@@ -45,6 +53,8 @@ class _UserPageState extends State<UserPage> {
 
   String _getPageTitle(String pageName) {
     switch (pageName) {
+      case 'HomePage':
+        return 'Home';
       case 'Profile':
         return 'Profile & Leave';
       case 'Attendance Records':
@@ -55,6 +65,8 @@ class _UserPageState extends State<UserPage> {
         return 'Corporate Policy';
       case 'HR Related Forms':
         return 'HR Forms';
+      case 'Calendar':
+        return 'Calendar';
       default:
         return 'Kelin Graphic System';
     }
@@ -62,6 +74,8 @@ class _UserPageState extends State<UserPage> {
 
   IconData _getPageIcon(String pageName) {
     switch (pageName) {
+      case 'HomePage':
+        return Icons.home;
       case 'Profile':
         return Icons.person;
       case 'Attendance Records':
@@ -71,6 +85,8 @@ class _UserPageState extends State<UserPage> {
       case 'Corporate Policy':
         return Icons.policy;
       case 'HR Related Forms':
+        return Icons.people_alt;
+      case 'Calendar':
         return Icons.people_alt;
       default:
         return Icons.business;
@@ -89,7 +105,6 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  // Log out and go back to main.dart
   void _signOut() {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const MyApp()),
@@ -115,12 +130,10 @@ class _UserPageState extends State<UserPage> {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                // Navigate to Profile if not already there
                 if (_selectedPage != 'Profile') {
                   setState(() {
                     _selectedPage = 'Profile';
                   });
-                  // Show feedback
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Navigated to Profile'),
@@ -138,7 +151,8 @@ class _UserPageState extends State<UserPage> {
                 child: Image.asset(
                   'assets/kelin.png',
                   height: 32,
-                  errorBuilder: (context, error, stackTrace) => const SizedBox(),
+                  errorBuilder: (context, error, stackTrace) =>
+                      const SizedBox(),
                 ),
               ),
             ),
@@ -156,69 +170,118 @@ class _UserPageState extends State<UserPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to Profile if not already there
-                      if (_selectedPage != 'Profile') {
-                        setState(() {
-                          _selectedPage = 'Profile';
-                        });
-                      }
-                      // Close drawer
-                      Navigator.pop(context);
-                      // Show feedback
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Navigated to Profile'),
-                          duration: Duration(seconds: 1),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(54),
-                        color: Colors.transparent,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.asset(
-                          'assets/profile.jpg',
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if (_selectedPage != 'Dashboard') {
+                            setState(() {
+                              _selectedPage = 'Dashboard';
+                            });
+                          }
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.transparent,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.asset(
+                              'assets/profile.jpg',
+                              width: 60,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      const Spacer(),
+                      Consumer<ThemeProvider>(
+                        builder: (context, themeProvider, child) {
+                          return GestureDetector(
+                            onTap: () {
+                              themeProvider.toggleTheme();
+                              HapticFeedback.lightImpact();
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: colorScheme.onPrimaryContainer
+                                    .withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                transitionBuilder:
+                                    (
+                                      Widget child,
+                                      Animation<double> animation,
+                                    ) {
+                                      return RotationTransition(
+                                        turns: animation,
+                                        child: ScaleTransition(
+                                          scale: animation,
+                                          child: child,
+                                        ),
+                                      );
+                                    },
+                                child: Icon(
+                                  themeProvider.isDarkMode
+                                      ? Icons.dark_mode
+                                      : Icons.light_mode,
+                                  key: ValueKey<bool>(themeProvider.isDarkMode),
+                                  color: colorScheme.onPrimaryContainer,
+                                  size: 24,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Welcome!',
+                    'Welcome, John Paul!',
                     style: TextStyle(
                       fontSize: 18,
+                      fontWeight: FontWeight.bold,
                       color: colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                  Text(
+                    'Role: Employee',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onPrimaryContainer.withOpacity(0.8),
                     ),
                   ),
                 ],
               ),
             ),
+
+            _buildDrawerItem(Icons.home, 'Home'),
             _buildDrawerItem(Icons.person, 'Profile'),
             _buildDrawerItem(Icons.calendar_today, 'Attendance Records'),
             _buildDrawerItem(Icons.school, 'Training Portal'),
             _buildDrawerItem(Icons.policy, 'Corporate Policy'),
             _buildDrawerItem(Icons.people_alt, 'HR Related Forms'),
+            _buildDrawerItem(Icons.calendar_today, 'Calendar'),
 
-            // Log out option
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
               title: const Text('Log out'),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
-                _signOut(); // Then log out
+                Navigator.pop(context);
+                _signOut();
               },
             ),
 
-            const SizedBox(height: 260), // Optional spacing
+            const SizedBox(height: 260),
           ],
         ),
       ),
@@ -230,15 +293,6 @@ class _UserPageState extends State<UserPage> {
           child: _getPage(_selectedPage),
         ),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   items: [
-      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.settings),
-      //       label: 'Settings',
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

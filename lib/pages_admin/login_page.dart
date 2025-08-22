@@ -21,23 +21,23 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
   bool _rememberMe = false;
   String? _errorMessage;
-  
+
   // Create secure storage instance
   // FlutterSecureStorage provides encrypted storage for sensitive data like passwords
   // Data is stored in the device's keychain (iOS) or keystore (Android)
   // This ensures credentials are encrypted and secure even if device is compromised
   static const _secureStorage = FlutterSecureStorage();
-  
+
   @override
   void initState() {
     super.initState();
     // Load any previously saved credentials when the login page opens
     _loadSavedCredentials();
   }
-  
+
   // REMEMBER ME FUNCTIONALITY:
   // This method loads saved username and password from secure storage
-  // when the app starts. If user previously checked "Remember Me" and 
+  // when the app starts. If user previously checked "Remember Me" and
   // successfully logged in, their credentials will be auto-filled
   Future<void> _loadSavedCredentials() async {
     try {
@@ -45,9 +45,11 @@ class _LoginPageState extends State<LoginPage> {
       final savedUsername = await _secureStorage.read(key: 'username');
       final savedPassword = await _secureStorage.read(key: 'password');
       final rememberMe = await _secureStorage.read(key: 'remember_me');
-      
+
       // Only auto-fill if all required data exists and remember_me was true
-      if (savedUsername != null && savedPassword != null && rememberMe == 'true') {
+      if (savedUsername != null &&
+          savedPassword != null &&
+          rememberMe == 'true') {
         setState(() {
           // Auto-fill the text fields with saved credentials
           _usernameController.text = savedUsername;
@@ -61,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
       print('Error loading saved credentials: $e');
     }
   }
-  
+
   // CREDENTIAL SAVING LOGIC:
   // This method saves or clears credentials based on the "Remember Me" checkbox state
   // Called after successful login to either store or remove user credentials
@@ -69,8 +71,14 @@ class _LoginPageState extends State<LoginPage> {
     try {
       if (_rememberMe) {
         // User wants to be remembered - save encrypted credentials
-        await _secureStorage.write(key: 'username', value: _usernameController.text.trim());
-        await _secureStorage.write(key: 'password', value: _passwordController.text);
+        await _secureStorage.write(
+          key: 'username',
+          value: _usernameController.text.trim(),
+        );
+        await _secureStorage.write(
+          key: 'password',
+          value: _passwordController.text,
+        );
         await _secureStorage.write(key: 'remember_me', value: 'true');
         print('Credentials saved securely for next login');
       } else {
@@ -134,13 +142,16 @@ class _LoginPageState extends State<LoginPage> {
     if (result != null && result.isNotEmpty) {
       // Check if login was actually successful by verifying we have valid data
       final employeeId = result['username'] ?? result['EmployeeID'] ?? '';
-      final success = result['success'] ?? true; // Some APIs return success flag
+      final success =
+          result['success'] ?? true; // Some APIs return success flag
       final error = result['error'] ?? '';
-      
+
       // If there's an error message or no valid employeeId, treat as failed login
       if (error.isNotEmpty || employeeId.isEmpty || success == false) {
         setState(() {
-          _errorMessage = error.isNotEmpty ? error : "Invalid username or password";
+          _errorMessage = error.isNotEmpty
+              ? error
+              : "Invalid username or password";
         });
         return;
       }
@@ -155,7 +166,8 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(
           builder: (_) => MyHomePage(
-            role: 'Admin', // Default role or you can use result['role'] ?? 'Admin'
+            role:
+                'Admin', // Default role or you can use result['role'] ?? 'Admin'
             employeeId: employeeId,
           ),
         ),
@@ -183,7 +195,15 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Logo
-                  Image.asset('assets/kelin.png', height: 120),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const UserPage()),
+                      );
+                    },
+                    child: Image.asset('assets/kelin.png', height: 120),
+                  ),
                   const SizedBox(height: 16),
 
                   // Welcome Text
@@ -199,7 +219,10 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 4),
                   Text(
                     "Sign in to continue",
-                    style: TextStyle(fontSize: 16, color: colorScheme.onBackground.withOpacity(0.7)),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: colorScheme.onBackground.withOpacity(0.7),
+                    ),
                   ),
                   const SizedBox(height: 32),
 
@@ -209,8 +232,13 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(color: colorScheme.onBackground),
                     decoration: InputDecoration(
                       labelText: 'Username',
-                      labelStyle: TextStyle(color: colorScheme.onBackground.withOpacity(0.8)),
-                      prefixIcon: Icon(Icons.person, color: colorScheme.primary),
+                      labelStyle: TextStyle(
+                        color: colorScheme.onBackground.withOpacity(0.8),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.person,
+                        color: colorScheme.primary,
+                      ),
                       filled: true,
                       fillColor: isDark ? colorScheme.surface : Colors.white,
                       border: OutlineInputBorder(
@@ -227,7 +255,9 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(color: colorScheme.onBackground),
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      labelStyle: TextStyle(color: colorScheme.onBackground.withOpacity(0.8)),
+                      labelStyle: TextStyle(
+                        color: colorScheme.onBackground.withOpacity(0.8),
+                      ),
                       prefixIcon: Icon(Icons.lock, color: colorScheme.primary),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -269,7 +299,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Text(
                         'Remember Me',
-                        style: TextStyle(fontSize: 16, color: colorScheme.onBackground),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: colorScheme.onBackground,
+                        ),
                       ),
                       const SizedBox(width: 8),
                       Icon(

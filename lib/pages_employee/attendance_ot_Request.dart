@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'profile_page.dart';
 import 'request_leave.dart';
+import 'solo_attendance.dart';
+import 'home_page.dart';
+import 'overtime_requests.dart';
 
-class ProfileLeave extends StatefulWidget {
-  const ProfileLeave({super.key});
+class AttendanceOvertime extends StatefulWidget {
+  const AttendanceOvertime({super.key});
 
   @override
-  State<ProfileLeave> createState() => _ProfileLeaveState();
+  State<AttendanceOvertime> createState() => _AttendanceOvertimeState();
 }
 
-class _ProfileLeaveState extends State<ProfileLeave> {
+class _AttendanceOvertimeState extends State<AttendanceOvertime> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -26,7 +29,7 @@ class _ProfileLeaveState extends State<ProfileLeave> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                'Profile & Leave Request',
+                'Attendance & Overtime Request',
                 style: TextStyle(color: colorScheme.onPrimaryContainer),
               ),
             ),
@@ -55,13 +58,13 @@ class _ProfileLeaveState extends State<ProfileLeave> {
                 children: [
                   _buildButton(
                     context,
-                    label: 'Personal Information',
+                    label: 'Attendance Records',
                     icon: Icons.person,
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ProfilePage(),
+                          builder: (context) => const EmployeeAttendancePage(),
                         ),
                       );
                     },
@@ -69,17 +72,29 @@ class _ProfileLeaveState extends State<ProfileLeave> {
                   const SizedBox(height: 16),
                   _buildButton(
                     context,
-                    label: 'Leave Request',
+                    label: 'Overtime Request',
                     icon: Icons.calendar_today,
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const RequestLeavePage(),
+                          builder: (context) => OvertimeRequestForm(),
                         ),
                       );
                     },
                   ),
+                  // const SizedBox(height: 16),
+                  // _buildButton(
+                  //   context,
+                  //   label: 'For UI Checking',
+                  //   icon: Icons.calendar_today,
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => HomePage()),
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ),

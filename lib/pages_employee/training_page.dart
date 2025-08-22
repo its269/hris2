@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'user_quiz_page.dart';
+import 'user_learning_page.dart';
 
 class TrainingPage extends StatelessWidget {
   final bool showAppBar;
-  
+
   const TrainingPage({super.key, this.showAppBar = true});
 
   // Temporary static data; in the future, replace this with a network call
@@ -17,10 +19,26 @@ class TrainingPage extends StatelessWidget {
     ];
   }
 
+  // Navigate to UserQuizPage
+  void navigateToQuiz(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const UserQuizPage()), // Fixed navigation
+    );
+  }
+
+  // Navigate to UserLearningPage
+  void navigateToLearning(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const UserLearningPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     Widget bodyContent = FutureBuilder<List<String>>(
       future: fetchTrainingModules(),
       builder: (context, snapshot) {
@@ -58,29 +76,109 @@ class TrainingPage extends StatelessWidget {
       },
     );
 
-    if (!showAppBar) {
-      return bodyContent;
-    }
-    
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
+      appBar: showAppBar
+          ? AppBar(
+              title: const Text('Training Portal'),
+              backgroundColor: colorScheme.primaryContainer,
+              foregroundColor: colorScheme.onPrimaryContainer,
+            )
+          : null,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
           children: [
-            Icon(Icons.school, 
-                 color: colorScheme.onPrimaryContainer, 
-                 size: 24),
-            const SizedBox(width: 8),
-            const Text('Training Portal'),
+            // Learning Section
+            Card(
+              color: colorScheme.surface,
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Learn About the Company',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Explore the history, mission, vision, and values of our company. Understand how we operate and what makes us unique.',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: colorScheme.onSurface.withOpacity(0.8),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => navigateToLearning(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
+                      ),
+                      child: const Text('Start Learning'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Quiz Section
+            Card(
+              color: colorScheme.surface,
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Take a Quiz',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Test your knowledge about the company and its policies. Complete the quiz to earn points and recognition.',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: colorScheme.onSurface.withOpacity(0.8),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => navigateToQuiz(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
+                      ),
+                      child: const Text('Start Quiz'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Training Modules Section
+            bodyContent,
           ],
         ),
-        backgroundColor: colorScheme.primaryContainer,
-        foregroundColor: colorScheme.onPrimaryContainer,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
-      body: bodyContent,
     );
   }
 }

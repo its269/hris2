@@ -5,13 +5,13 @@ import 'employee_model.dart';
 class ApiService {
   // ⚠️ Base URL for your HRIS API
   final String baseUrl = "http://190.92.236.127:8080/HRISAPI/Welcome";
-  
+
   // Sign in method
   Future<Map<String, dynamic>?> signIn(String username, String password) async {
     final url = Uri.parse("$baseUrl/login");
     print("Attempting login to: $url");
     print("Username: $username");
-    
+
     try {
       final response = await http.post(
         url,
@@ -25,7 +25,7 @@ class ApiService {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         print("Login result: $responseData");
-        
+
         // Check if the response indicates success
         if (responseData != null && responseData.isNotEmpty) {
           // If there's an error field, return null to indicate failure
@@ -39,7 +39,9 @@ class ApiService {
           return null;
         }
       } else {
-        print("Login failed with status ${response.statusCode}: ${response.body}");
+        print(
+          "Login failed with status ${response.statusCode}: ${response.body}",
+        );
         return null;
       }
     } catch (e) {
@@ -47,7 +49,6 @@ class ApiService {
       return null;
     }
   }
-
 
   // Fetch all employees
   Future<List<Employee>> fetchAllEmployees() async {
@@ -83,7 +84,9 @@ class ApiService {
           return false;
         }
       } else {
-        print("Add employee HTTP error: ${response.statusCode} - ${response.body}");
+        print(
+          "Add employee HTTP error: ${response.statusCode} - ${response.body}",
+        );
         return false;
       }
     } catch (e) {
@@ -102,7 +105,9 @@ class ApiService {
         body: jsonEncode(emp.toJson()),
       );
 
-      print("Update employee response: ${response.statusCode} - ${response.body}");
+      print(
+        "Update employee response: ${response.statusCode} - ${response.body}",
+      );
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
@@ -113,7 +118,9 @@ class ApiService {
           return false;
         }
       } else {
-        print("Update employee HTTP error: ${response.statusCode} - ${response.body}");
+        print(
+          "Update employee HTTP error: ${response.statusCode} - ${response.body}",
+        );
         return false;
       }
     } catch (e) {
@@ -145,7 +152,7 @@ class ApiService {
 
   // Fetch attendance records with leave status
   Future<List<Map<String, dynamic>>> fetchAttendanceWithLeave() async {
-    final url = Uri.parse("$baseUrl/attendance"); 
+    final url = Uri.parse("$baseUrl/attendance");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -160,7 +167,7 @@ class ApiService {
   // This method will fetch the actual employee name from another table
   // using the employeeId as the key. For now, this is commented out
   // because the separate employee names table is not yet available.
-  // 
+  //
   // Future<String?> fetchEmployeeName(String employeeId) async {
   //   try {
   //     final url = Uri.parse("$baseUrl/employee-names/$employeeId");
