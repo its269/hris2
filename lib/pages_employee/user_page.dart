@@ -11,6 +11,7 @@ import 'solo_attendance.dart';
 import 'employee_calendar.dart';
 import 'attendance_ot_Request.dart';
 import 'home_page.dart';
+import 'settings.dart';
 import '../main.dart'; // Assuming MyApp is here
 
 class UserPage extends StatefulWidget {
@@ -21,7 +22,7 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  String _selectedPage = 'Profile';
+  String _selectedPage = 'Home';
 
   Widget _getPage(String name) {
     switch (name) {
@@ -39,6 +40,8 @@ class _UserPageState extends State<UserPage> {
         return const HRPage(showAppBar: false);
       case 'Calendar':
         return const EmployeeCalendarPage(showAppBar: false);
+      case 'Settings':
+        return const SettingsPage(showAppBar: false);
       default:
         return const Center(child: Text('Page Not Found'));
     }
@@ -67,6 +70,8 @@ class _UserPageState extends State<UserPage> {
         return 'HR Forms';
       case 'Calendar':
         return 'Calendar';
+      case 'Settings':
+        return 'Settings';
       default:
         return 'Kelin Graphic System';
     }
@@ -88,6 +93,8 @@ class _UserPageState extends State<UserPage> {
         return Icons.people_alt;
       case 'Calendar':
         return Icons.people_alt;
+      case 'Settings':
+        return Icons.settings;
       default:
         return Icons.business;
     }
@@ -130,9 +137,9 @@ class _UserPageState extends State<UserPage> {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                if (_selectedPage != 'Profile') {
+                if (_selectedPage != 'Home') {
                   setState(() {
-                    _selectedPage = 'Profile';
+                    _selectedPage = 'Home';
                   });
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -271,6 +278,7 @@ class _UserPageState extends State<UserPage> {
             _buildDrawerItem(Icons.policy, 'Corporate Policy'),
             _buildDrawerItem(Icons.people_alt, 'HR Related Forms'),
             _buildDrawerItem(Icons.calendar_today, 'Calendar'),
+            _buildDrawerItem(Icons.settings, 'Settings'),
 
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),

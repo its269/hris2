@@ -43,6 +43,7 @@ flutter:
     - assets/kelin.png
     - assets/profile.jpg
     - assets/human-resources_hris.png
+    - assets/hris_settings_cover.png
 
 flutter_launcher_icons:
   android: "launcher_icon"
