@@ -17,86 +17,78 @@ class _AttendanceOvertimeState extends State<AttendanceOvertime> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Icon(
-              Icons.assignment,
-              color: colorScheme.onPrimaryContainer,
-              size: 24,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Attendance & Overtime Request',
-                style: TextStyle(color: colorScheme.onPrimaryContainer),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: colorScheme.primaryContainer,
-        foregroundColor: colorScheme.onPrimaryContainer,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Card(
-            elevation: 8,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            color: colorScheme.surface,
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildButton(
-                    context,
-                    label: 'Attendance Records',
-                    icon: Icons.person,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EmployeeAttendancePage(),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Card(
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          color: colorScheme.surface,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Add a header since we removed the AppBar
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.only(bottom: 24),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.assignment,
+                        size: 48,
+                        color: colorScheme.primary,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Attendance & Overtime',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.onSurface,
                         ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  _buildButton(
-                    context,
-                    label: 'Overtime Request',
-                    icon: Icons.calendar_today,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OvertimeRequestForm(),
+                      ),
+                      Text(
+                        'View records and submit requests',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: colorScheme.onSurface.withOpacity(0.7),
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
-                  // const SizedBox(height: 16),
-                  // _buildButton(
-                  //   context,
-                  //   label: 'For UI Checking',
-                  //   icon: Icons.calendar_today,
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(builder: (context) => HomePage()),
-                  //     );
-                  //   },
-                  // ),
-                ],
-              ),
+                ),
+                _buildButton(
+                  context,
+                  label: 'Attendance Records',
+                  icon: Icons.person,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EmployeeAttendancePage(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                _buildButton(
+                  context,
+                  label: 'View Only (Overtime moved to HR Forms)',
+                  icon: Icons.info_outline,
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Overtime and Undertime requests are now in HR Forms tab'),
+                        backgroundColor: Colors.blue,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
