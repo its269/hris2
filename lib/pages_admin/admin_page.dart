@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 'Training Management':
         return const TrainingManagementPage(showAppBar: false);
       case 'Corporate Policy':
-        return const PolicyPage(showAppBar: false);
+        return PolicyPage(showAppBar: false, userRole: widget.role);
       case 'HR Related Forms':
         return const HRPage(showAppBar: false);
       case 'Request':

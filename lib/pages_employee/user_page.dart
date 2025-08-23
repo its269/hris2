@@ -4,12 +4,12 @@ import 'package:hris/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'training_page.dart'; // Placeholder for future API data
 import '../pages_admin/policy_page.dart'; // Placeholder for future API data
-import '../pages_admin/hr_page.dart'; // Placeholder for future API data
+import 'hr_forms_page.dart'; // Employee-specific HR forms page
 import '../pages_admin/notifications_page.dart';
-import 'profile_leave.dart';
-import 'solo_attendance.dart';
+import 'profile_page.dart'; // Direct profile page
+import 'solo_attendance.dart'; // Direct attendance page
 import 'employee_calendar.dart';
-import 'attendance_ot_Request.dart';
+import 'leave_request_page.dart'; // New leave request page
 import 'home_page.dart';
 import '../main.dart'; // Assuming MyApp is here
 
@@ -28,15 +28,17 @@ class _UserPageState extends State<UserPage> {
       case 'Home':
         return const HomePage();
       case 'Profile':
-        return const ProfileLeave();
+        return const ProfilePage(); // Direct to profile page
       case 'Attendance Records':
-        return const AttendanceOvertime();
+        return const EmployeeAttendancePage(); // Direct to attendance page
+      case 'Leave Requests':
+        return const EmployeeLeaveRequestPage(showAppBar: false); // New leave request page
       case 'Training Portal':
         return const TrainingPage(showAppBar: false);
       case 'Corporate Policy':
-        return const PolicyPage(showAppBar: false);
+        return const PolicyPage(showAppBar: false, userRole: 'employee');
       case 'HR Related Forms':
-        return const HRPage(showAppBar: false);
+        return const EmployeeHRFormsPage(showAppBar: false);
       case 'Calendar':
         return const EmployeeCalendarPage(showAppBar: false);
       default:
@@ -53,12 +55,14 @@ class _UserPageState extends State<UserPage> {
 
   String _getPageTitle(String pageName) {
     switch (pageName) {
-      case 'HomePage':
+      case 'Home':
         return 'Home';
       case 'Profile':
-        return 'Profile & Leave';
+        return 'Profile';
       case 'Attendance Records':
         return 'Attendance Records';
+      case 'Leave Requests':
+        return 'Leave Requests';
       case 'Training Portal':
         return 'Training Portal';
       case 'Corporate Policy':
@@ -74,12 +78,14 @@ class _UserPageState extends State<UserPage> {
 
   IconData _getPageIcon(String pageName) {
     switch (pageName) {
-      case 'HomePage':
+      case 'Home':
         return Icons.home;
       case 'Profile':
         return Icons.person;
       case 'Attendance Records':
         return Icons.calendar_today;
+      case 'Leave Requests':
+        return Icons.event_available;
       case 'Training Portal':
         return Icons.school;
       case 'Corporate Policy':
@@ -267,6 +273,7 @@ class _UserPageState extends State<UserPage> {
             _buildDrawerItem(Icons.home, 'Home'),
             _buildDrawerItem(Icons.person, 'Profile'),
             _buildDrawerItem(Icons.calendar_today, 'Attendance Records'),
+            _buildDrawerItem(Icons.event_available, 'Leave Requests'),
             _buildDrawerItem(Icons.school, 'Training Portal'),
             _buildDrawerItem(Icons.policy, 'Corporate Policy'),
             _buildDrawerItem(Icons.people_alt, 'HR Related Forms'),

@@ -25,7 +25,7 @@ android {
         applicationId = "com.company.hris"
         
         // 🛠️ FIX: Set minSdk explicitly to avoid Firebase conflict
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

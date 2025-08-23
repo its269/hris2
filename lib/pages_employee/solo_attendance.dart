@@ -148,21 +148,21 @@ class _EmployeeAttendancePageState extends State<EmployeeAttendancePage> {
     final records = _getFilteredRecords();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Icon(Icons.calendar_today, color: colorScheme.onPrimaryContainer),
-            const SizedBox(width: 8),
-            const Expanded(child: Text("Employee Attendance")),
-          ],
-        ),
-        backgroundColor: colorScheme.primaryContainer,
-        foregroundColor: colorScheme.onPrimaryContainer,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: Row(
+      //     children: [
+      //       Icon(Icons.calendar_today, color: colorScheme.onPrimaryContainer),
+      //       const SizedBox(width: 8),
+      //       const Expanded(child: Text("Employee Attendance")),
+      //     ],
+      //   ),
+      //   backgroundColor: colorScheme.primaryContainer,
+      //   foregroundColor: colorScheme.onPrimaryContainer,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back),
+      //     onPressed: () => Navigator.pop(context),
+      //   ),
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
