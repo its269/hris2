@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  carousel_slider: ^5.1.1
   cupertino_icons: ^1.0.8
   uuid: ^4.5.1
   shared_preferences: ^2.5.3
@@ -36,9 +37,13 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/1.png
+    - assets/2.png
+    - assets/3.png
     - assets/kelin.png
     - assets/profile.jpg
     - assets/human-resources_hris.png
+    - assets/hris_settings_cover.png
 
 flutter_launcher_icons:
   android: "launcher_icon"

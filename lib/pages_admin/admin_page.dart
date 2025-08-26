@@ -7,7 +7,7 @@ import 'training_management_page.dart';
 import 'policy_page.dart';
 import 'hr_page.dart';
 import 'employee_list_page.dart';
-import 'admin_approval_page.dart';
+import 'admin_leave_management_page.dart';
 import 'dashboard_page.dart';
 import 'schedule_page.dart';
 import 'notifications_page.dart';
@@ -28,18 +28,14 @@ import '../main.dart'; // Assuming MyApp is here
 //         style: TextStyle(fontSize: 24),
 //       ),
 //     );
-//   } 
+//   }
 // }
 
 class MyHomePage extends StatefulWidget {
-  final String role;       
-  final String employeeId;  
+  final String role;
+  final String employeeId;
 
-    const MyHomePage({
-    super.key,
-    required this.role,
-    required this.employeeId,
-  });
+  const MyHomePage({super.key, required this.role, required this.employeeId});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -48,19 +44,20 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String _selectedPage = 'Dashboard';
   int _selectedTabIndex = 0; // 0 = Home, 1 = Notifications
-  int _unreadNotificationCount = 5; // Example count - replace with actual API data
-  
+  int _unreadNotificationCount =
+      5; // Example count - replace with actual API data
+
   // PLACEHOLDER - Employee name field
   // Uncomment this field when employee names table is ready:
   // String? _employeeName;
-  
+
   @override
   void initState() {
     super.initState();
     // Uncomment this when employee names table is ready
     // _loadEmployeeName();
   }
-  
+
   // PLACEHOLDER - Load employee name from API
   // This method will fetch the actual employee name from another table
   // using the employeeId. Currently commented out because the separate
@@ -89,7 +86,10 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         );
       case 'Leave Management':
-        return const AdminApprovalPage(showAppBar: false);
+        return AdminLeaveManagementPage(
+          employeeId: widget.employeeId,
+          role: widget.role,
+        );
       case 'Employee Management':
         return EmployeeListPage(
           role: widget.role,
@@ -101,11 +101,14 @@ class _MyHomePageState extends State<MyHomePage> {
       case 'Training Management':
         return const TrainingManagementPage(showAppBar: false);
       case 'Corporate Policy':
-        return const PolicyPage(showAppBar: false);
+        return PolicyPage(showAppBar: false, userRole: widget.role);
       case 'HR Related Forms':
         return const HRPage(showAppBar: false);
       case 'Request':
-        return const AdminApprovalPage(showAppBar: false);
+        return AdminLeaveManagementPage(
+          employeeId: widget.employeeId,
+          role: widget.role,
+        );
       default:
         return const Center(child: Text('Page Not Found'));
     }
@@ -153,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 'Corporate Policy':
         return 'Corporate Policy';
       case 'HR Related Forms':
-        return 'HR Management';
+        return 'HR Related Forms';
       case 'Request':
         return 'Leave Requests';
       case 'Schedule & Calendar':
@@ -168,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 'Dashboard':
         return Icons.dashboard;
       case 'Leave Management':
-        return Icons.approval;
+        return Icons.event_available;
       case 'Employee Management':
         return Icons.people;
       case 'Attendance Records':
@@ -237,7 +240,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Image.asset(
                   'assets/kelin.png',
                   height: 32,
-                  errorBuilder: (context, error, stackTrace) => const SizedBox(),
+                  errorBuilder: (context, error, stackTrace) =>
+                      const SizedBox(),
                 ),
               ),
             ),
@@ -303,22 +307,29 @@ class _MyHomePageState extends State<MyHomePage> {
                               curve: Curves.easeInOut,
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: colorScheme.onPrimaryContainer.withOpacity(0.1),
+                                color: colorScheme.onPrimaryContainer
+                                    .withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(25),
                               ),
                               child: AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 300),
-                                transitionBuilder: (Widget child, Animation<double> animation) {
-                                  return RotationTransition(
-                                    turns: animation,
-                                    child: ScaleTransition(
-                                      scale: animation,
-                                      child: child,
-                                    ),
-                                  );
-                                },
+                                transitionBuilder:
+                                    (
+                                      Widget child,
+                                      Animation<double> animation,
+                                    ) {
+                                      return RotationTransition(
+                                        turns: animation,
+                                        child: ScaleTransition(
+                                          scale: animation,
+                                          child: child,
+                                        ),
+                                      );
+                                    },
                                 child: Icon(
-                                  themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                                  themeProvider.isDarkMode
+                                      ? Icons.dark_mode
+                                      : Icons.light_mode,
                                   key: ValueKey<bool>(themeProvider.isDarkMode),
                                   color: colorScheme.onPrimaryContainer,
                                   size: 24,
@@ -412,7 +423,10 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
         items: [
-          const BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Schedule'),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Schedule',
+          ),
           BottomNavigationBarItem(
             icon: Stack(
               children: [

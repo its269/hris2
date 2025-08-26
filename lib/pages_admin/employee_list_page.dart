@@ -1212,23 +1212,23 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     final colorScheme = Theme.of(context).colorScheme;
     
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Row(
-      //     children: [
-      //       Icon(Icons.apartment, 
-      //            color: colorScheme.onPrimaryContainer, 
-      //            size: 24),
-      //       const SizedBox(width: 8),
-      //       Expanded(child: Text("Departments - ${selectedBranch!.name}")),
-      //     ],
-      //   ),
-      //   backgroundColor: colorScheme.primaryContainer,
-      //   foregroundColor: colorScheme.onPrimaryContainer,
-      //   leading: IconButton(
-      //     icon: const Icon(Icons.arrow_back),
-      //     onPressed: () => setState(() => selectedBranch = null),
-      //   ),
-      // ),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Icon(Icons.apartment, 
+                 color: colorScheme.onPrimaryContainer, 
+                 size: 24),
+            const SizedBox(width: 8),
+            Expanded(child: Text("${selectedBranch!.name}")),
+          ],
+        ),
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => setState(() => selectedBranch = null),
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: [

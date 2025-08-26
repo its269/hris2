@@ -37,10 +37,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       'companyEmail': TextEditingController(text: emp?.companyEmail ?? ''),
       'personalEmail': TextEditingController(text: emp?.personalEmail ?? ''),
       'mobileNumber': TextEditingController(text: emp?.mobileNumber ?? ''),
-      'permanentAddress':
-          TextEditingController(text: emp?.permanentAddress ?? ''),
-      'temporaryAddress':
-          TextEditingController(text: emp?.temporaryAddress ?? ''),
+      'permanentAddress': TextEditingController(
+        text: emp?.permanentAddress ?? '',
+      ),
+      'temporaryAddress': TextEditingController(
+        text: emp?.temporaryAddress ?? '',
+      ),
       'college': TextEditingController(text: emp?.college ?? ''),
       'shs': TextEditingController(text: emp?.shs ?? ''),
       'highSchool': TextEditingController(text: emp?.highSchool ?? ''),
@@ -52,8 +54,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       'department': TextEditingController(text: emp?.department ?? ''),
       'dateHired': TextEditingController(text: emp?.dateHired ?? ''),
       'dateRegular': TextEditingController(text: emp?.dateRegular ?? ''),
-      'employmentStatus':
-          TextEditingController(text: emp?.employmentStatus ?? ''),
+      'employmentStatus': TextEditingController(
+        text: emp?.employmentStatus ?? '',
+      ),
       'supervisor': TextEditingController(text: emp?.supervisor ?? ''),
       'role': TextEditingController(text: emp?.role ?? ''),
       'password': TextEditingController(text: emp?.password ?? ''),
@@ -73,7 +76,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   void save() {
     if (_formKey.currentState!.validate()) {
       final typedEmployeeId = controllers['EmployeeID']?.text.trim() ?? '';
-      final employeeId = (widget.employee?.employeeID != null && widget.employee!.employeeID.isNotEmpty)
+      final employeeId =
+          (widget.employee?.employeeID != null &&
+              widget.employee!.employeeID.isNotEmpty)
           ? widget.employee!.employeeID
           : (typedEmployeeId.isNotEmpty ? typedEmployeeId : _uuid.v4());
 
@@ -117,9 +122,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     }
   }
 
-
-  Widget buildField(String label, String key,
-      {TextInputType inputType = TextInputType.text, bool isRequired = false}) {
+  Widget buildField(
+    String label,
+    String key, {
+    TextInputType inputType = TextInputType.text,
+    bool isRequired = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
@@ -142,18 +150,24 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         DateTime? pickedDate = await showDatePicker(
           context: context,
           initialDate:
-              DateTime.tryParse(controllers[key]?.text ?? '') ??
-                  DateTime(1990),
+              DateTime.tryParse(controllers[key]?.text ?? '') ?? DateTime(1990),
           firstDate: DateTime(1900),
           lastDate: DateTime.now(),
         );
         if (pickedDate != null) {
-          controllers[key]?.text =
-              pickedDate.toIso8601String().split('T').first;
+          controllers[key]?.text = pickedDate
+              .toIso8601String()
+              .split('T')
+              .first;
         }
       },
       child: AbsorbPointer(
-        child: buildField(label, key, inputType: TextInputType.datetime, isRequired: isRequired),
+        child: buildField(
+          label,
+          key,
+          inputType: TextInputType.datetime,
+          isRequired: isRequired,
+        ),
       ),
     );
   }
@@ -165,12 +179,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       'Brother',
       'Sister',
       'Spouse',
-      'Child'
+      'Child',
     ];
     final selectedRelation =
         relations.contains(familyMembers[index]['relation'])
-            ? familyMembers[index]['relation']
-            : null;
+        ? familyMembers[index]['relation']
+        : null;
 
     return Row(
       children: [
@@ -185,8 +199,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             items: relations
                 .toSet()
                 .map(
-                  (relation) => DropdownMenuItem(
-                      value: relation, child: Text(relation)),
+                  (relation) =>
+                      DropdownMenuItem(value: relation, child: Text(relation)),
                 )
                 .toList(),
             onChanged: (value) {
@@ -231,57 +245,59 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     String key,
     List<String> options, {
     bool isRequired = true,
-    }) {
-      // Get the current value from the controller
-      String currentValue = controllers[key]!.text.trim();
-      
-      // Create a complete list of options including the current value if it's not already in the list
-      List<String> allOptions = List.from(options);
-      if (currentValue.isNotEmpty && !allOptions.contains(currentValue)) {
-        allOptions.add(currentValue);
-      }
-      
-      // Remove duplicates and ensure unique values
-      allOptions = allOptions.toSet().toList();
-      
-      // Determine the value to use
-      String? selectedValue;
-      if (currentValue.isNotEmpty && allOptions.contains(currentValue)) {
-        selectedValue = currentValue;
-      } else if (allOptions.isNotEmpty) {
-        selectedValue = allOptions.first;
-        // Update the controller with the default value if current value is empty
-        if (currentValue.isEmpty) {
-          controllers[key]!.text = selectedValue;
-        }
-      }
-      
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: DropdownButtonFormField<String>(
-          value: selectedValue,
-          decoration: InputDecoration(
-            labelText: label,
-            border: const OutlineInputBorder(),
-          ),
-          items: allOptions
-              .map((option) =>
-                  DropdownMenuItem(value: option, child: Text(option)))
-              .toList(),
-          onChanged: (value) {
-            setState(() {
-              controllers[key]!.text = value ?? '';
-            });
-          },
-          validator: (value) {
-            if (isRequired && (value == null || value.isEmpty)) {
-              return 'Required';
-            }
-            return null;
-          },
-        ),
-      );
+  }) {
+    // Get the current value from the controller
+    String currentValue = controllers[key]!.text.trim();
+
+    // Create a complete list of options including the current value if it's not already in the list
+    List<String> allOptions = List.from(options);
+    if (currentValue.isNotEmpty && !allOptions.contains(currentValue)) {
+      allOptions.add(currentValue);
     }
+
+    // Remove duplicates and ensure unique values
+    allOptions = allOptions.toSet().toList();
+
+    // Determine the value to use
+    String? selectedValue;
+    if (currentValue.isNotEmpty && allOptions.contains(currentValue)) {
+      selectedValue = currentValue;
+    } else if (allOptions.isNotEmpty) {
+      selectedValue = allOptions.first;
+      // Update the controller with the default value if current value is empty
+      if (currentValue.isEmpty) {
+        controllers[key]!.text = selectedValue;
+      }
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: DropdownButtonFormField<String>(
+        value: selectedValue,
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
+        items: allOptions
+            .map(
+              (option) => DropdownMenuItem(value: option, child: Text(option)),
+            )
+            .toList(),
+        onChanged: (value) {
+          setState(() {
+            controllers[key]!.text = value ?? '';
+          });
+        },
+        validator: (value) {
+          if (isRequired && (value == null || value.isEmpty)) {
+            return 'Required';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isEdit = widget.employee != null;
@@ -290,9 +306,11 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(isEdit ? Icons.edit : Icons.person_add, 
-                 color: Theme.of(context).colorScheme.onPrimaryContainer, 
-                 size: 24),
+            Icon(
+              isEdit ? Icons.edit : Icons.person_add,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              size: 24,
+            ),
             const SizedBox(width: 8),
             Text(isEdit ? 'Edit Profile' : 'Add Employee'),
           ],
@@ -312,8 +330,16 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             children: [
               ExpansionTile(
                 initiallyExpanded: true,
-                leading: const Icon(Icons.person),
-                title: const Text("Personal Information"),
+                leading: Icon(
+                  Icons.person,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(
+                  "Personal Information",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+                ),
                 children: [
                   const SizedBox(height: 5),
                   buildField('First Name', 'firstName', isRequired: true),
@@ -333,19 +359,36 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                     'Annulled',
                     'Legally Separated',
                   ]),
-                  buildField('Company Email', 'companyEmail',
-                      inputType: TextInputType.emailAddress),
-                  buildField('Personal Email', 'personalEmail',
-                      inputType: TextInputType.emailAddress),
-                  buildField('Mobile Number', 'mobileNumber',
-                      inputType: TextInputType.phone),
+                  buildField(
+                    'Company Email',
+                    'companyEmail',
+                    inputType: TextInputType.emailAddress,
+                  ),
+                  buildField(
+                    'Personal Email',
+                    'personalEmail',
+                    inputType: TextInputType.emailAddress,
+                  ),
+                  buildField(
+                    'Mobile Number',
+                    'mobileNumber',
+                    inputType: TextInputType.phone,
+                  ),
                   buildField('Permanent Address', 'permanentAddress'),
                   buildField('Temporary Address', 'temporaryAddress'),
                 ],
               ),
               ExpansionTile(
-                leading: const Icon(Icons.family_restroom),
-                title: const Text("Family"),
+                leading: Icon(
+                  Icons.family_restroom,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(
+                  "Family",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+                ),
                 children: [
                   const SizedBox(height: 5),
                   ...List.generate(
@@ -359,12 +402,19 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton.icon(
-                      icon: const Icon(Icons.add),
-                      label: const Text("Add Family Member"),
+                      icon: Icon(
+                        Icons.add,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      label: Text(
+                        "Add Family Member",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                       onPressed: () {
                         setState(() {
-                          familyMembers
-                              .add({'relation': null, 'name': ''});
+                          familyMembers.add({'relation': null, 'name': ''});
                         });
                       },
                     ),
@@ -372,8 +422,16 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 ],
               ),
               ExpansionTile(
-                leading: const Icon(Icons.school),
-                title: const Text("Education"),
+                leading: Icon(
+                  Icons.school,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(
+                  "Education",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+                ),
                 children: [
                   const SizedBox(height: 5),
                   buildField('College', 'college'),
@@ -382,8 +440,16 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 ],
               ),
               ExpansionTile(
-                leading: const Icon(Icons.account_balance),
-                title: const Text("Bank Information"),
+                leading: Icon(
+                  Icons.account_balance,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(
+                  "Bank Information",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+                ),
                 children: [
                   const SizedBox(height: 5),
                   buildField('Bank Name', 'bankName'),
@@ -391,23 +457,32 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 ],
               ),
               ExpansionTile(
-                leading: const Icon(Icons.work),
-                title: const Text("Employment Info"),
+                leading: Icon(
+                  Icons.work,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(
+                  "Employment Info",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+                ),
                 children: [
                   const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: TextFormField(
                       controller: controllers['EmployeeID'],
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Employee ID',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
                       ),
                       readOnly: isEdit,
                       validator: (value) =>
-                          value == null || value.isEmpty
-                              ? 'Required'
-                              : null,
+                          value == null || value.isEmpty ? 'Required' : null,
                     ),
                   ),
                   buildField('Position', 'position', isRequired: true),
@@ -435,10 +510,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   buildDateField('Date Hired', 'dateHired'),
                   buildDateField('Date Regular', 'dateRegular'),
                   buildField('Immediate Supervisor', 'supervisor'),
-                  buildDropdownField('Role', 'role', [
-                    'Admin',
-                    'Employee',
-                  ]),
+                  buildDropdownField('Role', 'role', ['Admin', 'Employee']),
                   buildField('Password', 'password', isRequired: true),
                 ],
               ),
@@ -450,6 +522,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(50),
                   textStyle: const TextStyle(fontSize: 16),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 ),
               ),
             ],
