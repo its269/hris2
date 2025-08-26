@@ -1,6 +1,4 @@
-// User > Profile Page
 import 'package:flutter/material.dart';
-
 
 class ProfilePage extends StatefulWidget {
   final String? username;
@@ -24,36 +22,38 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Icon(Icons.person, 
-                 color: colorScheme.onPrimaryContainer, 
-                 size: 24),
-            const SizedBox(width: 8),
-            const Text('Profile'),
-          ],
-        ),
-        backgroundColor: colorScheme.primaryContainer,
-        foregroundColor: colorScheme.onPrimaryContainer,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: Row(
+      //     children: [
+      //       Icon(Icons.person, color: colorScheme.onPrimaryContainer),
+      //       const SizedBox(width: 8),
+      //       Text(
+      //         'Profile',
+      //         style: TextStyle(color: colorScheme.onPrimaryContainer),
+      //       ),
+      //     ],
+      //   ),
+      //   backgroundColor: colorScheme.primaryContainer,
+      //   foregroundColor: colorScheme.onPrimaryContainer,
+      //   leading: IconButton(
+      //     icon: Icon(Icons.arrow_back, color: colorScheme.onPrimaryContainer),
+      //     onPressed: () => Navigator.pop(context),
+      //   ),
+      // ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProfileHeader(),
+              _buildProfileHeader(colorScheme),
               const SizedBox(height: 20),
-              const InfoTile(
+              InfoTile(
                 title: 'Personal Background',
-                content: Column(
+                icon: Icons.badge,
+                content: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InfoText(label: 'Last Name', value: 'Polendey'),
@@ -85,9 +85,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              const InfoTile(
+              InfoTile(
                 title: 'Family',
-                content: Column(
+                icon: Icons.family_restroom,
+                content: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InfoText(
@@ -105,9 +106,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              const InfoTile(
+              InfoTile(
                 title: 'Education',
-                content: Column(
+                icon: Icons.school,
+                content: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InfoText(label: 'Doctorate Degree', value: 'N/A'),
@@ -119,9 +121,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              const InfoTile(
+              InfoTile(
                 title: 'ID/Bank Information',
-                content: Column(
+                icon: Icons.account_balance,
+                content: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InfoText(
@@ -140,9 +143,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              const InfoTile(
+              InfoTile(
                 title: 'Employee Information',
-                content: Column(
+                icon: Icons.work,
+                content: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InfoText(label: 'EE ID', value: 'KG-0751'),
@@ -166,13 +170,13 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 253, 231, 227),
+        color: colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color.fromARGB(255, 251, 216, 187)),
+        border: Border.all(color: colorScheme.outlineVariant),
       ),
       child: Row(
         children: [
@@ -181,22 +185,28 @@ class _ProfilePageState extends State<ProfilePage> {
             backgroundImage: AssetImage('assets/profile.jpg'),
           ),
           const SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                userName,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  userName,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Position: $position',
-                style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
-              ),
-            ],
+                const SizedBox(height: 6),
+                Text(
+                  'Position: $position',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -207,8 +217,14 @@ class _ProfilePageState extends State<ProfilePage> {
 class InfoTile extends StatefulWidget {
   final String title;
   final Widget content;
+  final IconData icon;
 
-  const InfoTile({super.key, required this.title, required this.content});
+  const InfoTile({
+    super.key,
+    required this.title,
+    required this.content,
+    required this.icon,
+  });
 
   @override
   State<InfoTile> createState() => _InfoTileState();
@@ -219,15 +235,17 @@ class _InfoTileState extends State<InfoTile> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color.fromARGB(255, 251, 216, 187)),
+        color: colorScheme.surface,
+        border: Border.all(color: colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade200,
+            color: colorScheme.shadow.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -236,12 +254,18 @@ class _InfoTileState extends State<InfoTile> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          title: Text(
-            widget.title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 243, 110, 33),
-            ),
+          title: Row(
+            children: [
+              Icon(widget.icon, color: colorScheme.primary),
+              const SizedBox(width: 8),
+              Text(
+                widget.title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.primary,
+                ),
+              ),
+            ],
           ),
           onExpansionChanged: (expanded) {
             setState(() {
@@ -250,7 +274,7 @@ class _InfoTileState extends State<InfoTile> {
           },
           trailing: Icon(
             _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-            color: const Color.fromARGB(255, 243, 110, 33),
+            color: colorScheme.primary,
           ),
           childrenPadding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -271,6 +295,8 @@ class InfoText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     if (value.trim().isEmpty) return const SizedBox();
 
     return Padding(
@@ -282,9 +308,9 @@ class InfoText extends StatelessWidget {
             flex: 3,
             child: Text(
               '$label:',
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
           ),
@@ -292,7 +318,10 @@ class InfoText extends StatelessWidget {
             flex: 5,
             child: Text(
               value,
-              style: const TextStyle(color: Colors.black87, height: 1.2),
+              style: TextStyle(
+                color: colorScheme.onSurfaceVariant,
+                height: 1.2,
+              ),
             ),
           ),
         ],

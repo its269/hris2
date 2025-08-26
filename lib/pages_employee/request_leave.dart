@@ -20,11 +20,8 @@ class _RequestLeavePageState extends State<RequestLeavePage> {
   String _status = "No Request";
 
   final List<String> _leaveTypes = [
-    'Annual Leave',
-    'Sick Leave',
-    'Unpaid Leave',
-    'Maternity Leave',
     'Paid Leave',
+    'Unpaid Leave',
   ];
 
   Future<void> _pickDate(BuildContext context, bool isStartDate) async {

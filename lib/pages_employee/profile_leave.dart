@@ -13,16 +13,23 @@ class _ProfileLeaveState extends State<ProfileLeave> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(Icons.assignment, 
-                 color: colorScheme.onPrimaryContainer, 
-                 size: 24),
+            Icon(
+              Icons.assignment,
+              color: colorScheme.onPrimaryContainer,
+              size: 24,
+            ),
             const SizedBox(width: 8),
-            const Expanded(child: Text('Profile & Leave Request')),
+            Expanded(
+              child: Text(
+                'Profile & Leave Request',
+                style: TextStyle(color: colorScheme.onPrimaryContainer),
+              ),
+            ),
           ],
         ),
         backgroundColor: colorScheme.primaryContainer,
@@ -40,12 +47,14 @@ class _ProfileLeaveState extends State<ProfileLeave> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
+            color: colorScheme.surface,
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildButton(
+                    context,
                     label: 'Personal Information',
                     icon: Icons.person,
                     onPressed: () {
@@ -59,6 +68,7 @@ class _ProfileLeaveState extends State<ProfileLeave> {
                   ),
                   const SizedBox(height: 16),
                   _buildButton(
+                    context,
                     label: 'Leave Request',
                     icon: Icons.calendar_today,
                     onPressed: () {
@@ -79,11 +89,14 @@ class _ProfileLeaveState extends State<ProfileLeave> {
     );
   }
 
-  Widget _buildButton({
+  Widget _buildButton(
+    BuildContext context, {
     required String label,
     required IconData icon,
     required VoidCallback onPressed,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
@@ -92,8 +105,8 @@ class _ProfileLeaveState extends State<ProfileLeave> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          backgroundColor: const Color.fromARGB(255, 255, 181, 96),
-          foregroundColor: Colors.white,
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
           textStyle: const TextStyle(fontSize: 16),
         ),
         icon: Icon(icon, size: 20),
