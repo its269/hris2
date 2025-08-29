@@ -86,7 +86,7 @@ class _UserQuizPageState extends State<UserQuizPage> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: colorScheme.onBackground,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -94,7 +94,7 @@ class _UserQuizPageState extends State<UserQuizPage> {
                       'Your Score: $_score / ${_questions.length}',
                       style: TextStyle(
                         fontSize: 20,
-                        color: colorScheme.onBackground.withOpacity(0.8),
+                        color: colorScheme.onSurface.withOpacity(0.8),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -117,7 +117,7 @@ class _UserQuizPageState extends State<UserQuizPage> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: colorScheme.onBackground,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -125,7 +125,7 @@ class _UserQuizPageState extends State<UserQuizPage> {
                     _questions[_currentQuestionIndex]['question'],
                     style: TextStyle(
                       fontSize: 20,
-                      color: colorScheme.onBackground,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 24),

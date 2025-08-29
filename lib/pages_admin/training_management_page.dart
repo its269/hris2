@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 
 class TrainingManagementPage extends StatefulWidget {
   final bool showAppBar;
-  
+
   const TrainingManagementPage({super.key, this.showAppBar = true});
 
   @override
   State<TrainingManagementPage> createState() => _TrainingManagementPageState();
 }
 
-class _TrainingManagementPageState extends State<TrainingManagementPage> with TickerProviderStateMixin {
+class _TrainingManagementPageState extends State<TrainingManagementPage>
+    with TickerProviderStateMixin {
   late TabController _tabController;
   String _searchQuery = '';
   String _employeeSearchQuery = '';
   String _assessmentSearchQuery = '';
   int _selectedTabIndex = 0; // Add this to track selected tab
-  
+
   @override
   void initState() {
     super.initState();
@@ -48,8 +49,13 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'completedEmployees': 102,
       'status': 'Active',
       'createdDate': '2024-01-15',
-      'content': 'This comprehensive training covers all essential company policies including code of conduct, workplace ethics, communication guidelines, and compliance requirements.',
-      'objectives': ['Understand company values', 'Learn code of conduct', 'Know compliance requirements'],
+      'content':
+          'This comprehensive training covers all essential company policies including code of conduct, workplace ethics, communication guidelines, and compliance requirements.',
+      'objectives': [
+        'Understand company values',
+        'Learn code of conduct',
+        'Know compliance requirements',
+      ],
       'hasQuiz': true,
       'passingScore': 80,
       'averageScore': 87.5,
@@ -66,8 +72,13 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'completedEmployees': 110,
       'status': 'Active',
       'createdDate': '2024-02-01',
-      'content': 'Comprehensive safety training covering fire safety, emergency evacuation procedures, first aid basics, and workplace hazard identification.',
-      'objectives': ['Fire safety protocols', 'Emergency procedures', 'First aid basics'],
+      'content':
+          'Comprehensive safety training covering fire safety, emergency evacuation procedures, first aid basics, and workplace hazard identification.',
+      'objectives': [
+        'Fire safety protocols',
+        'Emergency procedures',
+        'First aid basics',
+      ],
       'hasQuiz': true,
       'passingScore': 85,
       'averageScore': 91.2,
@@ -84,8 +95,13 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'completedEmployees': 94,
       'status': 'Active',
       'createdDate': '2024-02-15',
-      'content': 'Learn about creating an inclusive workplace, understanding unconscious bias, and promoting diversity in all aspects of work.',
-      'objectives': ['Understand unconscious bias', 'Promote inclusion', 'Respect diversity'],
+      'content':
+          'Learn about creating an inclusive workplace, understanding unconscious bias, and promoting diversity in all aspects of work.',
+      'objectives': [
+        'Understand unconscious bias',
+        'Promote inclusion',
+        'Respect diversity',
+      ],
       'hasQuiz': true,
       'passingScore': 75,
       'averageScore': 83.7,
@@ -102,8 +118,13 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'completedEmployees': 78,
       'status': 'Draft',
       'createdDate': '2024-03-01',
-      'content': 'Essential cybersecurity training covering password security, phishing awareness, data protection, and secure communication practices.',
-      'objectives': ['Password security', 'Phishing awareness', 'Data protection'],
+      'content':
+          'Essential cybersecurity training covering password security, phishing awareness, data protection, and secure communication practices.',
+      'objectives': [
+        'Password security',
+        'Phishing awareness',
+        'Data protection',
+      ],
       'hasQuiz': true,
       'passingScore': 80,
       'averageScore': 79.3,
@@ -120,8 +141,13 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'completedEmployees': 106,
       'status': 'Active',
       'createdDate': '2024-03-10',
-      'content': 'Learn advanced customer service techniques, conflict resolution, and building lasting customer relationships.',
-      'objectives': ['Customer communication', 'Conflict resolution', 'Service excellence'],
+      'content':
+          'Learn advanced customer service techniques, conflict resolution, and building lasting customer relationships.',
+      'objectives': [
+        'Customer communication',
+        'Conflict resolution',
+        'Service excellence',
+      ],
       'hasQuiz': true,
       'passingScore': 80,
       'averageScore': 88.9,
@@ -144,56 +170,76 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'averageScore': 91.7,
       'trainings': [
         {
-          'name': 'Company Policies', 
-          'status': 'Completed', 
+          'name': 'Company Policies',
+          'status': 'Completed',
           'score': 95,
           'attempts': 1,
           'timeSpent': '1.8 hours',
           'completedDate': '2024-02-10',
           'quizResults': [
-            {'attempt': 1, 'score': 95, 'date': '2024-02-10', 'timeSpent': '25 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 95,
+              'date': '2024-02-10',
+              'timeSpent': '25 min',
+            },
+          ],
         },
         {
-          'name': 'Workplace Safety', 
-          'status': 'Completed', 
+          'name': 'Workplace Safety',
+          'status': 'Completed',
           'score': 88,
           'attempts': 2,
           'timeSpent': '2.5 hours',
           'completedDate': '2024-02-20',
           'quizResults': [
-            {'attempt': 1, 'score': 76, 'date': '2024-02-18', 'timeSpent': '32 min'},
-            {'attempt': 2, 'score': 88, 'date': '2024-02-20', 'timeSpent': '28 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 76,
+              'date': '2024-02-18',
+              'timeSpent': '32 min',
+            },
+            {
+              'attempt': 2,
+              'score': 88,
+              'date': '2024-02-20',
+              'timeSpent': '28 min',
+            },
+          ],
         },
         {
-          'name': 'Cybersecurity Basics', 
-          'status': 'Completed', 
+          'name': 'Cybersecurity Basics',
+          'status': 'Completed',
           'score': 92,
           'attempts': 1,
           'timeSpent': '2.2 hours',
           'completedDate': '2024-03-05',
           'quizResults': [
-            {'attempt': 1, 'score': 92, 'date': '2024-03-05', 'timeSpent': '35 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 92,
+              'date': '2024-03-05',
+              'timeSpent': '35 min',
+            },
+          ],
         },
         {
-          'name': 'Diversity and Inclusion', 
-          'status': 'In Progress', 
+          'name': 'Diversity and Inclusion',
+          'status': 'In Progress',
           'score': null,
           'attempts': 0,
           'timeSpent': '0.5 hours',
           'completedDate': null,
-          'quizResults': []
+          'quizResults': [],
         },
         {
-          'name': 'Customer Service', 
-          'status': 'Not Started', 
+          'name': 'Customer Service',
+          'status': 'Not Started',
           'score': null,
           'attempts': 0,
           'timeSpent': '0 hours',
           'completedDate': null,
-          'quizResults': []
+          'quizResults': [],
         },
       ],
     },
@@ -209,59 +255,84 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'averageScore': 93.6,
       'trainings': [
         {
-          'name': 'Company Policies', 
-          'status': 'Completed', 
+          'name': 'Company Policies',
+          'status': 'Completed',
           'score': 98,
           'attempts': 1,
           'timeSpent': '1.9 hours',
           'completedDate': '2024-01-20',
           'quizResults': [
-            {'attempt': 1, 'score': 98, 'date': '2024-01-20', 'timeSpent': '22 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 98,
+              'date': '2024-01-20',
+              'timeSpent': '22 min',
+            },
+          ],
         },
         {
-          'name': 'Workplace Safety', 
-          'status': 'Completed', 
+          'name': 'Workplace Safety',
+          'status': 'Completed',
           'score': 94,
           'attempts': 1,
           'timeSpent': '2.8 hours',
           'completedDate': '2024-02-05',
           'quizResults': [
-            {'attempt': 1, 'score': 94, 'date': '2024-02-05', 'timeSpent': '30 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 94,
+              'date': '2024-02-05',
+              'timeSpent': '30 min',
+            },
+          ],
         },
         {
-          'name': 'Cybersecurity Basics', 
-          'status': 'Completed', 
+          'name': 'Cybersecurity Basics',
+          'status': 'Completed',
           'score': 89,
           'attempts': 1,
           'timeSpent': '2.3 hours',
           'completedDate': '2024-02-25',
           'quizResults': [
-            {'attempt': 1, 'score': 89, 'date': '2024-02-25', 'timeSpent': '38 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 89,
+              'date': '2024-02-25',
+              'timeSpent': '38 min',
+            },
+          ],
         },
         {
-          'name': 'Diversity and Inclusion', 
-          'status': 'Completed', 
+          'name': 'Diversity and Inclusion',
+          'status': 'Completed',
           'score': 96,
           'attempts': 1,
           'timeSpent': '1.4 hours',
           'completedDate': '2024-03-10',
           'quizResults': [
-            {'attempt': 1, 'score': 96, 'date': '2024-03-10', 'timeSpent': '18 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 96,
+              'date': '2024-03-10',
+              'timeSpent': '18 min',
+            },
+          ],
         },
         {
-          'name': 'Customer Service', 
-          'status': 'Completed', 
+          'name': 'Customer Service',
+          'status': 'Completed',
           'score': 91,
           'attempts': 1,
           'timeSpent': '1.9 hours',
           'completedDate': '2024-03-20',
           'quizResults': [
-            {'attempt': 1, 'score': 91, 'date': '2024-03-20', 'timeSpent': '26 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 91,
+              'date': '2024-03-20',
+              'timeSpent': '26 min',
+            },
+          ],
         },
       ],
     },
@@ -277,56 +348,77 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'averageScore': 84.5,
       'trainings': [
         {
-          'name': 'Company Policies', 
-          'status': 'Completed', 
+          'name': 'Company Policies',
+          'status': 'Completed',
           'score': 87,
           'attempts': 2,
           'timeSpent': '2.1 hours',
           'completedDate': '2024-02-15',
           'quizResults': [
-            {'attempt': 1, 'score': 72, 'date': '2024-02-12', 'timeSpent': '28 min'},
-            {'attempt': 2, 'score': 87, 'date': '2024-02-15', 'timeSpent': '24 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 72,
+              'date': '2024-02-12',
+              'timeSpent': '28 min',
+            },
+            {
+              'attempt': 2,
+              'score': 87,
+              'date': '2024-02-15',
+              'timeSpent': '24 min',
+            },
+          ],
         },
         {
-          'name': 'Workplace Safety', 
-          'status': 'Completed', 
+          'name': 'Workplace Safety',
+          'status': 'Completed',
           'score': 92,
           'attempts': 1,
           'timeSpent': '2.9 hours',
           'completedDate': '2024-03-01',
           'quizResults': [
-            {'attempt': 1, 'score': 92, 'date': '2024-03-01', 'timeSpent': '31 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 92,
+              'date': '2024-03-01',
+              'timeSpent': '31 min',
+            },
+          ],
         },
         {
-          'name': 'Cybersecurity Basics', 
-          'status': 'In Progress', 
+          'name': 'Cybersecurity Basics',
+          'status': 'In Progress',
           'score': null,
           'attempts': 1,
           'timeSpent': '1.2 hours',
           'completedDate': null,
           'quizResults': [
-            {'attempt': 1, 'score': 65, 'date': '2024-03-08', 'timeSpent': '42 min', 'passed': false}
-          ]
+            {
+              'attempt': 1,
+              'score': 65,
+              'date': '2024-03-08',
+              'timeSpent': '42 min',
+              'passed': false,
+            },
+          ],
         },
         {
-          'name': 'Diversity and Inclusion', 
-          'status': 'Not Started', 
+          'name': 'Diversity and Inclusion',
+          'status': 'Not Started',
           'score': null,
           'attempts': 0,
           'timeSpent': '0 hours',
           'completedDate': null,
-          'quizResults': []
+          'quizResults': [],
         },
         {
-          'name': 'Customer Service', 
-          'status': 'Not Started', 
+          'name': 'Customer Service',
+          'status': 'Not Started',
           'score': null,
           'attempts': 0,
           'timeSpent': '0 hours',
           'completedDate': null,
-          'quizResults': []
+          'quizResults': [],
         },
       ],
     },
@@ -342,58 +434,83 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'averageScore': 89.0,
       'trainings': [
         {
-          'name': 'Company Policies', 
-          'status': 'Completed', 
+          'name': 'Company Policies',
+          'status': 'Completed',
           'score': 93,
           'attempts': 1,
           'timeSpent': '1.7 hours',
           'completedDate': '2024-01-28',
           'quizResults': [
-            {'attempt': 1, 'score': 93, 'date': '2024-01-28', 'timeSpent': '21 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 93,
+              'date': '2024-01-28',
+              'timeSpent': '21 min',
+            },
+          ],
         },
         {
-          'name': 'Workplace Safety', 
-          'status': 'Completed', 
+          'name': 'Workplace Safety',
+          'status': 'Completed',
           'score': 90,
           'attempts': 1,
           'timeSpent': '2.7 hours',
           'completedDate': '2024-02-12',
           'quizResults': [
-            {'attempt': 1, 'score': 90, 'date': '2024-02-12', 'timeSpent': '29 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 90,
+              'date': '2024-02-12',
+              'timeSpent': '29 min',
+            },
+          ],
         },
         {
-          'name': 'Cybersecurity Basics', 
-          'status': 'Completed', 
+          'name': 'Cybersecurity Basics',
+          'status': 'Completed',
           'score': 85,
           'attempts': 2,
           'timeSpent': '2.4 hours',
           'completedDate': '2024-03-05',
           'quizResults': [
-            {'attempt': 1, 'score': 78, 'date': '2024-03-02', 'timeSpent': '41 min'},
-            {'attempt': 2, 'score': 85, 'date': '2024-03-05', 'timeSpent': '36 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 78,
+              'date': '2024-03-02',
+              'timeSpent': '41 min',
+            },
+            {
+              'attempt': 2,
+              'score': 85,
+              'date': '2024-03-05',
+              'timeSpent': '36 min',
+            },
+          ],
         },
         {
-          'name': 'Diversity and Inclusion', 
-          'status': 'Completed', 
+          'name': 'Diversity and Inclusion',
+          'status': 'Completed',
           'score': 88,
           'attempts': 1,
           'timeSpent': '1.3 hours',
           'completedDate': '2024-03-15',
           'quizResults': [
-            {'attempt': 1, 'score': 88, 'date': '2024-03-15', 'timeSpent': '16 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 88,
+              'date': '2024-03-15',
+              'timeSpent': '16 min',
+            },
+          ],
         },
         {
-          'name': 'Customer Service', 
-          'status': 'In Progress', 
+          'name': 'Customer Service',
+          'status': 'In Progress',
           'score': null,
           'attempts': 0,
           'timeSpent': '0.8 hours',
           'completedDate': null,
-          'quizResults': []
+          'quizResults': [],
         },
       ],
     },
@@ -409,53 +526,68 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'averageScore': 82.0,
       'trainings': [
         {
-          'name': 'Company Policies', 
-          'status': 'Completed', 
+          'name': 'Company Policies',
+          'status': 'Completed',
           'score': 82,
           'attempts': 3,
           'timeSpent': '2.5 hours',
           'completedDate': '2024-03-05',
           'quizResults': [
-            {'attempt': 1, 'score': 68, 'date': '2024-02-28', 'timeSpent': '33 min'},
-            {'attempt': 2, 'score': 74, 'date': '2024-03-02', 'timeSpent': '29 min'},
-            {'attempt': 3, 'score': 82, 'date': '2024-03-05', 'timeSpent': '26 min'}
-          ]
+            {
+              'attempt': 1,
+              'score': 68,
+              'date': '2024-02-28',
+              'timeSpent': '33 min',
+            },
+            {
+              'attempt': 2,
+              'score': 74,
+              'date': '2024-03-02',
+              'timeSpent': '29 min',
+            },
+            {
+              'attempt': 3,
+              'score': 82,
+              'date': '2024-03-05',
+              'timeSpent': '26 min',
+            },
+          ],
         },
         {
-          'name': 'Workplace Safety', 
-          'status': 'Not Started', 
+          'name': 'Workplace Safety',
+          'status': 'Not Started',
           'score': null,
           'attempts': 0,
           'timeSpent': '0 hours',
           'completedDate': null,
-          'quizResults': []
+          'quizResults': [],
         },
         {
-          'name': 'Cybersecurity Basics', 
-          'status': 'Not Started', 
+          'name': 'Cybersecurity Basics',
+          'status': 'Not Started',
           'score': null,
           'attempts': 0,
           'timeSpent': '0 hours',
           'completedDate': null,
-          'quizResults': []
+          'quizResults': [],
         },
         {
-          'name': 'Diversity and Inclusion', 
-          'status': 'Not Started', 
+          'name': 'Diversity and Inclusion',
+          'status': 'Not Started',
           'score': null,
           'attempts': 0,
           'timeSpent': '0 hours',
           'completedDate': null,
-          'quizResults': []
+          'quizResults': [],
         },
         {
-          'name': 'Customer Service', 
-          'status': 'Not Started', 
+          'name': 'Customer Service',
+          'status': 'Not Started',
           'score': null,
           'attempts': 0,
           'timeSpent': '0 hours',
           'completedDate': null,
-          'quizResults': []
+          'quizResults': [],
         },
       ],
     },
@@ -480,12 +612,31 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'timeSpent': '25 minutes',
       'submittedDate': '2024-02-10',
       'questionResults': [
-        {'questionId': 1, 'question': 'What is the company mission?', 'correct': true, 'userAnswer': 'A', 'correctAnswer': 'A'},
-        {'questionId': 2, 'question': 'What is the dress code policy?', 'correct': true, 'userAnswer': 'B', 'correctAnswer': 'B'},
-        {'questionId': 3, 'question': 'When was the company founded?', 'correct': false, 'userAnswer': 'C', 'correctAnswer': 'B'},
+        {
+          'questionId': 1,
+          'question': 'What is the company mission?',
+          'correct': true,
+          'userAnswer': 'A',
+          'correctAnswer': 'A',
+        },
+        {
+          'questionId': 2,
+          'question': 'What is the dress code policy?',
+          'correct': true,
+          'userAnswer': 'B',
+          'correctAnswer': 'B',
+        },
+        {
+          'questionId': 3,
+          'question': 'When was the company founded?',
+          'correct': false,
+          'userAnswer': 'C',
+          'correctAnswer': 'B',
+        },
         // ... more questions
       ],
-      'feedback': 'Excellent understanding of company policies. Strong performance across all areas.',
+      'feedback':
+          'Excellent understanding of company policies. Strong performance across all areas.',
       'improvementAreas': ['Company history'],
       'certificate': 'CERT_POL_001_2024',
     },
@@ -506,11 +657,24 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'timeSpent': '30 minutes',
       'submittedDate': '2024-02-05',
       'questionResults': [
-        {'questionId': 1, 'question': 'Identify fire exit routes', 'correct': true, 'userAnswer': 'Correctly identified all routes', 'correctAnswer': 'All routes identified'},
-        {'questionId': 2, 'question': 'Use fire extinguisher properly', 'correct': true, 'userAnswer': 'PASS technique applied', 'correctAnswer': 'PASS technique'},
+        {
+          'questionId': 1,
+          'question': 'Identify fire exit routes',
+          'correct': true,
+          'userAnswer': 'Correctly identified all routes',
+          'correctAnswer': 'All routes identified',
+        },
+        {
+          'questionId': 2,
+          'question': 'Use fire extinguisher properly',
+          'correct': true,
+          'userAnswer': 'PASS technique applied',
+          'correctAnswer': 'PASS technique',
+        },
         // ... more practical tasks
       ],
-      'feedback': 'Outstanding practical demonstration of safety procedures. Excellent attention to detail.',
+      'feedback':
+          'Outstanding practical demonstration of safety procedures. Excellent attention to detail.',
       'improvementAreas': ['Emergency communication'],
       'certificate': 'CERT_SAF_002_2024',
     },
@@ -531,12 +695,29 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       'timeSpent': '42 minutes',
       'submittedDate': '2024-03-08',
       'questionResults': [
-        {'questionId': 1, 'question': 'Identify phishing email', 'correct': false, 'userAnswer': 'Legitimate', 'correctAnswer': 'Phishing'},
-        {'questionId': 2, 'question': 'Create strong password', 'correct': true, 'userAnswer': 'P@ssw0rd123!', 'correctAnswer': 'Strong password'},
+        {
+          'questionId': 1,
+          'question': 'Identify phishing email',
+          'correct': false,
+          'userAnswer': 'Legitimate',
+          'correctAnswer': 'Phishing',
+        },
+        {
+          'questionId': 2,
+          'question': 'Create strong password',
+          'correct': true,
+          'userAnswer': 'P@ssw0rd123!',
+          'correctAnswer': 'Strong password',
+        },
         // ... more simulation tasks
       ],
-      'feedback': 'Needs improvement in recognizing social engineering attacks. Good understanding of password security.',
-      'improvementAreas': ['Phishing detection', 'Social engineering awareness', 'Email security'],
+      'feedback':
+          'Needs improvement in recognizing social engineering attacks. Good understanding of password security.',
+      'improvementAreas': [
+        'Phishing detection',
+        'Social engineering awareness',
+        'Email security',
+      ],
       'certificate': null,
     },
   ];
@@ -592,7 +773,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             ],
           ),
           const SizedBox(height: 24),
-          
+
           // Recent Activity
           Card(
             child: Padding(
@@ -617,11 +798,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                         'Sarah Wilson completed "Diversity and Inclusion"',
                       ];
                       final times = ['2 hours ago', '5 hours ago', '1 day ago'];
-                      
+
                       return ListTile(
-                        leading: const CircleAvatar(
-                          child: Icon(Icons.person),
-                        ),
+                        leading: const CircleAvatar(child: Icon(Icons.person)),
                         title: Text(activities[index]),
                         subtitle: Text(times[index]),
                         dense: true,
@@ -640,7 +819,12 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
     );
   }
 
-  Widget _buildSummaryCard(String title, String value, IconData icon, Color color) {
+  Widget _buildSummaryCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Card(
       child: InkWell(
         onTap: () {
@@ -668,9 +852,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
               const SizedBox(height: 8),
               Text(
                 title,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
               ),
             ],
           ),
@@ -714,7 +898,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             ],
           ),
         ),
-        
+
         // Training Modules List
         Expanded(
           child: ListView.builder(
@@ -733,17 +917,26 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Icon(Icons.schedule, size: 16, color: Colors.grey[600]),
+                          Icon(
+                            Icons.schedule,
+                            size: 16,
+                            color: Colors.grey[600],
+                          ),
                           const SizedBox(width: 4),
                           Flexible(
-                            child: Text(module['duration'], style: TextStyle(color: Colors.grey[600])),
+                            child: Text(
+                              module['duration'],
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
                           ),
                           const SizedBox(width: 16),
                           Icon(Icons.people, size: 16, color: Colors.grey[600]),
                           const SizedBox(width: 4),
                           Flexible(
-                            child: Text('${module['completedEmployees']}/${module['totalEmployees']}', 
-                                 style: TextStyle(color: Colors.grey[600])),
+                            child: Text(
+                              '${module['completedEmployees']}/${module['totalEmployees']}',
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
                           ),
                         ],
                       ),
@@ -753,19 +946,29 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
-                          color: module['status'] == 'Active' ? Colors.green : Colors.orange,
+                          color: module['status'] == 'Active'
+                              ? Colors.green
+                              : Colors.orange,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           module['status'],
-                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text('${module['completionRate']}%', 
-                           style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        '${module['completionRate']}%',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                   children: [
@@ -782,8 +985,11 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                   value: module['completionRate'] / 100,
                                   backgroundColor: Colors.grey[300],
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    module['completionRate'] >= 80 ? Colors.green : 
-                                    module['completionRate'] >= 60 ? Colors.orange : Colors.red,
+                                    module['completionRate'] >= 80
+                                        ? Colors.green
+                                        : module['completionRate'] >= 60
+                                        ? Colors.orange
+                                        : Colors.red,
                                   ),
                                 ),
                               ),
@@ -792,7 +998,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                             ],
                           ),
                           const SizedBox(height: 16),
-                          
+
                           // Action Buttons
                           Wrap(
                             spacing: 8,
@@ -805,7 +1011,10 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                 icon: const Icon(Icons.analytics, size: 16),
                                 label: const Text('Analytics'),
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
                                 ),
                               ),
                               ElevatedButton.icon(
@@ -815,7 +1024,10 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                 icon: const Icon(Icons.edit, size: 16),
                                 label: const Text('Edit'),
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
                                 ),
                               ),
                               ElevatedButton.icon(
@@ -826,7 +1038,10 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                 label: const Text('Remind'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.orange,
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
                                 ),
                               ),
                             ],
@@ -865,7 +1080,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             ),
           ),
         ),
-        
+
         // Employee Progress List
         Expanded(
           child: ListView.builder(
@@ -877,18 +1092,30 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                 margin: const EdgeInsets.only(bottom: 12),
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: employee['completionRate'] == 100 ? Colors.green : 
-                                   employee['completionRate'] >= 75 ? Colors.orange : Colors.red,
+                    backgroundColor: employee['completionRate'] == 100
+                        ? Colors.green
+                        : employee['completionRate'] >= 75
+                        ? Colors.orange
+                        : Colors.red,
                     child: Text(
-                      employee['name'].toString().split(' ').map((n) => n[0]).join(),
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      employee['name']
+                          .toString()
+                          .split(' ')
+                          .map((n) => n[0])
+                          .join(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   title: Text(employee['name']),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${employee['department']} • ID: ${employee['employeeId']}'),
+                      Text(
+                        '${employee['department']} • ID: ${employee['employeeId']}',
+                      ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
@@ -917,8 +1144,11 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                         '${employee['completionRate']}%',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: employee['completionRate'] == 100 ? Colors.green : 
-                                 employee['completionRate'] >= 75 ? Colors.orange : Colors.red,
+                          color: employee['completionRate'] == 100
+                              ? Colors.green
+                              : employee['completionRate'] >= 75
+                              ? Colors.orange
+                              : Colors.red,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -928,8 +1158,11 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                           value: employee['completionRate'] / 100,
                           backgroundColor: Colors.grey[300],
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            employee['completionRate'] == 100 ? Colors.green : 
-                            employee['completionRate'] >= 75 ? Colors.orange : Colors.red,
+                            employee['completionRate'] == 100
+                                ? Colors.green
+                                : employee['completionRate'] >= 75
+                                ? Colors.orange
+                                : Colors.red,
                           ),
                         ),
                       ),
@@ -962,14 +1195,17 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.analytics, size: 28, color: Theme.of(context).primaryColor),
+                      Icon(
+                        Icons.analytics,
+                        size: 28,
+                        color: Theme.of(context).primaryColor,
+                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           'Generate Comprehensive Reports',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -977,12 +1213,12 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                   const SizedBox(height: 8),
                   Text(
                     'Export detailed analytics and insights about your training programs',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey[600],
-                    ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Primary Reports Row
                   Row(
                     children: [
@@ -1008,7 +1244,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                     ],
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Secondary Reports Row
                   Row(
                     children: [
@@ -1034,7 +1270,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                     ],
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Additional Reports Row
                   Row(
                     children: [
@@ -1064,7 +1300,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             ),
           ),
           const SizedBox(height: 24),
-          
+
           // Real-time Analytics Dashboard
           Card(
             child: Padding(
@@ -1074,20 +1310,23 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.dashboard, size: 28, color: Theme.of(context).primaryColor),
+                      Icon(
+                        Icons.dashboard,
+                        size: 28,
+                        color: Theme.of(context).primaryColor,
+                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           'Real-time Analytics Dashboard',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Department Completion Rates with Enhanced UI
                   Text(
                     'Department Completion Rates',
@@ -1095,97 +1334,147 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                   ),
                   const SizedBox(height: 16),
                   ...[
-                    {'dept': 'IT Department', 'rate': 95, 'employees': 25, 'trend': '+5%'},
-                    {'dept': 'HR Department', 'rate': 88, 'employees': 12, 'trend': '+2%'},
-                    {'dept': 'Finance Department', 'rate': 72, 'employees': 18, 'trend': '-3%'},
-                    {'dept': 'Marketing Department', 'rate': 65, 'employees': 22, 'trend': '+8%'},
-                    {'dept': 'Operations Department', 'rate': 78, 'employees': 30, 'trend': '+1%'},
-                    {'dept': 'Sales Department', 'rate': 82, 'employees': 35, 'trend': '+4%'},
-                  ].map((dept) => Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey[300]!),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                dept['dept'].toString(),
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: (dept['trend'].toString().startsWith('+') ? Colors.green : Colors.red).withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                dept['trend'].toString(),
-                                style: TextStyle(
-                                  color: dept['trend'].toString().startsWith('+') ? Colors.green : Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                    {
+                      'dept': 'IT Department',
+                      'rate': 95,
+                      'employees': 25,
+                      'trend': '+5%',
+                    },
+                    {
+                      'dept': 'HR Department',
+                      'rate': 88,
+                      'employees': 12,
+                      'trend': '+2%',
+                    },
+                    {
+                      'dept': 'Finance Department',
+                      'rate': 72,
+                      'employees': 18,
+                      'trend': '-3%',
+                    },
+                    {
+                      'dept': 'Marketing Department',
+                      'rate': 65,
+                      'employees': 22,
+                      'trend': '+8%',
+                    },
+                    {
+                      'dept': 'Operations Department',
+                      'rate': 78,
+                      'employees': 30,
+                      'trend': '+1%',
+                    },
+                    {
+                      'dept': 'Sales Department',
+                      'rate': 82,
+                      'employees': 35,
+                      'trend': '+4%',
+                    },
+                  ].map(
+                    (dept) => Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey[300]!),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  dept['dept'].toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  LinearProgressIndicator(
-                                    value: (dept['rate'] as int) / 100,
-                                    backgroundColor: Colors.grey[300],
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      (dept['rate'] as int) >= 80 ? Colors.green : 
-                                      (dept['rate'] as int) >= 60 ? Colors.orange : Colors.red,
-                                    ),
-                                    minHeight: 8,
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color:
+                                      (dept['trend'].toString().startsWith('+')
+                                              ? Colors.green
+                                              : Colors.red)
+                                          .withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  dept['trend'].toString(),
+                                  style: TextStyle(
+                                    color:
+                                        dept['trend'].toString().startsWith('+')
+                                        ? Colors.green
+                                        : Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    '${dept['employees']} employees',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    LinearProgressIndicator(
+                                      value: (dept['rate'] as int) / 100,
+                                      backgroundColor: Colors.grey[300],
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        (dept['rate'] as int) >= 80
+                                            ? Colors.green
+                                            : (dept['rate'] as int) >= 60
+                                            ? Colors.orange
+                                            : Colors.red,
+                                      ),
+                                      minHeight: 8,
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '${dept['employees']} employees',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 16),
-                            Text(
-                              '${dept['rate']}%',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: (dept['rate'] as int) >= 80 ? Colors.green : 
-                                       (dept['rate'] as int) >= 60 ? Colors.orange : Colors.red,
+                              const SizedBox(width: 16),
+                              Text(
+                                '${dept['rate']}%',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: (dept['rate'] as int) >= 80
+                                      ? Colors.green
+                                      : (dept['rate'] as int) >= 60
+                                      ? Colors.orange
+                                      : Colors.red,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  )).toList(),
+                  ),
                 ],
               ),
             ),
           ),
           const SizedBox(height: 24),
-          
+
           // Training Insights
           Card(
             child: Padding(
@@ -1195,74 +1484,86 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.insights, size: 28, color: Theme.of(context).primaryColor),
+                      Icon(
+                        Icons.insights,
+                        size: 28,
+                        color: Theme.of(context).primaryColor,
+                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           'Training Insights & Recommendations',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Insight Cards
                   ...[
                     {
                       'title': 'Top Performing Module',
-                      'content': 'Workplace Safety Training has 92% completion rate',
+                      'content':
+                          'Workplace Safety Training has 92% completion rate',
                       'icon': Icons.star,
                       'color': Colors.green,
                     },
                     {
                       'title': 'Needs Attention',
-                      'content': 'Cybersecurity Basics requires improvement (65% completion)',
+                      'content':
+                          'Cybersecurity Basics requires improvement (65% completion)',
                       'icon': Icons.warning,
                       'color': Colors.orange,
                     },
                     {
                       'title': 'Recommendation',
-                      'content': 'Consider shorter modules for better engagement',
+                      'content':
+                          'Consider shorter modules for better engagement',
                       'icon': Icons.lightbulb,
                       'color': Colors.blue,
                     },
-                  ].map((insight) => Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: (insight['color'] as Color).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: (insight['color'] as Color).withOpacity(0.3)),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          insight['icon'] as IconData,
-                          color: insight['color'] as Color,
-                          size: 24,
+                  ].map(
+                    (insight) => Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: (insight['color'] as Color).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: (insight['color'] as Color).withOpacity(0.3),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                insight['title'].toString(),
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                insight['content'].toString(),
-                                style: TextStyle(color: Colors.grey[600]),
-                              ),
-                            ],
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            insight['icon'] as IconData,
+                            color: insight['color'] as Color,
+                            size: 24,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  insight['title'].toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  insight['content'].toString(),
+                                  style: TextStyle(color: Colors.grey[600]),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )).toList(),
+                  ),
                 ],
               ),
             ),
@@ -1275,7 +1576,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     Widget bodyContent = Column(
       children: [
         // Custom Horizontal Tab Selection - Fixed
@@ -1293,9 +1594,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                 {'icon': Icons.analytics, 'text': 'Reports'},
                 {'icon': Icons.quiz, 'text': 'Assessments'},
               ];
-              
+
               final bool isSelected = _selectedTabIndex == index;
-              
+
               return GestureDetector(
                 onTap: () {
                   setState(() {
@@ -1305,15 +1606,18 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                 },
                 child: Container(
                   margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
-                    color: isSelected 
-                        ? colorScheme.primary 
+                    color: isSelected
+                        ? colorScheme.primary
                         : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(25),
                     border: Border.all(
-                      color: isSelected 
-                          ? colorScheme.primary 
+                      color: isSelected
+                          ? colorScheme.primary
                           : Colors.grey.shade300,
                     ),
                     boxShadow: isSelected
@@ -1332,9 +1636,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                       Icon(
                         tabData[index]['icon'] as IconData,
                         size: 18,
-                        color: isSelected 
-                            ? Colors.white 
-                            : Colors.grey.shade600,
+                        color: isSelected ? Colors.white : Colors.grey.shade600,
                       ),
                       const SizedBox(width: 6),
                       Text(
@@ -1342,8 +1644,8 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: isSelected 
-                              ? Colors.white 
+                          color: isSelected
+                              ? Colors.white
                               : Colors.grey.shade600,
                         ),
                       ),
@@ -1354,7 +1656,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             },
           ),
         ),
-        
+
         // Tab Content - Synchronized with tab selection
         Expanded(
           child: IndexedStack(
@@ -1374,14 +1676,12 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
     if (!widget.showAppBar) {
       return bodyContent;
     }
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(Icons.school, 
-                 color: colorScheme.onPrimaryContainer, 
-                 size: 24),
+            Icon(Icons.school, color: colorScheme.onPrimaryContainer, size: 24),
             const SizedBox(width: 8),
             const Text('Training Management'),
           ],
@@ -1403,12 +1703,22 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       return _trainingModules;
     }
     return _trainingModules.where((module) {
-      return module['title'].toString().toLowerCase().contains(_searchQuery.toLowerCase()) ||
-             module['description'].toString().toLowerCase().contains(_searchQuery.toLowerCase());
+      return module['title'].toString().toLowerCase().contains(
+            _searchQuery.toLowerCase(),
+          ) ||
+          module['description'].toString().toLowerCase().contains(
+            _searchQuery.toLowerCase(),
+          );
     }).toList();
   }
 
-  Widget _buildReportCard(String title, String subtitle, IconData icon, Color color, VoidCallback onTap) {
+  Widget _buildReportCard(
+    String title,
+    String subtitle,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return Card(
       elevation: 2,
       child: InkWell(
@@ -1423,7 +1733,11 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                 children: [
                   Icon(icon, color: color, size: 24),
                   const Spacer(),
-                  Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Colors.grey[400],
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -1437,10 +1751,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
               const SizedBox(height: 4),
               Text(
                 subtitle,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
             ],
           ),
@@ -1454,9 +1765,15 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       return _employeeProgress;
     }
     return _employeeProgress.where((employee) {
-      return employee['name'].toString().toLowerCase().contains(_employeeSearchQuery.toLowerCase()) ||
-             employee['department'].toString().toLowerCase().contains(_employeeSearchQuery.toLowerCase()) ||
-             employee['employeeId'].toString().toLowerCase().contains(_employeeSearchQuery.toLowerCase());
+      return employee['name'].toString().toLowerCase().contains(
+            _employeeSearchQuery.toLowerCase(),
+          ) ||
+          employee['department'].toString().toLowerCase().contains(
+            _employeeSearchQuery.toLowerCase(),
+          ) ||
+          employee['employeeId'].toString().toLowerCase().contains(
+            _employeeSearchQuery.toLowerCase(),
+          );
     }).toList();
   }
 
@@ -1471,7 +1788,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
           children: [
             Text(activity),
             const SizedBox(height: 16),
-            const Text('This activity shows recent training progress updates from employees.'),
+            const Text(
+              'This activity shows recent training progress updates from employees.',
+            ),
           ],
         ),
         actions: [
@@ -1493,16 +1812,27 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Current Value: $value', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              'Current Value: $value',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 16),
             if (title == 'Total Modules')
-              const Text('This shows the total number of training modules available in the system.')
+              const Text(
+                'This shows the total number of training modules available in the system.',
+              )
             else if (title == 'Avg. Completion')
-              const Text('This shows the average completion rate across all training modules.')
+              const Text(
+                'This shows the average completion rate across all training modules.',
+              )
             else if (title == 'Total Employees')
-              const Text('This shows the total number of employees in the training system.')
+              const Text(
+                'This shows the total number of employees in the training system.',
+              )
             else if (title == 'Active Modules')
-              const Text('This shows the number of currently active training modules.'),
+              const Text(
+                'This shows the number of currently active training modules.',
+              ),
           ],
         ),
         actions: [
@@ -1555,7 +1885,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Training module created successfully!')),
+                const SnackBar(
+                  content: Text('Training module created successfully!'),
+                ),
               );
             },
             child: const Text('Create'),
@@ -1578,13 +1910,18 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             children: [
               Text('Completion Rate: ${module['completionRate']}%'),
               const SizedBox(height: 8),
-              Text('Completed: ${module['completedEmployees']}/${module['totalEmployees']} employees'),
+              Text(
+                'Completed: ${module['completedEmployees']}/${module['totalEmployees']} employees',
+              ),
               const SizedBox(height: 8),
               Text('Duration: ${module['duration']}'),
               const SizedBox(height: 8),
               Text('Status: ${module['status']}'),
               const SizedBox(height: 16),
-              const Text('Performance Metrics:', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Performance Metrics:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 8),
               Text('• Average score: ${85 + (module['id'] * 2)}%'),
               Text('• Time to complete: ${module['duration']}'),
@@ -1645,7 +1982,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('${module['title']} updated successfully!')),
+                SnackBar(
+                  content: Text('${module['title']} updated successfully!'),
+                ),
               );
             },
             child: const Text('Save'),
@@ -1694,7 +2033,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Reminders sent for ${module['title']}!')),
+                SnackBar(
+                  content: Text('Reminders sent for ${module['title']}!'),
+                ),
               );
             },
             child: const Text('Send'),
@@ -1720,7 +2061,10 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
               Text('Overall Progress: ${employee['completionRate']}%'),
               Text('Last Activity: ${employee['lastActivity']}'),
               const SizedBox(height: 16),
-              const Text('Training Status:', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Training Status:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 8),
               Expanded(
                 child: ListView.builder(
@@ -1731,14 +2075,25 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                       child: ListTile(
                         title: Text(training['name']),
                         subtitle: Text(training['status']),
-                        trailing: training['score'] != null 
-                          ? Text('${training['score']}%', style: const TextStyle(fontWeight: FontWeight.bold))
-                          : null,
+                        trailing: training['score'] != null
+                            ? Text(
+                                '${training['score']}%',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : null,
                         leading: Icon(
-                          training['status'] == 'Completed' ? Icons.check_circle : 
-                          training['status'] == 'In Progress' ? Icons.schedule : Icons.radio_button_unchecked,
-                          color: training['status'] == 'Completed' ? Colors.green : 
-                                 training['status'] == 'In Progress' ? Colors.orange : Colors.grey,
+                          training['status'] == 'Completed'
+                              ? Icons.check_circle
+                              : training['status'] == 'In Progress'
+                              ? Icons.schedule
+                              : Icons.radio_button_unchecked,
+                          color: training['status'] == 'Completed'
+                              ? Colors.green
+                              : training['status'] == 'In Progress'
+                              ? Colors.orange
+                              : Colors.grey,
                         ),
                       ),
                     );
@@ -1778,15 +2133,24 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Training Completion Summary', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Training Completion Summary',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView(
-                  children: _trainingModules.map((module) => ListTile(
-                    title: Text(module['title']),
-                    subtitle: Text('${module['completedEmployees']}/${module['totalEmployees']} completed'),
-                    trailing: Text('${module['completionRate']}%'),
-                  )).toList(),
+                  children: _trainingModules
+                      .map(
+                        (module) => ListTile(
+                          title: Text(module['title']),
+                          subtitle: Text(
+                            '${module['completedEmployees']}/${module['totalEmployees']} completed',
+                          ),
+                          trailing: Text('${module['completionRate']}%'),
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             ],
@@ -1814,7 +2178,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
   void _generateDepartmentReport() {
     final departments = ['IT', 'HR', 'Finance', 'Marketing', 'Operations'];
     final rates = [95, 88, 72, 65, 78];
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -1825,14 +2189,19 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Department Performance', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Department Performance',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView.builder(
                   itemCount: departments.length,
                   itemBuilder: (context, index) => ListTile(
                     title: Text(departments[index]),
-                    subtitle: LinearProgressIndicator(value: rates[index] / 100),
+                    subtitle: LinearProgressIndicator(
+                      value: rates[index] / 100,
+                    ),
                     trailing: Text('${rates[index]}%'),
                   ),
                 ),
@@ -1849,7 +2218,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Department analysis downloaded!')),
+                const SnackBar(
+                  content: Text('Department analysis downloaded!'),
+                ),
               );
             },
             child: const Text('Download'),
@@ -1860,8 +2231,10 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
   }
 
   void _generateOverdueReport() {
-    final overdueEmployees = _employeeProgress.where((emp) => emp['completionRate'] < 80).toList();
-    
+    final overdueEmployees = _employeeProgress
+        .where((emp) => emp['completionRate'] < 80)
+        .toList();
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -1872,8 +2245,10 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('${overdueEmployees.length} employees need attention', 
-                   style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                '${overdueEmployees.length} employees need attention',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView.builder(
@@ -1882,10 +2257,14 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                     final employee = overdueEmployees[index];
                     return ListTile(
                       title: Text(employee['name']),
-                      subtitle: Text('${employee['department']} • ${employee['completionRate']}% complete'),
+                      subtitle: Text(
+                        '${employee['department']} • ${employee['completionRate']}% complete',
+                      ),
                       trailing: Icon(
                         Icons.warning,
-                        color: employee['completionRate'] < 50 ? Colors.red : Colors.orange,
+                        color: employee['completionRate'] < 50
+                            ? Colors.red
+                            : Colors.orange,
                       ),
                     );
                   },
@@ -1954,7 +2333,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Excel file exported successfully!')),
+                const SnackBar(
+                  content: Text('Excel file exported successfully!'),
+                ),
               );
             },
             child: const Text('Export'),
@@ -1975,7 +2356,10 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Training Performance Analytics', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Training Performance Analytics',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView(
@@ -1986,9 +2370,15 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                     _buildMetricRow('Employee Satisfaction', '4.3/5.0'),
                     _buildMetricRow('Most Popular Module', 'Workplace Safety'),
                     _buildMetricRow('Fastest Completion', '1.2 hours'),
-                    _buildMetricRow('Highest Scoring Module', 'Company Policies (91%)'),
+                    _buildMetricRow(
+                      'Highest Scoring Module',
+                      'Company Policies (91%)',
+                    ),
                     const Divider(),
-                    const Text('Trends:', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Trends:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     _buildMetricRow('Completion Rate Trend', '+12% this month'),
                     _buildMetricRow('Engagement Trend', '+8% this quarter'),
                   ],
@@ -2027,7 +2417,10 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('August 2025 Training Activity', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'August 2025 Training Activity',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView(
@@ -2039,7 +2432,10 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                     _buildMonthlySummaryCard('Training Hours', '156 hours'),
                     _buildMonthlySummaryCard('Certificates Issued', '41'),
                     const Divider(),
-                    const Text('Department Highlights:', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Department Highlights:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 8),
                     const Text('• IT Department: 100% completion rate'),
                     const Text('• HR Department: Highest engagement'),
@@ -2091,7 +2487,10 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title),
-            Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            Text(
+              value,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           ],
         ),
       ),
@@ -2100,9 +2499,15 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
 
   Widget _buildAssessmentTab() {
     List<Map<String, dynamic>> filteredResults = _assessmentResults
-        .where((result) => 
-            result['employeeName'].toString().toLowerCase().contains(_assessmentSearchQuery.toLowerCase()) ||
-            result['trainingTitle'].toString().toLowerCase().contains(_assessmentSearchQuery.toLowerCase()))
+        .where(
+          (result) =>
+              result['employeeName'].toString().toLowerCase().contains(
+                _assessmentSearchQuery.toLowerCase(),
+              ) ||
+              result['trainingTitle'].toString().toLowerCase().contains(
+                _assessmentSearchQuery.toLowerCase(),
+              ),
+        )
         .toList();
 
     return Padding(
@@ -2133,9 +2538,15 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                       decoration: InputDecoration(
                         hintText: 'Search assessments...',
                         hintStyle: TextStyle(color: Colors.grey.shade500),
-                        prefixIcon: Icon(Icons.search, color: Colors.grey.shade600),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.grey.shade600,
+                        ),
                         border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
                       ),
                       onChanged: (value) {
                         setState(() {
@@ -2160,7 +2571,11 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                   ),
                   child: IconButton(
                     onPressed: _exportToExcel,
-                    icon: const Icon(Icons.download, color: Colors.white, size: 20),
+                    icon: const Icon(
+                      Icons.download,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                     tooltip: 'Export Results',
                     padding: const EdgeInsets.all(12),
                   ),
@@ -2186,7 +2601,11 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                     color: Colors.blue.shade100,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(Icons.assessment, color: Colors.blue.shade700, size: 20),
+                  child: Icon(
+                    Icons.assessment,
+                    color: Colors.blue.shade700,
+                    size: 20,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Text(
@@ -2274,7 +2693,12 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                       radius: 24,
                                       backgroundColor: Colors.blue.shade100,
                                       child: Text(
-                                        result['employeeName'].toString().split(' ').map((e) => e[0]).take(2).join(),
+                                        result['employeeName']
+                                            .toString()
+                                            .split(' ')
+                                            .map((e) => e[0])
+                                            .take(2)
+                                            .join(),
                                         style: TextStyle(
                                           color: Colors.blue.shade700,
                                           fontWeight: FontWeight.bold,
@@ -2285,7 +2709,8 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             result['employeeName'],
@@ -2309,20 +2734,31 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                       ),
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
                                       decoration: BoxDecoration(
-                                        color: result['passed'] ? Colors.green.shade50 : Colors.red.shade50,
+                                        color: result['passed']
+                                            ? Colors.green.shade50
+                                            : Colors.red.shade50,
                                         borderRadius: BorderRadius.circular(20),
                                         border: Border.all(
-                                          color: result['passed'] ? Colors.green.shade300 : Colors.red.shade300,
+                                          color: result['passed']
+                                              ? Colors.green.shade300
+                                              : Colors.red.shade300,
                                         ),
                                       ),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Icon(
-                                            result['passed'] ? Icons.check_circle : Icons.cancel,
-                                            color: result['passed'] ? Colors.green.shade700 : Colors.red.shade700,
+                                            result['passed']
+                                                ? Icons.check_circle
+                                                : Icons.cancel,
+                                            color: result['passed']
+                                                ? Colors.green.shade700
+                                                : Colors.red.shade700,
                                             size: 16,
                                           ),
                                           const SizedBox(width: 4),
@@ -2331,7 +2767,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
-                                              color: result['passed'] ? Colors.green.shade700 : Colors.red.shade700,
+                                              color: result['passed']
+                                                  ? Colors.green.shade700
+                                                  : Colors.red.shade700,
                                             ),
                                           ),
                                         ],
@@ -2340,7 +2778,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                   ],
                                 ),
                                 const SizedBox(height: 12),
-                                
+
                                 // Assessment Details Grid
                                 Row(
                                   children: [
@@ -2386,13 +2824,17 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                   ],
                                 ),
                                 const SizedBox(height: 12),
-                                
+
                                 // Action Button - Full Width
                                 SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton.icon(
-                                    onPressed: () => _showAssessmentDetails(result),
-                                    icon: const Icon(Icons.visibility, size: 18),
+                                    onPressed: () =>
+                                        _showAssessmentDetails(result),
+                                    icon: const Icon(
+                                      Icons.visibility,
+                                      size: 18,
+                                    ),
                                     label: const Text(
                                       'View Details',
                                       style: TextStyle(
@@ -2403,7 +2845,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.blue.shade600,
                                       foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
@@ -2429,7 +2873,9 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             width: 600,
             height: 500,
@@ -2487,21 +2933,16 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                               Row(
                                 children: [
                                   Expanded(
-                                    child: _buildDetailItem('Employee', result['employeeName']),
+                                    child: _buildDetailItem(
+                                      'Employee',
+                                      result['employeeName'],
+                                    ),
                                   ),
                                   Expanded(
-                                    child: _buildDetailItem('Score', '${result['score']}%'),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildDetailItem('Result', result['passed'] ? 'PASSED' : 'FAILED'),
-                                  ),
-                                  Expanded(
-                                    child: _buildDetailItem('Time Spent', result['timeSpent']),
+                                    child: _buildDetailItem(
+                                      'Score',
+                                      '${result['score']}%',
+                                    ),
                                   ),
                                 ],
                               ),
@@ -2509,10 +2950,33 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                               Row(
                                 children: [
                                   Expanded(
-                                    child: _buildDetailItem('Questions', '${result['correctAnswers']}/${result['totalQuestions']} correct'),
+                                    child: _buildDetailItem(
+                                      'Result',
+                                      result['passed'] ? 'PASSED' : 'FAILED',
+                                    ),
                                   ),
                                   Expanded(
-                                    child: _buildDetailItem('Date', result['submittedDate']),
+                                    child: _buildDetailItem(
+                                      'Time Spent',
+                                      result['timeSpent'],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _buildDetailItem(
+                                      'Questions',
+                                      '${result['correctAnswers']}/${result['totalQuestions']} correct',
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: _buildDetailItem(
+                                      'Date',
+                                      result['submittedDate'],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -2520,7 +2984,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                           ),
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Feedback Section
                         if (result['feedback'] != null) ...[
                           Text(
@@ -2545,7 +3009,8 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                         ],
 
                         // Improvement Areas
-                        if (result['improvementAreas'] != null && result['improvementAreas'].isNotEmpty) ...[
+                        if (result['improvementAreas'] != null &&
+                            result['improvementAreas'].isNotEmpty) ...[
                           Text(
                             'Areas for Improvement',
                             style: TextStyle(
@@ -2555,18 +3020,26 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
                             ),
                           ),
                           const SizedBox(height: 8),
-                          ...result['improvementAreas'].map<Widget>((area) => 
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.arrow_right, color: Colors.orange.shade600, size: 16),
-                                  const SizedBox(width: 8),
-                                  Text(area),
-                                ],
-                              ),
-                            ),
-                          ).toList(),
+                          ...result['improvementAreas']
+                              .map<Widget>(
+                                (area) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 2,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.arrow_right,
+                                        color: Colors.orange.shade600,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(area),
+                                    ],
+                                  ),
+                                ),
+                              )
+                              .toList(),
                         ],
                       ],
                     ),
@@ -2618,16 +3091,18 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
         const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
       ],
     );
   }
 
-  Widget _buildMobileDetailItem(IconData icon, String label, String value, Color color) {
+  Widget _buildMobileDetailItem(
+    IconData icon,
+    String label,
+    String value,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
       decoration: BoxDecoration(
@@ -2653,10 +3128,7 @@ class _TrainingManagementPageState extends State<TrainingManagementPage> with Ti
           ),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 9,
-              color: Colors.grey,
-            ),
+            style: const TextStyle(fontSize: 9, color: Colors.grey),
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

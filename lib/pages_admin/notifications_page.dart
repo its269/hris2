@@ -3,16 +3,14 @@ import 'package:flutter/material.dart';
 class NotificationsPage extends StatefulWidget {
   final bool showAppBar;
 
-  const NotificationsPage({
-    super.key,
-    this.showAppBar = true,
-  });
+  const NotificationsPage({super.key, this.showAppBar = true});
 
   @override
   State<NotificationsPage> createState() => _NotificationsPageState();
 }
 
-class _NotificationsPageState extends State<NotificationsPage> with SingleTickerProviderStateMixin {
+class _NotificationsPageState extends State<NotificationsPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<NotificationItem> allNotifications = [];
   List<NotificationItem> unreadNotifications = [];
@@ -111,7 +109,9 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
 
   void _markAsRead(String notificationId) {
     setState(() {
-      final notification = allNotifications.firstWhere((n) => n.id == notificationId);
+      final notification = allNotifications.firstWhere(
+        (n) => n.id == notificationId,
+      );
       notification.isRead = true;
       _updateNotificationLists();
     });
@@ -129,7 +129,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     Widget body = Column(
       children: [
         // Header with actions
@@ -145,16 +145,19 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                     if (!widget.showAppBar) ...[
                       Row(
                         children: [
-                          Icon(Icons.notifications, 
-                               color: colorScheme.primary, 
-                               size: 28),
+                          Icon(
+                            Icons.notifications,
+                            color: colorScheme.primary,
+                            size: 28,
+                          ),
                           const SizedBox(width: 12),
                           Text(
                             'Notifications',
-                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.primary,
-                            ),
+                            style: Theme.of(context).textTheme.headlineMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: colorScheme.primary,
+                                ),
                           ),
                         ],
                       ),
@@ -173,7 +176,11 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
               if (unreadNotifications.isNotEmpty)
                 TextButton.icon(
                   onPressed: _markAllAsRead,
-                  icon: Icon(Icons.done_all, size: 18, color: colorScheme.primary),
+                  icon: Icon(
+                    Icons.done_all,
+                    size: 18,
+                    color: colorScheme.primary,
+                  ),
                   label: Text(
                     'Mark all read',
                     style: TextStyle(color: colorScheme.primary),
@@ -182,7 +189,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
             ],
           ),
         ),
-        
+
         // Tab bar
         Container(
           color: colorScheme.surface,
@@ -197,7 +204,10 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                     if (allNotifications.isNotEmpty) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: colorScheme.primaryContainer,
                           borderRadius: BorderRadius.circular(12),
@@ -222,7 +232,10 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                     if (unreadNotifications.isNotEmpty) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(12),
@@ -247,9 +260,12 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                     if (readNotifications.isNotEmpty) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
-                          color: colorScheme.surfaceVariant,
+                          color: colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -270,7 +286,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
             unselectedLabelColor: colorScheme.onSurfaceVariant,
           ),
         ),
-        
+
         // Tab views
         Expanded(
           child: TabBarView(
@@ -332,7 +348,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
 
   Widget _buildNotificationList(List<NotificationItem> notifications) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     if (notifications.isEmpty) {
       return Center(
         child: Column(
@@ -376,13 +392,15 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
 
   Widget _buildNotificationCard(NotificationItem notification) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Card(
       elevation: notification.isRead ? 1 : 3,
       margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: notification.priority == NotificationPriority.high && !notification.isRead
+        side:
+            notification.priority == NotificationPriority.high &&
+                !notification.isRead
             ? BorderSide(color: Colors.red.withOpacity(0.3), width: 1)
             : BorderSide.none,
       ),
@@ -410,7 +428,9 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: notification.color.withOpacity(notification.isRead ? 0.1 : 0.2),
+                      color: notification.color.withOpacity(
+                        notification.isRead ? 0.1 : 0.2,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
@@ -419,7 +439,8 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                       size: 24,
                     ),
                   ),
-                  if (notification.priority == NotificationPriority.high && !notification.isRead)
+                  if (notification.priority == NotificationPriority.high &&
+                      !notification.isRead)
                     Positioned(
                       top: 0,
                       right: 0,
@@ -435,7 +456,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                 ],
               ),
               const SizedBox(width: 16),
-              
+
               // Content
               Expanded(
                 child: Column(
@@ -447,7 +468,9 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                           child: Text(
                             notification.title,
                             style: TextStyle(
-                              fontWeight: notification.isRead ? FontWeight.w500 : FontWeight.bold,
+                              fontWeight: notification.isRead
+                                  ? FontWeight.w500
+                                  : FontWeight.bold,
                               fontSize: 16,
                               color: colorScheme.onSurface,
                             ),
@@ -477,7 +500,10 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: notification.color.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(6),
@@ -495,7 +521,9 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                         Text(
                           notification.time,
                           style: TextStyle(
-                            color: colorScheme.onSurfaceVariant.withOpacity(0.7),
+                            color: colorScheme.onSurfaceVariant.withOpacity(
+                              0.7,
+                            ),
                             fontSize: 12,
                           ),
                         ),
@@ -554,17 +582,6 @@ class NotificationItem {
   });
 }
 
-enum NotificationType {
-  system,
-  reminder,
-  policy,
-  training,
-  social,
-  support,
-}
+enum NotificationType { system, reminder, policy, training, social, support }
 
-enum NotificationPriority {
-  low,
-  medium,
-  high,
-}
+enum NotificationPriority { low, medium, high }

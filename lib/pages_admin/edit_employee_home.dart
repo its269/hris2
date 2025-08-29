@@ -1,58 +1,203 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class AdminHomePage extends StatefulWidget {
-  const AdminHomePage({super.key});
+class EditEmployeeHome extends StatefulWidget {
+  const EditEmployeeHome({super.key, required bool showAppBar});
 
   @override
-  State<AdminHomePage> createState() => _AdminHomePageState();
+  State<EditEmployeeHome> createState() => _EditEmployeeHomeState();
 }
 
-class _AdminHomePageState extends State<AdminHomePage> {
+class _EditEmployeeHomeState extends State<EditEmployeeHome> {
+  // State variables for the UI and data
   int _currentIndex = 0;
-
-  // Admin editable variables
-  String userName = "John Paul";
-  List<String> imagePaths = ['assets/1.png', 'assets/2.png', 'assets/3.png'];
-
-  DateTime timeIn = DateTime.now();
-
-  final TextEditingController _userNameController = TextEditingController();
+  List<dynamic> _images = [];
   final ImagePicker _picker = ImagePicker();
+  final TextEditingController _descriptionController = TextEditingController();
+  bool _isLoading = true;
 
-  String get formattedDate {
-    return DateFormat('EEEE, MMMM d, yyyy').format(timeIn);
+  // Lifecycle method to fetch data when the widget initializes
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
   }
 
-  String get formattedTimeIn {
-    return DateFormat('hh:mm a').format(timeIn);
+  // Dispose controller to prevent memory leaks
+  @override
+  void dispose() {
+    _descriptionController.dispose();
+    super.dispose();
   }
 
-  bool get isDayTime {
-    final hour = timeIn.hour;
-    return hour >= 6 && hour < 18;
-  }
+  // C R U D OPERATION 1: READ
+  // Fetches data from the employee_home.php API to read the latest information.
+  Future<void> _fetchData() async {
+    setState(() {
+      _isLoading = true;
+    });
 
-  // Function to pick images
-  Future<void> _pickImage(int index) async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2/employee_home/employee_home.php'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['error'] == null) {
+          setState(() {
+            _descriptionController.text = data['description'] ?? '';
+            // Update the images list with data from the API
+            _images = data['images'] ?? [];
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    } finally {
       setState(() {
-        imagePaths[index] = pickedFile.path;
+        _isLoading = false;
       });
     }
   }
 
-  // Function to update the greeting
-  void _updateGreeting() {
+  // C R U D OPERATION 2 & 3: UPDATE and CREATE
+  // Sends updated data to the update_employee_home.php API.
+  // This handles both updating existing data and creating new image entries.
+  Future<void> _saveChanges() async {
+    // Show a loading indicator
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Saving changes...')));
+
+    try {
+      final uri = Uri.parse(
+        'http://10.0.2.2/employee_home/update_employee_home.php',
+      );
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['description'] = _descriptionController.text;
+
+      // Add existing images (URLs) to the request
+      for (int i = 0; i < _images.length; i++) {
+        if (_images[i] is String) {
+          request.fields['existing_images[$i]'] = _images[i];
+        }
+      }
+
+      // Add new, uploaded images (local files) to the request
+      for (var image in _images) {
+        if (image is File) {
+          request.files.add(
+            await http.MultipartFile.fromPath('images[]', image.path),
+          );
+        }
+      }
+
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        final respStr = await response.stream.bytesToString();
+        final data = json.decode(respStr);
+        if (data['success'] == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Changes Saved Successfully!')),
+          );
+          _fetchData(); // Reload data after successful save to get the new URLs
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to save changes.')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Server Error: ${response.statusCode}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
+
+  // C R U D OPERATION 2: CREATE (front-end)
+  // Pick a new image from the gallery and add it to the local list.
+  Future<void> _addImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _images.add(File(pickedFile.path));
+      });
+    }
+  }
+
+  // C R U D OPERATION 3: UPDATE (front-end)
+  // Replace an existing image at a given index with a new one.
+  Future<void> _updateImage(int index) async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _images[index] = File(pickedFile.path);
+      });
+    }
+  }
+
+  // C R U D OPERATION 4: DELETE (front-end)
+  // Remove an image from the local list. The change is saved on the next _saveChanges() call.
+  void _removeImage(int index) {
     setState(() {
-      userName = _userNameController.text.isEmpty
-          ? "John Paul"
-          : _userNameController.text;
+      _images.removeAt(index);
     });
+  }
+
+  // Determine if the image is a URL or a local file and build the appropriate widget
+  Widget _buildImage(dynamic image) {
+    if (image is String) {
+      // It's a URL from the API
+      return Image.network(
+        'http://10.0.2.2/uploads/$image',
+        fit: BoxFit.cover,
+        width: double.infinity,
+        errorBuilder: (context, error, stackTrace) {
+          return const Center(
+            child: Text('Image not found', style: TextStyle(color: Colors.red)),
+          );
+        },
+      );
+    } else if (image is File) {
+      // It's a local file picked from the gallery
+      return Image.file(image, fit: BoxFit.cover, width: double.infinity);
+    }
+    return const SizedBox.shrink();
+  }
+
+  // Confirmation dialog for deletion
+  void _showDeleteDialog(int index) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Remove Image'),
+        content: const Text('Are you sure you want to remove this image?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              _removeImage(index);
+              Navigator.of(context).pop();
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -62,246 +207,155 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Admin Panel"),
+        title: const Text("Edit HRIS Section"),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: () {
-              // Here you can add your save functionality (e.g., save to a database or local storage).
-              // For now, it just shows a confirmation
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('Changes Saved')));
-            },
-          ),
+          IconButton(icon: const Icon(Icons.save), onPressed: _saveChanges),
         ],
       ),
-      backgroundColor: colorScheme.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Greeting + Date + Time-in (Editable for Admin)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      backgroundColor: colorScheme.surface,
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    // HRIS Description Card
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.blue[800],
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blue.shade900.withOpacity(0.6),
+                            blurRadius: 12,
+                            offset: const Offset(3, 6),
+                          ),
+                        ],
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Editable Greeting
+                          Center(
+                            child: Text(
+                              "HRIS KELIN",
+                              style: textTheme.headlineSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                          ),
+                          const Divider(
+                            color: Colors.white70,
+                            thickness: 1.2,
+                            height: 32,
+                          ),
                           TextField(
-                            controller: _userNameController..text = userName,
-                            onChanged: (newName) => _updateGreeting(),
+                            controller: _descriptionController,
+                            maxLines: 3,
                             decoration: InputDecoration(
-                              labelText: 'Greeting',
-                              hintText: 'Enter name',
+                              labelText: "HRIS Description",
+                              hintText: "Enter description...",
                               labelStyle: textTheme.bodyLarge?.copyWith(
-                                color: colorScheme.onBackground,
+                                color: Colors.white,
                               ),
                               border: const OutlineInputBorder(),
                             ),
-                            style: textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.onBackground,
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: Colors.white.withOpacity(0.9),
+                              height: 1.5,
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_today_outlined,
-                                size: 18,
-                                color: colorScheme.onBackground.withOpacity(
-                                  0.7,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  formattedDate,
-                                  style: textTheme.bodyMedium?.copyWith(
-                                    color: colorScheme.onBackground.withOpacity(
-                                      0.7,
-                                    ),
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
                           ),
                         ],
                       ),
                     ),
 
-                    // Right side (TIME-IN label + time + icon)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          "TIME-IN",
-                          style: textTheme.labelMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5,
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              formattedTimeIn,
-                              style: textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: colorScheme.onBackground,
+                    const SizedBox(height: 32),
+
+                    // Carousel Slider with Add Option
+                    CarouselSlider.builder(
+                      itemCount: _images.length + 1,
+                      itemBuilder: (context, index, realIndex) {
+                        if (index == _images.length) {
+                          // Add Image Button
+                          return GestureDetector(
+                            onTap: _addImage,
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: Colors.grey),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.add_a_photo_outlined,
+                                  size: 48,
+                                  color: Colors.black54,
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            Icon(
-                              isDayTime
-                                  ? Icons.wb_sunny_outlined
-                                  : Icons.nights_stay_outlined,
-                              color: isDayTime
-                                  ? Colors.orangeAccent
-                                  : Colors.indigoAccent,
-                              size: 26,
-                            ),
-                          ],
-                        ),
-                      ],
+                          );
+                        }
+
+                        // Regular image
+                        return GestureDetector(
+                          onTap: () => _updateImage(index),
+                          onLongPress: () => _showDeleteDialog(index),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: _buildImage(_images[index]),
+                          ),
+                        );
+                      },
+                      options: CarouselOptions(
+                        height: 220,
+                        autoPlay: false,
+                        enlargeCenterPage: true,
+                        aspectRatio: 16 / 9,
+                        viewportFraction: 0.85,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                      ),
                     ),
+
+                    const SizedBox(height: 16),
+
+                    // Dots Indicator
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        _images.length + 1,
+                        (index) => AnimatedContainer(
+                          duration: const Duration(milliseconds: 350),
+                          margin: const EdgeInsets.symmetric(horizontal: 6),
+                          height: 12,
+                          width: _currentIndex == index ? 24 : 12,
+                          decoration: BoxDecoration(
+                            color: _currentIndex == index
+                                ? colorScheme.primary
+                                : colorScheme.primary.withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 32),
                   ],
                 ),
-
-                const SizedBox(height: 24),
-
-                // HRIS Card (Editable)
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[800],
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blue.shade900.withOpacity(0.6),
-                        blurRadius: 12,
-                        offset: const Offset(3, 6),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Text(
-                          "HRIS KELIN",
-                          style: textTheme.headlineSmall?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                      ),
-                      const Divider(
-                        color: Colors.white70,
-                        thickness: 1.2,
-                        height: 32,
-                      ),
-                      TextField(
-                        maxLines: 3,
-                        decoration: InputDecoration(
-                          labelText: "HRIS Description",
-                          hintText: "Enter description...",
-                          labelStyle: textTheme.bodyLarge?.copyWith(
-                            color: Colors.white,
-                          ),
-                          border: const OutlineInputBorder(),
-                        ),
-                        style: textTheme.bodyMedium?.copyWith(
-                          color: Colors.white.withOpacity(0.9),
-                          height: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 32),
-
-                // Carousel (Editable)
-                CarouselSlider.builder(
-                  itemCount: imagePaths.length,
-                  itemBuilder: (context, index, realIndex) {
-                    return GestureDetector(
-                      onTap: () => _pickImage(index), // Pick image when clicked
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.file(
-                          File(imagePaths[index]),
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          semanticLabel: 'Carousel image ${index + 1}',
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: Colors.grey[300],
-                              child: const Center(
-                                child: Text("Image not found"),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                  options: CarouselOptions(
-                    height: 220,
-                    autoPlay: true,
-                    enlargeCenterPage: true,
-                    aspectRatio: 16 / 9,
-                    viewportFraction: 0.85,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                // Dots Indicator
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    imagePaths.length,
-                    (index) => AnimatedContainer(
-                      duration: const Duration(milliseconds: 350),
-                      margin: const EdgeInsets.symmetric(horizontal: 6),
-                      height: 12,
-                      width: _currentIndex == index ? 24 : 12,
-                      decoration: BoxDecoration(
-                        color: _currentIndex == index
-                            ? colorScheme.primary
-                            : colorScheme.primary.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 32),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

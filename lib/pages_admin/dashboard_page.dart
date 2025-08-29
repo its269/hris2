@@ -7,6 +7,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'profile_edit_page.dart';
 import 'account_settings_page.dart';
 import 'employee_model.dart';
+import 'edit_employee_home.dart';
 import '../theme_provider.dart';
 import 'full_analytics_page.dart';
 
@@ -29,7 +30,6 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   File? _avatarImage;
   final ImagePicker _picker = ImagePicker();
-  String? _avatarPath;
 
   @override
   void initState() {
@@ -43,45 +43,46 @@ class _DashboardPageState extends State<DashboardPage> {
     if (path != null && path.isNotEmpty) {
       setState(() {
         _avatarImage = File(path);
-        _avatarPath = path;
       });
     }
   }
 
   // PLACEHOLDER DATA - Replace with actual API calls when available
-  String get employeeName => widget.employeeId; // Using employeeId as name for now
+  String get employeeName =>
+      widget.employeeId; // Using employeeId as name for now
   String get employeePosition => "Sample Position"; // Placeholder position
   String get employeeDepartment => "HR"; // Placeholder department
 
   Future<void> _pickImage() async {
     try {
       final XFile? image = await _picker.pickImage(
-            source: ImageSource.gallery,
-            maxWidth: 300,
-            maxHeight: 300,
-            imageQuality: 85,
-          );
-          if (image != null) {
-            setState(() {
-              _avatarImage = File(image.path);
-            });
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Avatar updated (placeholder, not retained).'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Error picking image: $e'),
-              backgroundColor: Colors.red,
-            ),
-          );
+        source: ImageSource.gallery,
+        maxWidth: 300,
+        maxHeight: 300,
+        imageQuality: 85,
+      );
+      if (image != null) {
+        setState(() {
+          _avatarImage = File(image.path);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Avatar updated (placeholder, not retained).'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error picking image: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
+
   // String? _avatarPath; // Removed to avoid persistence
   void _navigateToEditProfile() {
     // TODO: PLACEHOLDER - Create a sample employee object for editing
@@ -153,10 +154,8 @@ class _DashboardPageState extends State<DashboardPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => FullAnalyticsPage(
-          employeeId: widget.employeeId,
-          role: widget.role,
-        ),
+        builder: (context) =>
+            FullAnalyticsPage(employeeId: widget.employeeId, role: widget.role),
       ),
     );
   }
@@ -181,10 +180,10 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Have a great day at work, ${employeeName}',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.grey[600],
-              ),
+              'Have a great day at work, $employeeName',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: Colors.grey[600]),
             ),
             const SizedBox(height: 16),
 
@@ -202,12 +201,18 @@ class _DashboardPageState extends State<DashboardPage> {
                         children: [
                           CircleAvatar(
                             radius: 60,
-                            backgroundColor: colorScheme.primary.withOpacity(0.1),
-                            backgroundImage: _avatarImage != null 
-                                ? FileImage(_avatarImage!) 
+                            backgroundColor: colorScheme.primary.withOpacity(
+                              0.1,
+                            ),
+                            backgroundImage: _avatarImage != null
+                                ? FileImage(_avatarImage!)
                                 : null,
                             child: _avatarImage == null
-                                ? Icon(Icons.person, size: 60, color: colorScheme.primary)
+                                ? Icon(
+                                    Icons.person,
+                                    size: 60,
+                                    color: colorScheme.primary,
+                                  )
                                 : null,
                           ),
                           Positioned(
@@ -219,7 +224,11 @@ class _DashboardPageState extends State<DashboardPage> {
                                 shape: BoxShape.circle,
                               ),
                               padding: const EdgeInsets.all(6),
-                              child: const Icon(Icons.camera_alt, color: Colors.white, size: 20),
+                              child: const Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                                size: 20,
+                              ),
                             ),
                           ),
                         ],
@@ -230,9 +239,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     // Employee Info
                     Text(
                       employeeName,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -245,9 +253,9 @@ class _DashboardPageState extends State<DashboardPage> {
                     const SizedBox(height: 4),
                     Text(
                       employeeDepartment,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 4),
                     Chip(
@@ -274,33 +282,42 @@ class _DashboardPageState extends State<DashboardPage> {
                               padding: WidgetStateProperty.all(
                                 const EdgeInsets.symmetric(vertical: 12),
                               ),
-                              elevation: WidgetStateProperty.resolveWith<double>(
-                                (Set<WidgetState> states) {
-                                  if (states.contains(WidgetState.hovered)) {
-                                    return 6.0;
-                                  }
-                                  return 2.0;
-                                },
-                              ),
-                              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                                (Set<WidgetState> states) {
-                                  if (states.contains(WidgetState.hovered)) {
-                                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
-                                  }
-                                  return Theme.of(context).colorScheme.primary;
-                                },
-                              ),
+                              elevation:
+                                  WidgetStateProperty.resolveWith<double>((
+                                    Set<WidgetState> states,
+                                  ) {
+                                    if (states.contains(WidgetState.hovered)) {
+                                      return 6.0;
+                                    }
+                                    return 2.0;
+                                  }),
+                              backgroundColor:
+                                  WidgetStateProperty.resolveWith<Color?>((
+                                    Set<WidgetState> states,
+                                  ) {
+                                    if (states.contains(WidgetState.hovered)) {
+                                      return Theme.of(
+                                        context,
+                                      ).colorScheme.primary.withOpacity(0.9);
+                                    }
+                                    return Theme.of(
+                                      context,
+                                    ).colorScheme.primary;
+                                  }),
                               foregroundColor: WidgetStateProperty.all<Color?>(
                                 Theme.of(context).colorScheme.onPrimary,
                               ),
-                              shadowColor: WidgetStateProperty.resolveWith<Color?>(
-                                (Set<WidgetState> states) {
-                                  if (states.contains(WidgetState.hovered)) {
-                                    return Theme.of(context).colorScheme.primary.withOpacity(0.4);
-                                  }
-                                  return null;
-                                },
-                              ),
+                              shadowColor:
+                                  WidgetStateProperty.resolveWith<Color?>((
+                                    Set<WidgetState> states,
+                                  ) {
+                                    if (states.contains(WidgetState.hovered)) {
+                                      return Theme.of(
+                                        context,
+                                      ).colorScheme.primary.withOpacity(0.4);
+                                    }
+                                    return null;
+                                  }),
                             ),
                           ),
                         ),
@@ -314,33 +331,42 @@ class _DashboardPageState extends State<DashboardPage> {
                               padding: WidgetStateProperty.all(
                                 const EdgeInsets.symmetric(vertical: 12),
                               ),
-                              elevation: WidgetStateProperty.resolveWith<double>(
-                                (Set<WidgetState> states) {
-                                  if (states.contains(WidgetState.hovered)) {
-                                    return 6.0;
-                                  }
-                                  return 2.0;
-                                },
-                              ),
-                              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                                (Set<WidgetState> states) {
-                                  if (states.contains(WidgetState.hovered)) {
-                                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
-                                  }
-                                  return Theme.of(context).colorScheme.primary;
-                                },
-                              ),
+                              elevation:
+                                  WidgetStateProperty.resolveWith<double>((
+                                    Set<WidgetState> states,
+                                  ) {
+                                    if (states.contains(WidgetState.hovered)) {
+                                      return 6.0;
+                                    }
+                                    return 2.0;
+                                  }),
+                              backgroundColor:
+                                  WidgetStateProperty.resolveWith<Color?>((
+                                    Set<WidgetState> states,
+                                  ) {
+                                    if (states.contains(WidgetState.hovered)) {
+                                      return Theme.of(
+                                        context,
+                                      ).colorScheme.primary.withOpacity(0.9);
+                                    }
+                                    return Theme.of(
+                                      context,
+                                    ).colorScheme.primary;
+                                  }),
                               foregroundColor: WidgetStateProperty.all<Color?>(
                                 Theme.of(context).colorScheme.onPrimary,
                               ),
-                              shadowColor: WidgetStateProperty.resolveWith<Color?>(
-                                (Set<WidgetState> states) {
-                                  if (states.contains(WidgetState.hovered)) {
-                                    return Theme.of(context).colorScheme.primary.withOpacity(0.4);
-                                  }
-                                  return null;
-                                },
-                              ),
+                              shadowColor:
+                                  WidgetStateProperty.resolveWith<Color?>((
+                                    Set<WidgetState> states,
+                                  ) {
+                                    if (states.contains(WidgetState.hovered)) {
+                                      return Theme.of(
+                                        context,
+                                      ).colorScheme.primary.withOpacity(0.4);
+                                    }
+                                    return null;
+                                  }),
                             ),
                           ),
                         ),
@@ -355,7 +381,9 @@ class _DashboardPageState extends State<DashboardPage> {
             // Main Dashboard Section
             Card(
               elevation: 6,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -381,7 +409,10 @@ class _DashboardPageState extends State<DashboardPage> {
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [colorScheme.primary, colorScheme.primary.withOpacity(0.8)],
+                                colors: [
+                                  colorScheme.primary,
+                                  colorScheme.primary.withOpacity(0.8),
+                                ],
                               ),
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
@@ -392,7 +423,11 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                               ],
                             ),
-                            child: const Icon(Icons.dashboard, color: Colors.white, size: 24),
+                            child: const Icon(
+                              Icons.dashboard,
+                              color: Colors.white,
+                              size: 24,
+                            ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
@@ -401,22 +436,32 @@ class _DashboardPageState extends State<DashboardPage> {
                               children: [
                                 Text(
                                   'Dashboard Overview',
-                                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: colorScheme.primary,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: colorScheme.primary,
+                                      ),
                                 ),
                                 const SizedBox(height: 4),
                                 Row(
                                   children: [
-                                    Icon(Icons.check_circle, color: Colors.green, size: 16),
+                                    Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green,
+                                      size: 16,
+                                    ),
                                     const SizedBox(width: 4),
                                     Text(
                                       'Active • ${widget.employeeId} • $employeeDepartment',
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: Colors.grey[700],
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: Colors.grey[700],
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -426,33 +471,58 @@ class _DashboardPageState extends State<DashboardPage> {
                         ],
                       ),
                       const SizedBox(height: 24),
-                      
+
                       // Quick Insights in a compact row
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.7),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: colorScheme.primary.withOpacity(0.1)),
+                          border: Border.all(
+                            color: colorScheme.primary.withOpacity(0.1),
+                          ),
                         ),
                         child: Row(
                           children: [
                             Expanded(
-                              child: _buildCompactStat('Attendance', '22/24 Days', Icons.calendar_today, Colors.green),
+                              child: _buildCompactStat(
+                                'Attendance',
+                                '22/24 Days',
+                                Icons.calendar_today,
+                                Colors.green,
+                              ),
                             ),
-                            Container(width: 1, height: 40, color: Colors.grey[300]),
-                            Expanded(
-                              child: _buildCompactStat('Leave Requests', '3 Pending', Icons.pending_actions, Colors.orange),
+                            Container(
+                              width: 1,
+                              height: 40,
+                              color: Colors.grey[300],
                             ),
-                            Container(width: 1, height: 40, color: Colors.grey[300]),
                             Expanded(
-                              child: _buildCompactStat('Overtime', '8.5 Hours', Icons.access_time, Colors.blue),
+                              child: _buildCompactStat(
+                                'Leave Requests',
+                                '3 Pending',
+                                Icons.pending_actions,
+                                Colors.orange,
+                              ),
+                            ),
+                            Container(
+                              width: 1,
+                              height: 40,
+                              color: Colors.grey[300],
+                            ),
+                            Expanded(
+                              child: _buildCompactStat(
+                                'Overtime',
+                                '8.5 Hours',
+                                Icons.access_time,
+                                Colors.blue,
+                              ),
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 24),
-                      
+
                       // Reports & Analytics Header
                       Container(
                         padding: const EdgeInsets.all(16),
@@ -506,11 +576,14 @@ class _DashboardPageState extends State<DashboardPage> {
                                 children: [
                                   Text(
                                     'Reports & Analytics',
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: colorScheme.primary,
-                                      fontSize: 18,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: colorScheme.primary,
+                                          fontSize: 18,
+                                        ),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
@@ -528,7 +601,10 @@ class _DashboardPageState extends State<DashboardPage> {
                             GestureDetector(
                               onTap: () => _navigateToFullAnalytics(context),
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
@@ -569,7 +645,81 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      
+
+                      // Container(
+                      //   // ignore: sort_child_properties_last
+                      //   child: Center(
+                      //     child: Text(
+                      //       'Hello',
+                      //       style: TextStyle(color: Colors.white),
+                      //     ),
+                      //   ),
+                      //   height: 100,
+                      //   decoration: BoxDecoration(
+                      //     color: const Color.fromARGB(48, 0, 80, 145),
+                      //     border: Border.all(
+                      //       color: const Color.fromARGB(255, 0, 109, 211),
+                      //       width: 1,
+                      //     ),
+                      //     borderRadius: BorderRadius.circular(15),
+                      //   ),
+                      // ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const EditEmployeeHome(showAppBar: false),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(16),
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                            border: Border.all(
+                              color: Colors.blueAccent,
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(Icons.edit, color: Colors.blueAccent),
+                              Text(
+                                'Employee Home',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.grey,
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
                       // Reports Grid - More compact
                       GridView.count(
                         shrinkWrap: true,
@@ -625,7 +775,12 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildCompactStat(String label, String value, IconData icon, Color color) {
+  Widget _buildCompactStat(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
@@ -642,10 +797,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 11,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 11, color: Colors.grey[600]),
             textAlign: TextAlign.center,
           ),
         ],
@@ -653,7 +805,14 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildReportCard(BuildContext context, String title, String subtitle, IconData icon, Color color, VoidCallback onTap) {
+  Widget _buildReportCard(
+    BuildContext context,
+    String title,
+    String subtitle,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -661,7 +820,9 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Card(
           elevation: 4,
           shadowColor: color.withOpacity(0.2),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -669,15 +830,9 @@ class _DashboardPageState extends State<DashboardPage> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  color.withOpacity(0.06),
-                  color.withOpacity(0.12),
-                ],
+                colors: [color.withOpacity(0.06), color.withOpacity(0.12)],
               ),
-              border: Border.all(
-                color: color.withOpacity(0.15),
-                width: 1,
-              ),
+              border: Border.all(color: color.withOpacity(0.15), width: 1),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -693,11 +848,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                       child: Icon(icon, color: color, size: 18),
                     ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: color,
-                      size: 14,
-                    ),
+                    Icon(Icons.arrow_forward_ios, color: color, size: 14),
                   ],
                 ),
                 const SizedBox(height: 6),
@@ -769,14 +920,14 @@ class _DashboardPageState extends State<DashboardPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: ButtonStyle(
-              overlayColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.1);
-                  }
-                  return null;
-                },
-              ),
+              overlayColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.1);
+                }
+                return null;
+              }),
             ),
             child: const Text('Close'),
           ),
@@ -789,33 +940,33 @@ class _DashboardPageState extends State<DashboardPage> {
               }
             },
             style: ButtonStyle(
-              elevation: WidgetStateProperty.resolveWith<double>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return 8.0;
-                  }
-                  return 2.0;
-                },
-              ),
-              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
-                  }
-                  return Theme.of(context).colorScheme.primary;
-                },
-              ),
+              elevation: WidgetStateProperty.resolveWith<double>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return 8.0;
+                }
+                return 2.0;
+              }),
+              backgroundColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.9);
+                }
+                return Theme.of(context).colorScheme.primary;
+              }),
               foregroundColor: WidgetStateProperty.all<Color?>(
                 Theme.of(context).colorScheme.onPrimary,
               ),
-              shadowColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
-                  }
-                  return null;
-                },
-              ),
+              shadowColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                }
+                return null;
+              }),
             ),
             child: const Text('View Details'),
           ),
@@ -854,14 +1005,14 @@ class _DashboardPageState extends State<DashboardPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: ButtonStyle(
-              overlayColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.1);
-                  }
-                  return null;
-                },
-              ),
+              overlayColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.1);
+                }
+                return null;
+              }),
             ),
             child: const Text('Close'),
           ),
@@ -874,33 +1025,33 @@ class _DashboardPageState extends State<DashboardPage> {
               }
             },
             style: ButtonStyle(
-              elevation: WidgetStateProperty.resolveWith<double>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return 8.0;
-                  }
-                  return 2.0;
-                },
-              ),
-              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
-                  }
-                  return Theme.of(context).colorScheme.primary;
-                },
-              ),
+              elevation: WidgetStateProperty.resolveWith<double>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return 8.0;
+                }
+                return 2.0;
+              }),
+              backgroundColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.9);
+                }
+                return Theme.of(context).colorScheme.primary;
+              }),
               foregroundColor: WidgetStateProperty.all<Color?>(
                 Theme.of(context).colorScheme.onPrimary,
               ),
-              shadowColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
-                  }
-                  return null;
-                },
-              ),
+              shadowColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                }
+                return null;
+              }),
             ),
             child: const Text('Manage Leave'),
           ),
@@ -939,14 +1090,14 @@ class _DashboardPageState extends State<DashboardPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: ButtonStyle(
-              overlayColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.1);
-                  }
-                  return null;
-                },
-              ),
+              overlayColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.1);
+                }
+                return null;
+              }),
             ),
             child: const Text('Close'),
           ),
@@ -959,33 +1110,33 @@ class _DashboardPageState extends State<DashboardPage> {
               }
             },
             style: ButtonStyle(
-              elevation: WidgetStateProperty.resolveWith<double>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return 8.0;
-                  }
-                  return 2.0;
-                },
-              ),
-              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
-                  }
-                  return Theme.of(context).colorScheme.primary;
-                },
-              ),
+              elevation: WidgetStateProperty.resolveWith<double>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return 8.0;
+                }
+                return 2.0;
+              }),
+              backgroundColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.9);
+                }
+                return Theme.of(context).colorScheme.primary;
+              }),
               foregroundColor: WidgetStateProperty.all<Color?>(
                 Theme.of(context).colorScheme.onPrimary,
               ),
-              shadowColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
-                  }
-                  return null;
-                },
-              ),
+              shadowColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                }
+                return null;
+              }),
             ),
             child: const Text('View Team'),
           ),
@@ -1024,14 +1175,14 @@ class _DashboardPageState extends State<DashboardPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: ButtonStyle(
-              overlayColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.1);
-                  }
-                  return null;
-                },
-              ),
+              overlayColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.1);
+                }
+                return null;
+              }),
             ),
             child: const Text('Close'),
           ),
@@ -1039,37 +1190,39 @@ class _DashboardPageState extends State<DashboardPage> {
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Detailed summary export feature coming soon!')),
+                const SnackBar(
+                  content: Text('Detailed summary export feature coming soon!'),
+                ),
               );
             },
             style: ButtonStyle(
-              elevation: WidgetStateProperty.resolveWith<double>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return 8.0;
-                  }
-                  return 2.0;
-                },
-              ),
-              backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.9);
-                  }
-                  return Theme.of(context).colorScheme.primary;
-                },
-              ),
+              elevation: WidgetStateProperty.resolveWith<double>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return 8.0;
+                }
+                return 2.0;
+              }),
+              backgroundColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.9);
+                }
+                return Theme.of(context).colorScheme.primary;
+              }),
               foregroundColor: WidgetStateProperty.all<Color?>(
                 Theme.of(context).colorScheme.onPrimary,
               ),
-              shadowColor: WidgetStateProperty.resolveWith<Color?>(
-                (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
-                  }
-                  return null;
-                },
-              ),
+              shadowColor: WidgetStateProperty.resolveWith<Color?>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+                }
+                return null;
+              }),
             ),
             child: const Text('Export Report'),
           ),
@@ -1080,7 +1233,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _buildReportStatRow(String label, String value, String status) {
     Color statusColor = Colors.blue;
-    if (status.contains('Excellent') || status.contains('Outstanding') || status.contains('Good')) {
+    if (status.contains('Excellent') ||
+        status.contains('Outstanding') ||
+        status.contains('Good')) {
       statusColor = Colors.green;
     } else if (status.contains('Minimal') || status.contains('Available')) {
       statusColor = Colors.orange;

@@ -80,7 +80,7 @@ class ApiService {
         if (responseData['success'] == true) {
           return true;
         } else {
-          print("Add employee failed: ${responseData}");
+          print("Add employee failed: $responseData");
           return false;
         }
       } else {
@@ -114,7 +114,7 @@ class ApiService {
         if (responseData['success'] == true) {
           return true;
         } else {
-          print("Update employee failed: ${responseData}");
+          print("Update employee failed: $responseData");
           return false;
         }
       } else {
