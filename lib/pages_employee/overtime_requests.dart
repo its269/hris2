@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class OvertimeRequestForm extends StatefulWidget {
+  const OvertimeRequestForm({super.key});
+
   @override
   _OvertimeRequestFormState createState() => _OvertimeRequestFormState();
 }
@@ -13,7 +15,7 @@ class _OvertimeRequestFormState extends State<OvertimeRequestForm> {
   TimeOfDay? _endTime;
   final TextEditingController _reasonController = TextEditingController();
 
-  List<Map<String, dynamic>> _overtimeHistory = [];
+  final List<Map<String, dynamic>> _overtimeHistory = [];
 
   String _filterStatus = 'All';
 

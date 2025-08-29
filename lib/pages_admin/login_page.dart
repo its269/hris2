@@ -213,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5,
-                      color: colorScheme.onBackground,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -221,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                     "Sign in to continue",
                     style: TextStyle(
                       fontSize: 16,
-                      color: colorScheme.onBackground.withOpacity(0.7),
+                      color: colorScheme.onSurface.withOpacity(0.7),
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -229,11 +229,11 @@ class _LoginPageState extends State<LoginPage> {
                   // Username Field
                   TextField(
                     controller: _usernameController,
-                    style: TextStyle(color: colorScheme.onBackground),
+                    style: TextStyle(color: colorScheme.onSurface),
                     decoration: InputDecoration(
                       labelText: 'Username',
                       labelStyle: TextStyle(
-                        color: colorScheme.onBackground.withOpacity(0.8),
+                        color: colorScheme.onSurface.withOpacity(0.8),
                       ),
                       prefixIcon: Icon(
                         Icons.person,
@@ -252,11 +252,11 @@ class _LoginPageState extends State<LoginPage> {
                   TextField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    style: TextStyle(color: colorScheme.onBackground),
+                    style: TextStyle(color: colorScheme.onSurface),
                     decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: TextStyle(
-                        color: colorScheme.onBackground.withOpacity(0.8),
+                        color: colorScheme.onSurface.withOpacity(0.8),
                       ),
                       prefixIcon: Icon(Icons.lock, color: colorScheme.primary),
                       suffixIcon: IconButton(
@@ -301,14 +301,14 @@ class _LoginPageState extends State<LoginPage> {
                         'Remember Me',
                         style: TextStyle(
                           fontSize: 16,
-                          color: colorScheme.onBackground,
+                          color: colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(width: 8),
                       Icon(
                         Icons.info_outline,
                         size: 16,
-                        color: colorScheme.onBackground.withOpacity(0.6),
+                        color: colorScheme.onSurface.withOpacity(0.6),
                       ),
                     ],
                   ),

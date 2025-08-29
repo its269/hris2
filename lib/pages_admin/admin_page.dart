@@ -10,6 +10,7 @@ import 'employee_list_page.dart';
 import 'admin_leave_management_page.dart';
 import 'dashboard_page.dart';
 import 'schedule_page.dart';
+import 'edit_employee_home.dart';
 import 'notifications_page.dart';
 import '../theme_provider.dart';
 import '../main.dart'; // Assuming MyApp is here
@@ -44,7 +45,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String _selectedPage = 'Dashboard';
   int _selectedTabIndex = 0; // 0 = Home, 1 = Notifications
-  int _unreadNotificationCount =
+  final int _unreadNotificationCount =
       5; // Example count - replace with actual API data
 
   // PLACEHOLDER - Employee name field

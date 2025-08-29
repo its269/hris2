@@ -15,12 +15,8 @@ void main() {
 class AttendancePage extends StatefulWidget {
   final bool showAppBar;
   final String? initialBranch;
-  
-  const AttendancePage({
-    super.key, 
-    this.showAppBar = true,
-    this.initialBranch,
-  });
+
+  const AttendancePage({super.key, this.showAppBar = true, this.initialBranch});
 
   @override
   State<AttendancePage> createState() => _AttendancePageState();
@@ -31,40 +27,124 @@ class _AttendancePageState extends State<AttendancePage> {
     Branch(
       name: "KGS - Main",
       departments: [
-        Department(name: "MIS", Employees: generateEmployeesForDepartment("KGS - Main", "MIS")),
-        Department(name: "HR", Employees: generateEmployeesForDepartment("KGS - Main", "HR")),
-        Department(name: "Marketing", Employees: generateEmployeesForDepartment("KGS - Main", "Marketing")),
-        Department(name: "Accounting", Employees: generateEmployeesForDepartment("KGS - Main", "Accounting")),
-        Department(name: "Finance", Employees: generateEmployeesForDepartment("KGS - Main", "Finance")),
-        Department(name: "Sales", Employees: generateEmployeesForDepartment("KGS - Main", "Sales")),
-        Department(name: "Support", Employees: generateEmployeesForDepartment("KGS - Main", "Support")),
-        Department(name: "E - Commerce", Employees: generateEmployeesForDepartment("KGS - Main", "E - Commerce")),
+        Department(
+          name: "MIS",
+          Employees: generateEmployeesForDepartment("KGS - Main", "MIS"),
+        ),
+        Department(
+          name: "HR",
+          Employees: generateEmployeesForDepartment("KGS - Main", "HR"),
+        ),
+        Department(
+          name: "Marketing",
+          Employees: generateEmployeesForDepartment("KGS - Main", "Marketing"),
+        ),
+        Department(
+          name: "Accounting",
+          Employees: generateEmployeesForDepartment("KGS - Main", "Accounting"),
+        ),
+        Department(
+          name: "Finance",
+          Employees: generateEmployeesForDepartment("KGS - Main", "Finance"),
+        ),
+        Department(
+          name: "Sales",
+          Employees: generateEmployeesForDepartment("KGS - Main", "Sales"),
+        ),
+        Department(
+          name: "Support",
+          Employees: generateEmployeesForDepartment("KGS - Main", "Support"),
+        ),
+        Department(
+          name: "E - Commerce",
+          Employees: generateEmployeesForDepartment(
+            "KGS - Main",
+            "E - Commerce",
+          ),
+        ),
       ],
     ),
     Branch(
       name: "KGS - CDO",
       departments: [
-        Department(name: "MIS", Employees: generateEmployeesForDepartment("KGS - CDO", "MIS")),
-        Department(name: "HR", Employees: generateEmployeesForDepartment("KGS - CDO", "HR")),
-        Department(name: "Marketing", Employees: generateEmployeesForDepartment("KGS - CDO", "Marketing")),
-        Department(name: "Accounting", Employees: generateEmployeesForDepartment("KGS - CDO", "Accounting")),
-        Department(name: "Finance", Employees: generateEmployeesForDepartment("KGS - CDO", "Finance")),
-        Department(name: "Sales", Employees: generateEmployeesForDepartment("KGS - CDO", "Sales")),
-        Department(name: "Support", Employees: generateEmployeesForDepartment("KGS - CDO", "Support")),
-        Department(name: "E - Commerce", Employees: generateEmployeesForDepartment("KGS - CDO", "E - Commerce")),
+        Department(
+          name: "MIS",
+          Employees: generateEmployeesForDepartment("KGS - CDO", "MIS"),
+        ),
+        Department(
+          name: "HR",
+          Employees: generateEmployeesForDepartment("KGS - CDO", "HR"),
+        ),
+        Department(
+          name: "Marketing",
+          Employees: generateEmployeesForDepartment("KGS - CDO", "Marketing"),
+        ),
+        Department(
+          name: "Accounting",
+          Employees: generateEmployeesForDepartment("KGS - CDO", "Accounting"),
+        ),
+        Department(
+          name: "Finance",
+          Employees: generateEmployeesForDepartment("KGS - CDO", "Finance"),
+        ),
+        Department(
+          name: "Sales",
+          Employees: generateEmployeesForDepartment("KGS - CDO", "Sales"),
+        ),
+        Department(
+          name: "Support",
+          Employees: generateEmployeesForDepartment("KGS - CDO", "Support"),
+        ),
+        Department(
+          name: "E - Commerce",
+          Employees: generateEmployeesForDepartment(
+            "KGS - CDO",
+            "E - Commerce",
+          ),
+        ),
       ],
     ),
     Branch(
       name: "KGS - Davao",
       departments: [
-        Department(name: "MIS", Employees: generateEmployeesForDepartment("KGS - Davao", "MIS")),
-        Department(name: "HR", Employees: generateEmployeesForDepartment("KGS - Davao", "HR")),
-        Department(name: "Marketing", Employees: generateEmployeesForDepartment("KGS - Davao", "Marketing")),
-        Department(name: "Accounting", Employees: generateEmployeesForDepartment("KGS - Davao", "Accounting")),
-        Department(name: "Finance", Employees: generateEmployeesForDepartment("KGS - Davao", "Finance")),
-        Department(name: "Sales", Employees: generateEmployeesForDepartment("KGS - Davao", "Sales")),
-        Department(name: "Support", Employees: generateEmployeesForDepartment("KGS - Davao", "Support")),
-        Department(name: "E - Commerce", Employees: generateEmployeesForDepartment("KGS - Davao", "E - Commerce")),
+        Department(
+          name: "MIS",
+          Employees: generateEmployeesForDepartment("KGS - Davao", "MIS"),
+        ),
+        Department(
+          name: "HR",
+          Employees: generateEmployeesForDepartment("KGS - Davao", "HR"),
+        ),
+        Department(
+          name: "Marketing",
+          Employees: generateEmployeesForDepartment("KGS - Davao", "Marketing"),
+        ),
+        Department(
+          name: "Accounting",
+          Employees: generateEmployeesForDepartment(
+            "KGS - Davao",
+            "Accounting",
+          ),
+        ),
+        Department(
+          name: "Finance",
+          Employees: generateEmployeesForDepartment("KGS - Davao", "Finance"),
+        ),
+        Department(
+          name: "Sales",
+          Employees: generateEmployeesForDepartment("KGS - Davao", "Sales"),
+        ),
+        Department(
+          name: "Support",
+          Employees: generateEmployeesForDepartment("KGS - Davao", "Support"),
+        ),
+        Department(
+          name: "E - Commerce",
+          Employees: generateEmployeesForDepartment(
+            "KGS - Davao",
+            "E - Commerce",
+          ),
+        ),
       ],
     ),
   ];
@@ -72,7 +152,7 @@ class _AttendancePageState extends State<AttendancePage> {
   Branch? selectedBranch;
   Department? selectedDepartment;
   String _searchQuery = '';
-  List<Employee> _searchResults = [];
+  final List<Employee> _searchResults = [];
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
 
@@ -95,37 +175,70 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   // Sample employee data matching the employee_list_page.dart structure
-  static final Map<String, Map<String, List<Map<String, String>>>> employeeData = {
+  static final Map<String, Map<String, List<Map<String, String>>>>
+  employeeData = {
     "KGS - Main": {
       "MIS": [
         {"id": "EMP001", "name": "John Doe", "position": "IT Specialist"},
-        {"id": "EMP025", "name": "Admin User", "position": "System Administrator"},
+        {
+          "id": "EMP025",
+          "name": "Admin User",
+          "position": "System Administrator",
+        },
       ],
       "HR": [
         {"id": "EMP002", "name": "Jane Smith", "position": "HR Manager"},
       ],
       "Marketing": [
-        {"id": "EMP003", "name": "Sarah Williams", "position": "Marketing Coordinator"},
+        {
+          "id": "EMP003",
+          "name": "Sarah Williams",
+          "position": "Marketing Coordinator",
+        },
       ],
       "Sales": [
-        {"id": "EMP004", "name": "Lisa Davis", "position": "Sales Representative"},
+        {
+          "id": "EMP004",
+          "name": "Lisa Davis",
+          "position": "Sales Representative",
+        },
       ],
       "E - Commerce": [
-        {"id": "EMP005", "name": "Emily Wilson", "position": "E-commerce Specialist"},
+        {
+          "id": "EMP005",
+          "name": "Emily Wilson",
+          "position": "E-commerce Specialist",
+        },
       ],
       "Accounting": [
-        {"id": "EMP006", "name": "Maria Garcia", "position": "Senior Accountant"},
+        {
+          "id": "EMP006",
+          "name": "Maria Garcia",
+          "position": "Senior Accountant",
+        },
       ],
       "Finance": [
-        {"id": "EMP007", "name": "James Rodriguez", "position": "Finance Manager"},
+        {
+          "id": "EMP007",
+          "name": "James Rodriguez",
+          "position": "Finance Manager",
+        },
       ],
       "Support": [
-        {"id": "EMP008", "name": "Anna Martinez", "position": "Customer Support Lead"},
+        {
+          "id": "EMP008",
+          "name": "Anna Martinez",
+          "position": "Customer Support Lead",
+        },
       ],
     },
     "KGS - Davao": {
       "MIS": [
-        {"id": "EMP009", "name": "Mike Johnson", "position": "Network Administrator"},
+        {
+          "id": "EMP009",
+          "name": "Mike Johnson",
+          "position": "Network Administrator",
+        },
       ],
       "HR": [
         {"id": "EMP010", "name": "Robert Miller", "position": "HR Assistant"},
@@ -134,19 +247,39 @@ class _AttendancePageState extends State<AttendancePage> {
         {"id": "EMP011", "name": "Carmen Santos", "position": "Accountant"},
       ],
       "Marketing": [
-        {"id": "EMP012", "name": "Daniel Cruz", "position": "Marketing Specialist"},
+        {
+          "id": "EMP012",
+          "name": "Daniel Cruz",
+          "position": "Marketing Specialist",
+        },
       ],
       "Sales": [
-        {"id": "EMP013", "name": "Patricia Reyes", "position": "Sales Executive"},
+        {
+          "id": "EMP013",
+          "name": "Patricia Reyes",
+          "position": "Sales Executive",
+        },
       ],
       "Finance": [
-        {"id": "EMP014", "name": "Kevin Torres", "position": "Financial Analyst"},
+        {
+          "id": "EMP014",
+          "name": "Kevin Torres",
+          "position": "Financial Analyst",
+        },
       ],
       "E - Commerce": [
-        {"id": "EMP015", "name": "Michelle Flores", "position": "E-commerce Assistant"},
+        {
+          "id": "EMP015",
+          "name": "Michelle Flores",
+          "position": "E-commerce Assistant",
+        },
       ],
       "Support": [
-        {"id": "EMP016", "name": "Richard Hernandez", "position": "Technical Support"},
+        {
+          "id": "EMP016",
+          "name": "Richard Hernandez",
+          "position": "Technical Support",
+        },
       ],
     },
     "KGS - CDO": {
@@ -154,30 +287,57 @@ class _AttendancePageState extends State<AttendancePage> {
         {"id": "EMP017", "name": "David Brown", "position": "Systems Analyst"},
       ],
       "HR": [
-        {"id": "EMP018", "name": "Jennifer Lopez", "position": "Recruitment Specialist"},
+        {
+          "id": "EMP018",
+          "name": "Jennifer Lopez",
+          "position": "Recruitment Specialist",
+        },
       ],
       "Accounting": [
-        {"id": "EMP019", "name": "Carlos Valdez", "position": "Accounting Clerk"},
+        {
+          "id": "EMP019",
+          "name": "Carlos Valdez",
+          "position": "Accounting Clerk",
+        },
       ],
       "Marketing": [
-        {"id": "EMP020", "name": "Sofia Gonzalez", "position": "Digital Marketing Specialist"},
+        {
+          "id": "EMP020",
+          "name": "Sofia Gonzalez",
+          "position": "Digital Marketing Specialist",
+        },
       ],
       "Sales": [
         {"id": "EMP021", "name": "Antonio Perez", "position": "Sales Manager"},
       ],
       "Finance": [
-        {"id": "EMP022", "name": "Isabella Morales", "position": "Budget Analyst"},
+        {
+          "id": "EMP022",
+          "name": "Isabella Morales",
+          "position": "Budget Analyst",
+        },
       ],
       "E - Commerce": [
-        {"id": "EMP023", "name": "Gabriel Rivera", "position": "Online Store Manager"},
+        {
+          "id": "EMP023",
+          "name": "Gabriel Rivera",
+          "position": "Online Store Manager",
+        },
       ],
       "Support": [
-        {"id": "EMP024", "name": "Natalia Castro", "position": "Help Desk Specialist"},
+        {
+          "id": "EMP024",
+          "name": "Natalia Castro",
+          "position": "Help Desk Specialist",
+        },
       ],
     },
   };
 
-  static List<Employee> generateEmployeesForDepartment(String branch, String department) {
+  static List<Employee> generateEmployeesForDepartment(
+    String branch,
+    String department,
+  ) {
     final Random random = Random();
     final List<String> statusList = ['Present', 'Absent', 'Leave', 'Late'];
     final List<Employee> employees = [];
@@ -185,7 +345,7 @@ class _AttendancePageState extends State<AttendancePage> {
     // Get employees for specific branch and department
     final branchData = employeeData[branch];
     if (branchData == null) return employees;
-    
+
     final deptData = branchData[department];
     if (deptData == null) return employees;
 
@@ -208,9 +368,11 @@ class _AttendancePageState extends State<AttendancePage> {
             final inMinute = random.nextInt(60);
             final outHour = 17 + random.nextInt(2); // 5-6 PM
             final outMinute = random.nextInt(60);
-            
-            inTime = "${inHour.toString().padLeft(2, '0')}:${inMinute.toString().padLeft(2, '0')} ${inHour < 12 ? 'AM' : 'PM'}";
-            outTime = "${outHour.toString().padLeft(2, '0')}:${outMinute.toString().padLeft(2, '0')} PM";
+
+            inTime =
+                "${inHour.toString().padLeft(2, '0')}:${inMinute.toString().padLeft(2, '0')} ${inHour < 12 ? 'AM' : 'PM'}";
+            outTime =
+                "${outHour.toString().padLeft(2, '0')}:${outMinute.toString().padLeft(2, '0')} PM";
             break;
           case 'Late':
             // Late arrival: 9:30 AM - 11:00 AM
@@ -218,9 +380,11 @@ class _AttendancePageState extends State<AttendancePage> {
             final inMinute = 30 + random.nextInt(30);
             final outHour = 17 + random.nextInt(2);
             final outMinute = random.nextInt(60);
-            
-            inTime = "${inHour.toString().padLeft(2, '0')}:${inMinute.toString().padLeft(2, '0')} ${inHour < 12 ? 'AM' : 'PM'}";
-            outTime = "${outHour.toString().padLeft(2, '0')}:${outMinute.toString().padLeft(2, '0')} PM";
+
+            inTime =
+                "${inHour.toString().padLeft(2, '0')}:${inMinute.toString().padLeft(2, '0')} ${inHour < 12 ? 'AM' : 'PM'}";
+            outTime =
+                "${outHour.toString().padLeft(2, '0')}:${outMinute.toString().padLeft(2, '0')} PM";
             break;
           case 'Leave':
             inTime = "On Leave";
@@ -259,16 +423,16 @@ class _AttendancePageState extends State<AttendancePage> {
     setState(() {
       _searchQuery = query;
       _isSearching = query.isNotEmpty;
-      
+
       if (query.isEmpty) {
         _searchResults.clear();
         return;
       }
-      
+
       // Search across all branches and departments
       _searchResults.clear();
       final lowercaseQuery = query.toLowerCase();
-      
+
       for (final branch in branches) {
         for (final department in branch.departments) {
           for (final employee in department.Employees) {
@@ -297,11 +461,11 @@ class _AttendancePageState extends State<AttendancePage> {
 
   Widget _buildSearchResultCard(Employee employee) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     // Find the branch and department for this employee
     String? employeeBranch;
     String? employeeDepartment;
-    
+
     for (final branch in branches) {
       for (final department in branch.departments) {
         if (department.Employees.contains(employee)) {
@@ -312,15 +476,16 @@ class _AttendancePageState extends State<AttendancePage> {
       }
       if (employeeBranch != null) break;
     }
-    
+
     return Card(
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -383,21 +548,25 @@ class _AttendancePageState extends State<AttendancePage> {
 
   Widget _buildBranchSelection() {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Scaffold(
-      appBar: widget.showAppBar ? AppBar(
-        title: Row(
-          children: [
-            Icon(Icons.schedule, 
-                 color: colorScheme.onPrimaryContainer, 
-                 size: 24),
-            const SizedBox(width: 8),
-            const Text("Attendance Records"),
-          ],
-        ),
-        backgroundColor: colorScheme.primaryContainer,
-        foregroundColor: colorScheme.onPrimaryContainer,
-      ) : null,
+      appBar: widget.showAppBar
+          ? AppBar(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.schedule,
+                    color: colorScheme.onPrimaryContainer,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text("Attendance Records"),
+                ],
+              ),
+              backgroundColor: colorScheme.primaryContainer,
+              foregroundColor: colorScheme.onPrimaryContainer,
+            )
+          : null,
       body: Column(
         children: [
           // STICKY Global Search Bar - This will always stay at the top
@@ -415,13 +584,14 @@ class _AttendancePageState extends State<AttendancePage> {
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: "Search employees by name, ID, position, or department...",
+                    hintText:
+                        "Search employees by name, ID, position, or department...",
                     hintStyle: TextStyle(
                       color: colorScheme.onSurfaceVariant.withOpacity(0.6),
                       fontSize: 16,
                     ),
                     prefixIcon: Icon(
-                      Icons.search_rounded, 
+                      Icons.search_rounded,
                       color: colorScheme.primary,
                       size: 24,
                     ),
@@ -458,20 +628,17 @@ class _AttendancePageState extends State<AttendancePage> {
                     filled: true,
                     fillColor: colorScheme.surface,
                     contentPadding: const EdgeInsets.symmetric(
-                      vertical: 16, 
+                      vertical: 16,
                       horizontal: 16,
                     ),
                   ),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: colorScheme.onSurface,
-                  ),
+                  style: TextStyle(fontSize: 16, color: colorScheme.onSurface),
                   onChanged: _performSearch,
                 ),
               ),
             ),
           ),
-          
+
           // Search results indicator if searching
           if (_isSearching)
             Container(
@@ -487,7 +654,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 ),
               ),
             ),
-          
+
           // Scrollable content below the fixed search bar
           Expanded(
             child: ListView(
@@ -506,7 +673,9 @@ class _AttendancePageState extends State<AttendancePage> {
                             Icon(
                               Icons.search_off_rounded,
                               size: 48,
-                              color: colorScheme.onSurfaceVariant.withOpacity(0.5),
+                              color: colorScheme.onSurfaceVariant.withOpacity(
+                                0.5,
+                              ),
                             ),
                             const SizedBox(height: 16),
                             Text(
@@ -522,7 +691,9 @@ class _AttendancePageState extends State<AttendancePage> {
                               'Try searching with different keywords like employee name, ID, position, department, or branch.',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: colorScheme.onSurfaceVariant.withOpacity(0.7),
+                                color: colorScheme.onSurfaceVariant.withOpacity(
+                                  0.7,
+                                ),
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -531,7 +702,9 @@ class _AttendancePageState extends State<AttendancePage> {
                       ),
                     )
                   else
-                    ..._searchResults.map((employee) => _buildSearchResultCard(employee)),
+                    ..._searchResults.map(
+                      (employee) => _buildSearchResultCard(employee),
+                    ),
                 ] else ...[
                   // Section Header for Branch Selection
                   Padding(
@@ -557,7 +730,10 @@ class _AttendancePageState extends State<AttendancePage> {
                   ),
                   const SizedBox(height: 12),
                   ...branches.map((branch) {
-                    final branchEmployeeCount = branch.departments.fold(0, (sum, dept) => sum + dept.Employees.length);
+                    final branchEmployeeCount = branch.departments.fold(
+                      0,
+                      (sum, dept) => sum + dept.Employees.length,
+                    );
                     return Card(
                       elevation: 2,
                       margin: const EdgeInsets.only(bottom: 8),
@@ -565,11 +741,16 @@ class _AttendancePageState extends State<AttendancePage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         leading: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: colorScheme.primaryContainer.withOpacity(0.3),
+                            color: colorScheme.primaryContainer.withOpacity(
+                              0.3,
+                            ),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -603,7 +784,7 @@ class _AttendancePageState extends State<AttendancePage> {
                         }),
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ],
             ),
@@ -615,16 +796,18 @@ class _AttendancePageState extends State<AttendancePage> {
 
   Widget _buildDepartmentSelection() {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(Icons.apartment, 
-                 color: colorScheme.onPrimaryContainer, 
-                 size: 24),
+            Icon(
+              Icons.apartment,
+              color: colorScheme.onPrimaryContainer,
+              size: 24,
+            ),
             const SizedBox(width: 8),
-            Expanded(child: Text("${selectedBranch!.name}")),
+            Expanded(child: Text(selectedBranch!.name)),
           ],
         ),
         backgroundColor: colorScheme.primaryContainer,
@@ -660,54 +843,59 @@ class _AttendancePageState extends State<AttendancePage> {
             ),
           ),
           const SizedBox(height: 12),
-          
-          ...selectedBranch!.departments.where((dept) => dept.Employees.isNotEmpty).map((dept) {
-            return Card(
-              elevation: 2,
-              margin: const EdgeInsets.only(bottom: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                leading: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: colorScheme.secondaryContainer.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(8),
+
+          ...selectedBranch!.departments
+              .where((dept) => dept.Employees.isNotEmpty)
+              .map((dept) {
+                return Card(
+                  elevation: 2,
+                  margin: const EdgeInsets.only(bottom: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
-                    Icons.business_center_rounded,
-                    color: colorScheme.secondary,
-                    size: 20,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: colorScheme.secondaryContainer.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.business_center_rounded,
+                        color: colorScheme.secondary,
+                        size: 20,
+                      ),
+                    ),
+                    title: Text(
+                      dept.name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '${dept.Employees.length} employee${dept.Employees.length != 1 ? 's' : ''}',
+                      style: TextStyle(
+                        color: colorScheme.onSurfaceVariant,
+                        fontSize: 14,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: colorScheme.secondary,
+                      size: 16,
+                    ),
+                    onTap: () => setState(() {
+                      selectedDepartment = dept;
+                    }),
                   ),
-                ),
-                title: Text(
-                  dept.name,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-                subtitle: Text(
-                  '${dept.Employees.length} employee${dept.Employees.length != 1 ? 's' : ''}',
-                  style: TextStyle(
-                    color: colorScheme.onSurfaceVariant,
-                    fontSize: 14,
-                  ),
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: colorScheme.secondary,
-                  size: 16,
-                ),
-                onTap: () => setState(() {
-                  selectedDepartment = dept;
-                }),
-              ),
-            );
-          }).toList(),
+                );
+              }),
         ],
       ),
     );
@@ -715,14 +903,16 @@ class _AttendancePageState extends State<AttendancePage> {
 
   Widget _buildAttendanceView() {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(Icons.schedule, 
-                 color: colorScheme.onPrimaryContainer, 
-                 size: 24),
+            Icon(
+              Icons.schedule,
+              color: colorScheme.onPrimaryContainer,
+              size: 24,
+            ),
             const SizedBox(width: 8),
             Expanded(child: Text("${selectedDepartment!.name} Attendance")),
           ],
@@ -794,7 +984,7 @@ class _AttendancePageState extends State<AttendancePage> {
               ),
             ),
           ),
-          
+
           // Sticky search bar
           Container(
             color: colorScheme.surface,
@@ -816,7 +1006,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       fontSize: 16,
                     ),
                     prefixIcon: Icon(
-                      Icons.search_rounded, 
+                      Icons.search_rounded,
                       color: colorScheme.primary,
                       size: 24,
                     ),
@@ -853,20 +1043,17 @@ class _AttendancePageState extends State<AttendancePage> {
                     filled: true,
                     fillColor: colorScheme.surface,
                     contentPadding: const EdgeInsets.symmetric(
-                      vertical: 16, 
+                      vertical: 16,
                       horizontal: 16,
                     ),
                   ),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: colorScheme.onSurface,
-                  ),
+                  style: TextStyle(fontSize: 16, color: colorScheme.onSurface),
                   onChanged: _performSearch,
                 ),
               ),
             ),
           ),
-          
+
           // Search results indicator if searching
           if (_isSearching)
             Container(
@@ -882,11 +1069,9 @@ class _AttendancePageState extends State<AttendancePage> {
                 ),
               ),
             ),
-          
+
           // Employee list - This will scroll under the fixed search bar
-          Expanded(
-            child: _buildEmployeeListView(selectedDepartment!),
-          ),
+          Expanded(child: _buildEmployeeListView(selectedDepartment!)),
         ],
       ),
     );
@@ -895,7 +1080,7 @@ class _AttendancePageState extends State<AttendancePage> {
   Widget _buildEmployeeListView(Department department) {
     final colorScheme = Theme.of(context).colorScheme;
     final displayEmployees = _getFilteredEmployees();
-    
+
     if (displayEmployees.isEmpty) {
       return Center(
         child: Padding(
@@ -942,13 +1127,21 @@ class _AttendancePageState extends State<AttendancePage> {
       itemCount: displayEmployees.length,
       itemBuilder: (context, index) {
         final employee = displayEmployees[index];
-        
+
         // Calculate attendance summary
-        final presentDays = employee.attendanceRecords.where((r) => r.status == 'Present').length;
-        final lateDays = employee.attendanceRecords.where((r) => r.status == 'Late').length;
-        final leaveDays = employee.attendanceRecords.where((r) => r.status == 'Leave').length;
-        final absentDays = employee.attendanceRecords.where((r) => r.status == 'Absent').length;
-        
+        final presentDays = employee.attendanceRecords
+            .where((r) => r.status == 'Present')
+            .length;
+        final lateDays = employee.attendanceRecords
+            .where((r) => r.status == 'Late')
+            .length;
+        final leaveDays = employee.attendanceRecords
+            .where((r) => r.status == 'Leave')
+            .length;
+        final absentDays = employee.attendanceRecords
+            .where((r) => r.status == 'Absent')
+            .length;
+
         return Card(
           elevation: 2,
           margin: const EdgeInsets.only(bottom: 8),
@@ -956,7 +1149,10 @@ class _AttendancePageState extends State<AttendancePage> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
             leading: CircleAvatar(
               backgroundColor: colorScheme.primaryContainer,
               radius: 20,
@@ -1015,12 +1211,17 @@ class _AttendancePageState extends State<AttendancePage> {
 
   List<Employee> _getFilteredEmployees() {
     if (!_isSearching) return selectedDepartment!.Employees;
-    
-    return selectedDepartment!.Employees.where((emp) =>
-      emp.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-      emp.employeeId.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-      emp.position.toLowerCase().contains(_searchQuery.toLowerCase())
-    ).toList();
+
+    return selectedDepartment!.Employees
+        .where(
+          (emp) =>
+              emp.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              emp.employeeId.toLowerCase().contains(
+                _searchQuery.toLowerCase(),
+              ) ||
+              emp.position.toLowerCase().contains(_searchQuery.toLowerCase()),
+        )
+        .toList();
   }
 
   void _showEmployeeAttendanceDialog(Employee employee) {
@@ -1049,14 +1250,14 @@ class _AttendancePageState extends State<AttendancePage> {
                   children: [
                     Text(
                       employee.name,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       '${employee.employeeId} • ${employee.position}',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
                     ),
                   ],
                 ),
@@ -1072,10 +1273,34 @@ class _AttendancePageState extends State<AttendancePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildStatusChip('P', employee.attendanceRecords.where((r) => r.status == 'Present').length, Colors.green),
-                    _buildStatusChip('L', employee.attendanceRecords.where((r) => r.status == 'Late').length, Colors.amber),
-                    _buildStatusChip('V', employee.attendanceRecords.where((r) => r.status == 'Leave').length, Colors.orange),
-                    _buildStatusChip('A', employee.attendanceRecords.where((r) => r.status == 'Absent').length, Colors.red),
+                    _buildStatusChip(
+                      'P',
+                      employee.attendanceRecords
+                          .where((r) => r.status == 'Present')
+                          .length,
+                      Colors.green,
+                    ),
+                    _buildStatusChip(
+                      'L',
+                      employee.attendanceRecords
+                          .where((r) => r.status == 'Late')
+                          .length,
+                      Colors.amber,
+                    ),
+                    _buildStatusChip(
+                      'V',
+                      employee.attendanceRecords
+                          .where((r) => r.status == 'Leave')
+                          .length,
+                      Colors.orange,
+                    ),
+                    _buildStatusChip(
+                      'A',
+                      employee.attendanceRecords
+                          .where((r) => r.status == 'Absent')
+                          .length,
+                      Colors.red,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -1148,14 +1373,11 @@ class _AttendancePageState extends State<AttendancePage> {
           const SizedBox(width: 12),
           Expanded(
             flex: 2,
-            child: Text(
-              record.date,
-              style: const TextStyle(fontSize: 12),
-            ),
+            child: Text(record.date, style: const TextStyle(fontSize: 12)),
           ),
           Expanded(
             flex: 3,
-            child: record.status == 'Present' || record.status == 'Late' 
+            child: record.status == 'Present' || record.status == 'Late'
                 ? Text(
                     '${record.inTime} - ${record.outTime}',
                     style: const TextStyle(fontSize: 11),
@@ -1188,7 +1410,6 @@ class _AttendancePageState extends State<AttendancePage> {
       ),
     );
   }
-
 }
 
 // Models
@@ -1233,4 +1454,3 @@ class AttendanceRecord {
     required this.status,
   });
 }
-

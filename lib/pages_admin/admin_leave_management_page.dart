@@ -13,13 +13,14 @@ class AdminLeaveManagementPage extends StatefulWidget {
   });
 
   @override
-  State<AdminLeaveManagementPage> createState() => _AdminLeaveManagementPageState();
+  State<AdminLeaveManagementPage> createState() =>
+      _AdminLeaveManagementPageState();
 }
 
 class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  
+
   List pendingRequests = [];
   List allRequests = [];
   List employees = [];
@@ -70,18 +71,58 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
   Future<void> _loadDummyData() async {
     // Simulate loading delay
     await Future.delayed(const Duration(milliseconds: 1000));
-    
+
     setState(() {
       // Sample employees
       employees = [
-        {'id': 'EMP001', 'name': 'John Doe', 'department': 'Human Resources', 'position': 'HR Manager'},
-        {'id': 'EMP002', 'name': 'Jane Smith', 'department': 'Information Technology', 'position': 'Software Developer'},
-        {'id': 'EMP003', 'name': 'Mike Johnson', 'department': 'Finance', 'position': 'Financial Analyst'},
-        {'id': 'EMP004', 'name': 'Sarah Wilson', 'department': 'Marketing', 'position': 'Marketing Specialist'},
-        {'id': 'EMP005', 'name': 'David Brown', 'department': 'Operations', 'position': 'Operations Manager'},
-        {'id': 'EMP006', 'name': 'Emily Davis', 'department': 'Sales', 'position': 'Sales Representative'},
-        {'id': 'EMP007', 'name': 'Robert Miller', 'department': 'IT Support', 'position': 'Technical Support'},
-        {'id': 'EMP008', 'name': 'Lisa Anderson', 'department': 'Human Resources', 'position': 'HR Assistant'},
+        {
+          'id': 'EMP001',
+          'name': 'John Doe',
+          'department': 'Human Resources',
+          'position': 'HR Manager',
+        },
+        {
+          'id': 'EMP002',
+          'name': 'Jane Smith',
+          'department': 'Information Technology',
+          'position': 'Software Developer',
+        },
+        {
+          'id': 'EMP003',
+          'name': 'Mike Johnson',
+          'department': 'Finance',
+          'position': 'Financial Analyst',
+        },
+        {
+          'id': 'EMP004',
+          'name': 'Sarah Wilson',
+          'department': 'Marketing',
+          'position': 'Marketing Specialist',
+        },
+        {
+          'id': 'EMP005',
+          'name': 'David Brown',
+          'department': 'Operations',
+          'position': 'Operations Manager',
+        },
+        {
+          'id': 'EMP006',
+          'name': 'Emily Davis',
+          'department': 'Sales',
+          'position': 'Sales Representative',
+        },
+        {
+          'id': 'EMP007',
+          'name': 'Robert Miller',
+          'department': 'IT Support',
+          'position': 'Technical Support',
+        },
+        {
+          'id': 'EMP008',
+          'name': 'Lisa Anderson',
+          'department': 'Human Resources',
+          'position': 'HR Assistant',
+        },
       ];
 
       // Sample pending requests
@@ -127,7 +168,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
           'status': 'Pending',
           'submitted_date': '2024-08-14',
           'admin_notes': '',
-        }
+        },
       ];
 
       // Sample all requests (including history)
@@ -212,7 +253,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
           'approved_date': '2024-07-26',
           'approved_by': 'Admin',
           'admin_notes': 'Training supports role development',
-        }
+        },
       ];
 
       isLoading = false;
@@ -222,7 +263,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
   Future<void> _updateStatus(String id, String status, {String? notes}) async {
     // Simulate API call delay
     await Future.delayed(const Duration(milliseconds: 800));
-    
+
     try {
       // Update the status in dummy data
       for (int i = 0; i < pendingRequests.length; i++) {
@@ -230,9 +271,12 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
           setState(() {
             pendingRequests[i]['status'] = status;
             pendingRequests[i]['admin_notes'] = notes ?? '';
-            pendingRequests[i]['${status.toLowerCase()}_date'] = _formatDate(DateTime.now());
-            pendingRequests[i]['${status.toLowerCase()}_by'] = widget.employeeId;
-            
+            pendingRequests[i]['${status.toLowerCase()}_date'] = _formatDate(
+              DateTime.now(),
+            );
+            pendingRequests[i]['${status.toLowerCase()}_by'] =
+                widget.employeeId;
+
             // Move to all requests and remove from pending
             allRequests.removeWhere((req) => req['id'] == id);
             allRequests.insert(0, pendingRequests[i]);
@@ -240,12 +284,12 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
           break;
         }
       }
-      
+
       // Remove from pending requests
       setState(() {
         pendingRequests.removeWhere((req) => req['id'] == id);
       });
-      
+
       _showSuccessMessage("Leave request $status successfully");
     } catch (e) {
       _showErrorMessage("Error updating request status");
@@ -264,8 +308,12 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
         final newRequest = {
           'id': (allRequests.length + 1).toString(),
           'employee_id': _selectedEmployee,
-          'employee_name': employees.firstWhere((emp) => emp['id'] == _selectedEmployee)['name'],
-          'department': employees.firstWhere((emp) => emp['id'] == _selectedEmployee)['department'],
+          'employee_name': employees.firstWhere(
+            (emp) => emp['id'] == _selectedEmployee,
+          )['name'],
+          'department': employees.firstWhere(
+            (emp) => emp['id'] == _selectedEmployee,
+          )['department'],
           'leave_type': _leaveType,
           'start_date': _formatDate(_startDate),
           'end_date': _formatDate(_endDate),
@@ -323,10 +371,10 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
   }
 
   Future<void> _pickDate(BuildContext context, bool isStartDate) async {
-    final initialDate = isStartDate 
+    final initialDate = isStartDate
         ? (_startDate ?? DateTime.now())
         : (_endDate ?? _startDate ?? DateTime.now());
-    
+
     final newDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
@@ -393,10 +441,14 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
               _buildDetailRow('Duration', '${_calculateRequestDays(req)} days'),
               _buildDetailRow('Status', req['status']),
               _buildDetailRow('Submitted', req['submitted_date']),
-              if (req['admin_notes'] != null && req['admin_notes'].toString().isNotEmpty)
+              if (req['admin_notes'] != null &&
+                  req['admin_notes'].toString().isNotEmpty)
                 _buildDetailRow('Admin Notes', req['admin_notes']),
               const SizedBox(height: 8),
-              const Text('Reason:', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Reason:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 4),
               Text(req['reason'] ?? 'No reason provided'),
             ],
@@ -425,9 +477,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
-          Expanded(
-            child: Text(value ?? 'N/A'),
-          ),
+          Expanded(child: Text(value ?? 'N/A')),
         ],
       ),
     );
@@ -466,8 +516,14 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
               unselectedLabelColor: Colors.white70,
               indicatorColor: Colors.white,
               indicatorWeight: 3,
-              labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              labelStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
               dividerColor: Colors.transparent,
               tabs: const [
                 Tab(text: 'Pending'),
@@ -502,7 +558,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
 
   Widget _buildPendingTab() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return pendingRequests.isEmpty
         ? _buildEmptyState(
             icon: Icons.check_circle_outline,
@@ -573,14 +629,17 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                     ],
                   ),
                 ),
-                
+
                 // Requests List
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: pendingRequests.length,
                     itemBuilder: (context, index) {
-                      return _buildRequestCard(pendingRequests[index], showActions: true);
+                      return _buildRequestCard(
+                        pendingRequests[index],
+                        showActions: true,
+                      );
                     },
                   ),
                 ),
@@ -591,7 +650,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
 
   Widget _buildHistoryTab() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return allRequests.isEmpty
         ? _buildEmptyState(
             icon: Icons.history,
@@ -680,7 +739,10 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                           Expanded(
                             child: _buildStatCard(
                               "Approved",
-                              allRequests.where((req) => req['status'] == 'Approved').length.toString(),
+                              allRequests
+                                  .where((req) => req['status'] == 'Approved')
+                                  .length
+                                  .toString(),
                               Icons.check_circle,
                               Colors.white,
                               isInHeader: true,
@@ -690,7 +752,10 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                           Expanded(
                             child: _buildStatCard(
                               "Rejected",
-                              allRequests.where((req) => req['status'] == 'Rejected').length.toString(),
+                              allRequests
+                                  .where((req) => req['status'] == 'Rejected')
+                                  .length
+                                  .toString(),
                               Icons.cancel,
                               Colors.white,
                               isInHeader: true,
@@ -701,7 +766,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                     ],
                   ),
                 ),
-                
+
                 // Request List
                 Expanded(
                   child: ListView.builder(
@@ -717,24 +782,34 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
           );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color, {bool isInHeader = false}) {
+  Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color, {
+    bool isInHeader = false,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: isInHeader 
+        color: isInHeader
             ? Colors.white.withOpacity(0.2)
-            : (Theme.of(context).brightness == Brightness.dark 
-                ? const Color(0xFF1E2029) 
-                : Colors.white),
+            : (Theme.of(context).brightness == Brightness.dark
+                  ? const Color(0xFF1E2029)
+                  : Colors.white),
         borderRadius: BorderRadius.circular(isInHeader ? 16 : 12),
-        border: isInHeader ? Border.all(color: Colors.white.withOpacity(0.3), width: 1) : null,
-        boxShadow: isInHeader ? null : [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: isInHeader
+            ? Border.all(color: Colors.white.withOpacity(0.3), width: 1)
+            : null,
+        boxShadow: isInHeader
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -742,15 +817,15 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: isInHeader 
+              color: isInHeader
                   ? Colors.white.withOpacity(0.3)
                   : color.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
-              icon, 
-              color: isInHeader ? Colors.white : color, 
-              size: 16
+              icon,
+              color: isInHeader ? Colors.white : color,
+              size: 16,
             ),
           ),
           const SizedBox(width: 6),
@@ -763,11 +838,11 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                   title,
                   style: TextStyle(
                     fontSize: 10,
-                    color: isInHeader 
+                    color: isInHeader
                         ? Colors.white.withOpacity(0.9)
                         : (Theme.of(context).brightness == Brightness.dark
-                            ? Colors.grey[300]
-                            : Colors.grey[700]),
+                              ? Colors.grey[300]
+                              : Colors.grey[700]),
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -778,11 +853,11 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: isInHeader 
+                    color: isInHeader
                         ? Colors.white
                         : (Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black87),
+                              ? Colors.white
+                              : Colors.black87),
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -832,10 +907,11 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                       Expanded(
                         child: Text(
                           "Submit Leave Request",
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                       ),
                     ],
@@ -843,10 +919,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                   const SizedBox(height: 6),
                   Text(
                     "Submit requests on behalf of employees",
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
                   ),
                 ],
               ),
@@ -856,73 +929,92 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
             // Employee Selection
             Text(
               "Employee",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
               value: _selectedEmployee,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 hintText: "Select Employee",
                 prefixIcon: const Icon(Icons.person),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 16,
+                ),
               ),
               isExpanded: true,
-              items: employees.map((emp) => DropdownMenuItem<String>(
-                value: emp['id'],
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Text(
-                        emp['name'] ?? 'Unknown',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                        overflow: TextOverflow.ellipsis,
+              items: employees
+                  .map(
+                    (emp) => DropdownMenuItem<String>(
+                      value: emp['id'],
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              emp['name'] ?? 'Unknown',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              emp['department'] ?? '',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        emp['department'] ?? '',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              )).toList(),
+                  )
+                  .toList(),
               onChanged: (value) => setState(() => _selectedEmployee = value),
-              validator: (value) => value == null ? "Please select an employee" : null,
+              validator: (value) =>
+                  value == null ? "Please select an employee" : null,
             ),
             const SizedBox(height: 16),
 
             // Leave Type
             Text(
               "Leave Type",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
               value: _leaveType,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 hintText: "Select Leave Type",
                 prefixIcon: const Icon(Icons.category),
               ),
-              items: _leaveTypes.map((type) => DropdownMenuItem<String>(
-                value: type,
-                child: Text(type),
-              )).toList(),
+              items: _leaveTypes
+                  .map(
+                    (type) => DropdownMenuItem<String>(
+                      value: type,
+                      child: Text(type),
+                    ),
+                  )
+                  .toList(),
               onChanged: (value) => setState(() => _leaveType = value),
-              validator: (value) => value == null ? "Please select leave type" : null,
+              validator: (value) =>
+                  value == null ? "Please select leave type" : null,
             ),
             const SizedBox(height: 16),
 
@@ -935,9 +1027,8 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                     children: [
                       Text(
                         "Start Date",
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       InkWell(
@@ -967,9 +1058,8 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                     children: [
                       Text(
                         "End Date",
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       InkWell(
@@ -1024,35 +1114,40 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
             // Reason
             Text(
               "Reason",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             TextFormField(
               maxLines: 3,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 hintText: "Enter reason for leave",
                 prefixIcon: const Icon(Icons.edit_note),
               ),
               onSaved: (value) => _reason = value,
-              validator: (value) => value?.isEmpty ?? true ? "Please enter reason" : null,
+              validator: (value) =>
+                  value?.isEmpty ?? true ? "Please enter reason" : null,
             ),
             const SizedBox(height: 16),
 
             // Admin Notes
             Text(
               "Admin Notes (Optional)",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             TextFormField(
               maxLines: 2,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 hintText: "Additional notes for this leave request",
                 prefixIcon: const Icon(Icons.note_add),
               ),
@@ -1092,10 +1187,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
-                  "Reset Form",
-                  style: TextStyle(fontSize: 16),
-                ),
+                child: const Text("Reset Form", style: TextStyle(fontSize: 16)),
               ),
             ),
           ],
@@ -1107,8 +1199,12 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
   Widget _buildAnalyticsTab() {
     // Calculate analytics from requests
     int totalRequests = allRequests.length;
-    int approvedRequests = allRequests.where((req) => req['status'] == 'Approved').length;
-    int rejectedRequests = allRequests.where((req) => req['status'] == 'Rejected').length;
+    int approvedRequests = allRequests
+        .where((req) => req['status'] == 'Approved')
+        .length;
+    int rejectedRequests = allRequests
+        .where((req) => req['status'] == 'Rejected')
+        .length;
     int pendingCount = pendingRequests.length;
 
     return SingleChildScrollView(
@@ -1123,19 +1219,19 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                 children: [
                   Expanded(
                     child: _buildStatCard(
-                      "Total Requests", 
-                      totalRequests.toString(), 
-                      Icons.description, 
-                      Colors.blue
+                      "Total Requests",
+                      totalRequests.toString(),
+                      Icons.description,
+                      Colors.blue,
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: _buildStatCard(
-                      "Pending", 
-                      pendingCount.toString(), 
-                      Icons.pending_actions, 
-                      Colors.orange
+                      "Pending",
+                      pendingCount.toString(),
+                      Icons.pending_actions,
+                      Colors.orange,
                     ),
                   ),
                 ],
@@ -1145,31 +1241,33 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                 children: [
                   Expanded(
                     child: _buildStatCard(
-                      "Approved", 
-                      approvedRequests.toString(), 
-                      Icons.check_circle, 
-                      Colors.green
+                      "Approved",
+                      approvedRequests.toString(),
+                      Icons.check_circle,
+                      Colors.green,
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: _buildStatCard(
-                      "Rejected", 
-                      rejectedRequests.toString(), 
-                      Icons.cancel, 
-                      Colors.red
+                      "Rejected",
+                      rejectedRequests.toString(),
+                      Icons.cancel,
+                      Colors.red,
                     ),
                   ),
                 ],
               ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Leave Type Breakdown
           Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -1182,19 +1280,25 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                     ),
                   ),
                   const SizedBox(height: 16),
-                  ..._getLeaveTypeBreakdown().map((item) => 
-                    _buildBreakdownItem(item['type'], item['count'], item['color'])
-                  ).toList(),
+                  ..._getLeaveTypeBreakdown().map(
+                    (item) => _buildBreakdownItem(
+                      item['type'],
+                      item['count'],
+                      item['color'],
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Recent Activity
           Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -1207,9 +1311,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                     ),
                   ),
                   const SizedBox(height: 16),
-                  ...allRequests.take(5).map((req) => 
-                    _buildActivityItem(req)
-                  ).toList(),
+                  ...allRequests.take(5).map((req) => _buildActivityItem(req)),
                 ],
               ),
             ),
@@ -1223,7 +1325,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
     final statusColor = _getStatusColor(req['status']);
     final days = req['days'] ?? _calculateRequestDays(req);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 3,
@@ -1240,7 +1342,10 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: statusColor.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(16),
@@ -1249,8 +1354,11 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(_getStatusIcon(req['status']), 
-                             color: statusColor, size: 14),
+                        Icon(
+                          _getStatusIcon(req['status']),
+                          color: statusColor,
+                          size: 14,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           req['status'] ?? 'Unknown',
@@ -1265,7 +1373,10 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                   ),
                   const Spacer(),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
@@ -1288,9 +1399,13 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                    backgroundColor: Theme.of(
+                      context,
+                    ).primaryColor.withOpacity(0.1),
                     child: Text(
-                      (req['employee_name'] ?? 'U').substring(0, 1).toUpperCase(),
+                      (req['employee_name'] ?? 'U')
+                          .substring(0, 1)
+                          .toUpperCase(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).primaryColor,
@@ -1312,23 +1427,39 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                         const SizedBox(height: 2),
                         Row(
                           children: [
-                            Icon(Icons.badge_outlined, size: 14, color: isDark ? Colors.grey[400] : Colors.grey[600]),
+                            Icon(
+                              Icons.badge_outlined,
+                              size: 14,
+                              color: isDark
+                                  ? Colors.grey[400]
+                                  : Colors.grey[600],
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               req['employee_id'] ?? 'N/A',
                               style: TextStyle(
-                                color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                color: isDark
+                                    ? Colors.grey[400]
+                                    : Colors.grey[600],
                                 fontSize: 12,
                               ),
                             ),
                             const SizedBox(width: 12),
-                            Icon(Icons.business, size: 14, color: isDark ? Colors.grey[400] : Colors.grey[600]),
+                            Icon(
+                              Icons.business,
+                              size: 14,
+                              color: isDark
+                                  ? Colors.grey[400]
+                                  : Colors.grey[600],
+                            ),
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
                                 req['department'] ?? 'N/A',
                                 style: TextStyle(
-                                  color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                  color: isDark
+                                      ? Colors.grey[400]
+                                      : Colors.grey[600],
                                   fontSize: 12,
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -1355,7 +1486,11 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                     Expanded(
                       child: Row(
                         children: [
-                          Icon(Icons.calendar_today, size: 16, color: isDark ? Colors.grey[400] : Colors.grey[700]),
+                          Icon(
+                            Icons.calendar_today,
+                            size: 16,
+                            color: isDark ? Colors.grey[400] : Colors.grey[700],
+                          ),
                           const SizedBox(width: 6),
                           Expanded(
                             child: Column(
@@ -1365,7 +1500,9 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                                   'Duration',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                    color: isDark
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600],
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -1384,7 +1521,10 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -1416,7 +1556,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
               Text(
                 req['reason'] ?? 'No reason provided',
                 style: TextStyle(
-                  fontSize: 14, 
+                  fontSize: 14,
                   height: 1.3,
                   color: isDark ? Colors.white : Colors.black,
                 ),
@@ -1425,7 +1565,8 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
               ),
 
               // Admin Notes (if any)
-              if (req['admin_notes'] != null && req['admin_notes'].toString().isNotEmpty) ...[
+              if (req['admin_notes'] != null &&
+                  req['admin_notes'].toString().isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Text(
                   'Admin Notes:',
@@ -1450,7 +1591,11 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
               const SizedBox(height: 8),
               Row(
                 children: [
-                  Icon(Icons.schedule, size: 14, color: isDark ? Colors.grey[400] : Colors.grey[500]),
+                  Icon(
+                    Icons.schedule,
+                    size: 14,
+                    color: isDark ? Colors.grey[400] : Colors.grey[500],
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     'Submitted: ${req['submitted_date'] ?? 'N/A'}',
@@ -1544,19 +1689,12 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Container(
-            width: 4,
-            height: 20,
-            color: color,
-          ),
+          Container(width: 4, height: 20, color: color),
           const SizedBox(width: 12),
           Expanded(child: Text(type)),
           Text(
             count.toString(),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold, color: color),
           ),
         ],
       ),
@@ -1594,10 +1732,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
           ),
           Text(
             req['start_date'] ?? '',
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 12,
-            ),
+            style: TextStyle(color: Colors.grey[600], fontSize: 12),
           ),
         ],
       ),
@@ -1607,7 +1742,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
   void _showApprovalDialog(Map req, String action) {
     final TextEditingController notesController = TextEditingController();
     final String actionStatus = action == "Approve" ? "Approved" : "Rejected";
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -1656,7 +1791,7 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
               controller: notesController,
               decoration: InputDecoration(
                 labelText: "Admin Notes (Optional)",
-                hintText: actionStatus == "Approved" 
+                hintText: actionStatus == "Approved"
                     ? "e.g., Approved with sufficient leave balance"
                     : "e.g., Insufficient leave balance or scheduling conflict",
                 border: const OutlineInputBorder(),
@@ -1681,7 +1816,9 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
               );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: actionStatus == "Approved" ? Colors.green : Colors.red,
+              backgroundColor: actionStatus == "Approved"
+                  ? Colors.green
+                  : Colors.red,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             ),
@@ -1728,8 +1865,14 @@ class _AdminLeaveManagementPageState extends State<AdminLeaveManagementPage>
     }
 
     List<Color> colors = [
-      Colors.blue, Colors.green, Colors.orange, Colors.purple,
-      Colors.teal, Colors.red, Colors.indigo, Colors.amber,
+      Colors.blue,
+      Colors.green,
+      Colors.orange,
+      Colors.purple,
+      Colors.teal,
+      Colors.red,
+      Colors.indigo,
+      Colors.amber,
     ];
 
     return breakdown.entries.map((entry) {

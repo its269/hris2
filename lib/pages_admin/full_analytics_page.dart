@@ -14,7 +14,8 @@ class FullAnalyticsPage extends StatefulWidget {
   State<FullAnalyticsPage> createState() => _FullAnalyticsPageState();
 }
 
-class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProviderStateMixin {
+class _FullAnalyticsPageState extends State<FullAnalyticsPage>
+    with TickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -81,10 +82,34 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
             mainAxisSpacing: 16,
             childAspectRatio: 1.5,
             children: [
-              _buildMetricCard('Total Employees', '127', Icons.people, Colors.blue, '+5 this month'),
-              _buildMetricCard('Attendance Rate', '92.5%', Icons.check_circle, Colors.green, '+2.1% vs last month'),
-              _buildMetricCard('Leave Requests', '23', Icons.beach_access, Colors.orange, '8 pending approval'),
-              _buildMetricCard('Performance Score', '4.7/5.0', Icons.star, Colors.purple, 'Above target'),
+              _buildMetricCard(
+                'Total Employees',
+                '127',
+                Icons.people,
+                Colors.blue,
+                '+5 this month',
+              ),
+              _buildMetricCard(
+                'Attendance Rate',
+                '92.5%',
+                Icons.check_circle,
+                Colors.green,
+                '+2.1% vs last month',
+              ),
+              _buildMetricCard(
+                'Leave Requests',
+                '23',
+                Icons.beach_access,
+                Colors.orange,
+                '8 pending approval',
+              ),
+              _buildMetricCard(
+                'Performance Score',
+                '4.7/5.0',
+                Icons.star,
+                Colors.purple,
+                'Above target',
+              ),
             ],
           ),
           const SizedBox(height: 24),
@@ -151,7 +176,10 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
                               ),
                               const Spacer(),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.green.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(8),
@@ -171,9 +199,17 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
                         // Chart
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 40, right: 16, bottom: 30, top: 8),
+                            padding: const EdgeInsets.only(
+                              left: 40,
+                              right: 16,
+                              bottom: 30,
+                              top: 8,
+                            ),
                             child: CustomPaint(
-                              size: const Size(double.infinity, double.infinity),
+                              size: const Size(
+                                double.infinity,
+                                double.infinity,
+                              ),
                               painter: MonthlyTrendsPainter(),
                             ),
                           ),
@@ -202,7 +238,12 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
                     ),
                   ),
                   const SizedBox(height: 16),
-                  _buildDepartmentItem('Human Resources', 15, 95.2, Colors.blue),
+                  _buildDepartmentItem(
+                    'Human Resources',
+                    15,
+                    95.2,
+                    Colors.blue,
+                  ),
                   _buildDepartmentItem('Engineering', 45, 89.7, Colors.green),
                   _buildDepartmentItem('Sales', 28, 93.1, Colors.orange),
                   _buildDepartmentItem('Marketing', 22, 91.8, Colors.purple),
@@ -239,9 +280,30 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      Expanded(child: _buildAttendanceStat('Present Today', '118/127', '92.9%', Colors.green)),
-                      Expanded(child: _buildAttendanceStat('Late Arrivals', '7', '5.5%', Colors.orange)),
-                      Expanded(child: _buildAttendanceStat('Absent', '9', '7.1%', Colors.red)),
+                      Expanded(
+                        child: _buildAttendanceStat(
+                          'Present Today',
+                          '118/127',
+                          '92.9%',
+                          Colors.green,
+                        ),
+                      ),
+                      Expanded(
+                        child: _buildAttendanceStat(
+                          'Late Arrivals',
+                          '7',
+                          '5.5%',
+                          Colors.orange,
+                        ),
+                      ),
+                      Expanded(
+                        child: _buildAttendanceStat(
+                          'Absent',
+                          '9',
+                          '7.1%',
+                          Colors.red,
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -302,9 +364,27 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      Expanded(child: _buildPerformanceMetric('Average Score', '4.6/5.0', Colors.green)),
-                      Expanded(child: _buildPerformanceMetric('Top Performers', '23', Colors.blue)),
-                      Expanded(child: _buildPerformanceMetric('Needs Improvement', '8', Colors.orange)),
+                      Expanded(
+                        child: _buildPerformanceMetric(
+                          'Average Score',
+                          '4.6/5.0',
+                          Colors.green,
+                        ),
+                      ),
+                      Expanded(
+                        child: _buildPerformanceMetric(
+                          'Top Performers',
+                          '23',
+                          Colors.blue,
+                        ),
+                      ),
+                      Expanded(
+                        child: _buildPerformanceMetric(
+                          'Needs Improvement',
+                          '8',
+                          Colors.orange,
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -351,9 +431,9 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
           // Available Reports
           Text(
             'Available Reports',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
 
@@ -398,7 +478,13 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
     );
   }
 
-  Widget _buildMetricCard(String title, String value, IconData icon, Color color, String subtitle) {
+  Widget _buildMetricCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+    String subtitle,
+  ) {
     return Card(
       elevation: 4,
       child: Padding(
@@ -467,7 +553,12 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
     );
   }
 
-  Widget _buildDepartmentItem(String department, int employees, double attendance, Color color) {
+  Widget _buildDepartmentItem(
+    String department,
+    int employees,
+    double attendance,
+    Color color,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -494,27 +585,26 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
                 ),
                 Text(
                   '$employees employees • ${attendance.toStringAsFixed(1)}% attendance',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
                 ),
               ],
             ),
           ),
           Text(
             '${attendance.toStringAsFixed(1)}%',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold, color: color),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildAttendanceStat(String label, String value, String percentage, Color color) {
+  Widget _buildAttendanceStat(
+    String label,
+    String value,
+    String percentage,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -536,18 +626,12 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
           const SizedBox(height: 4),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
           Text(
             percentage,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 10, color: Colors.grey[600]),
           ),
         ],
       ),
@@ -621,10 +705,7 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
           const SizedBox(height: 4),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
         ],
@@ -632,7 +713,12 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
     );
   }
 
-  Widget _buildPerformerItem(String name, String department, double score, int rank) {
+  Widget _buildPerformerItem(
+    String name,
+    String department,
+    double score,
+    int rank,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -669,10 +755,7 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
                 ),
                 Text(
                   department,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
                 ),
               ],
             ),
@@ -697,7 +780,13 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
     );
   }
 
-  Widget _buildReportItem(String title, String description, IconData icon, Color color, VoidCallback onTap) {
+  Widget _buildReportItem(
+    String title,
+    String description,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 12),
@@ -710,10 +799,7 @@ class _FullAnalyticsPageState extends State<FullAnalyticsPage> with TickerProvid
           ),
           child: Icon(icon, color: color),
         ),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
         subtitle: Text(description),
         trailing: ElevatedButton(
           onPressed: onTap,
@@ -819,8 +905,34 @@ class MonthlyTrendsPainter extends CustomPainter {
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
 
     // Sample data points (attendance percentages for 12 months)
-    final dataPoints = [85.2, 87.5, 89.1, 91.3, 88.7, 92.1, 89.8, 93.4, 91.2, 88.9, 90.7, 92.5];
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    final dataPoints = [
+      85.2,
+      87.5,
+      89.1,
+      91.3,
+      88.7,
+      92.1,
+      89.8,
+      93.4,
+      91.2,
+      88.9,
+      90.7,
+      92.5,
+    ];
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
     // Calculate positions
     final double stepX = size.width / (dataPoints.length - 1);
@@ -832,11 +944,7 @@ class MonthlyTrendsPainter extends CustomPainter {
     // Draw grid lines
     for (int i = 0; i <= 5; i++) {
       final double y = (maxY / 5) * i;
-      canvas.drawLine(
-        Offset(0, y),
-        Offset(size.width, y),
-        gridPaint,
-      );
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
     }
 
     // Create path for line and fill
@@ -848,9 +956,9 @@ class MonthlyTrendsPainter extends CustomPainter {
       final double x = i * stepX;
       final double normalizedValue = (dataPoints[i] - minValue) / valueRange;
       final double y = maxY - (normalizedValue * maxY);
-      
+
       points.add(Offset(x, y));
-      
+
       if (i == 0) {
         linePath.moveTo(x, y);
         fillPath.moveTo(x, maxY);
@@ -878,32 +986,29 @@ class MonthlyTrendsPainter extends CustomPainter {
 
     for (final point in points) {
       canvas.drawCircle(point, 4.0, pointPaint);
-      canvas.drawCircle(point, 4.0, Paint()
-        ..color = Colors.white
-        ..style = PaintingStyle.fill);
+      canvas.drawCircle(
+        point,
+        4.0,
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.fill,
+      );
       canvas.drawCircle(point, 2.0, pointPaint);
     }
 
     // Draw month labels
-    final textPainter = TextPainter(
-      textDirection: TextDirection.ltr,
-    );
+    final textPainter = TextPainter(textDirection: TextDirection.ltr);
 
     for (int i = 0; i < months.length; i++) {
-      if (i % 2 == 0) { // Show every other month to avoid crowding
+      if (i % 2 == 0) {
+        // Show every other month to avoid crowding
         final double x = i * stepX;
         textPainter.text = TextSpan(
           text: months[i],
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 10,
-          ),
+          style: const TextStyle(color: Colors.grey, fontSize: 10),
         );
         textPainter.layout();
-        textPainter.paint(
-          canvas,
-          Offset(x - textPainter.width / 2, maxY + 10),
-        );
+        textPainter.paint(canvas, Offset(x - textPainter.width / 2, maxY + 10));
       }
     }
 
@@ -911,13 +1016,10 @@ class MonthlyTrendsPainter extends CustomPainter {
     for (int i = 0; i <= 3; i++) {
       final double value = minValue + (valueRange / 3) * i;
       final double y = maxY - ((value - minValue) / valueRange * maxY);
-      
+
       textPainter.text = TextSpan(
         text: '${value.toStringAsFixed(0)}%',
-        style: const TextStyle(
-          color: Colors.grey,
-          fontSize: 10,
-        ),
+        style: const TextStyle(color: Colors.grey, fontSize: 10),
       );
       textPainter.layout();
       textPainter.paint(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SettingsPage extends StatelessWidget {
   final bool showAppBar;
 
-  const SettingsPage({Key? key, this.showAppBar = true}) : super(key: key);
+  const SettingsPage({super.key, this.showAppBar = true});
 
   static const List<_SettingsItem> _settingsItems = [
     _SettingsItem(
@@ -33,7 +33,7 @@ class SettingsPage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       appBar: showAppBar
           ? AppBar(
               title: const Text('Settings'),
@@ -116,7 +116,7 @@ class SettingsPage extends StatelessWidget {
 }
 
 class SettingsHeader extends StatelessWidget {
-  const SettingsHeader({Key? key}) : super(key: key);
+  const SettingsHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +158,7 @@ class SettingsHeader extends StatelessWidget {
           'KELIN GRAPHIC SYSTEM CORP.',
           style: TextStyle(
             fontSize: 12,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
             letterSpacing: 1,
           ),
         ),
@@ -210,19 +210,19 @@ class AboutPage extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'Version: 1.0.0',
-              style: TextStyle(fontSize: 16, color: colorScheme.onBackground),
+              style: TextStyle(fontSize: 16, color: colorScheme.onSurface),
             ),
             const SizedBox(height: 20),
             Text(
               'Developed by KELIN GRAPHIC SYSTEM CORP. (MIS DEPT.)',
-              style: TextStyle(fontSize: 16, color: colorScheme.onBackground),
+              style: TextStyle(fontSize: 16, color: colorScheme.onSurface),
             ),
             const SizedBox(height: 20),
             Text(
               'This application is designed to manage human resource information efficiently and securely.',
               style: TextStyle(
                 fontSize: 14,
-                color: colorScheme.onBackground.withOpacity(0.8),
+                color: colorScheme.onSurface.withOpacity(0.8),
               ),
             ),
           ],

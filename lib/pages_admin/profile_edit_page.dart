@@ -337,7 +337,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 title: Text(
                   "Personal Information",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 children: [
@@ -386,7 +386,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 title: Text(
                   "Family",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 children: [
@@ -429,7 +429,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 title: Text(
                   "Education",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 children: [
@@ -447,7 +447,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 title: Text(
                   "Bank Information",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 children: [
@@ -464,7 +464,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 title: Text(
                   "Employment Info",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 children: [
@@ -477,7 +477,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                         labelText: 'Employee ID',
                         border: const OutlineInputBorder(),
                         labelStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       readOnly: isEdit,

@@ -30,11 +30,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
   Branch? selectedBranch;
   Department? selectedDepartment;
 
-  final List<String> branches = [
-    "KGS - Main",
-    "KGS - Davao",
-    "KGS - CDO",
-  ];
+  final List<String> branches = ["KGS - Main", "KGS - Davao", "KGS - CDO"];
 
   final List<String> departments = [
     "MIS",
@@ -44,7 +40,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     "Finance",
     "Sales",
     "Support",
-    "E - Commerce"
+    "E - Commerce",
   ];
 
   @override
@@ -423,7 +419,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
         filteredEmployees = finalList;
         isLoading = false;
       });
-      
+
       // Initialize search to populate filteredEmployees properly
       search('');
     } catch (e) {
@@ -437,48 +433,90 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
   void search(String query) {
     setState(() {
       searchQuery = query.toLowerCase();
-      
+
       if (selectedBranch == null && selectedDepartment == null) {
         // Global search - no branch/department filtering, search all employees
         filteredEmployees = employees.where((e) {
-          final matchesName = ('${e.firstName} ${e.lastName}').toLowerCase().contains(searchQuery);
+          final matchesName = ('${e.firstName} ${e.lastName}')
+              .toLowerCase()
+              .contains(searchQuery);
           final matchesId = e.employeeID.toLowerCase().contains(searchQuery);
           final matchesBranch = e.branch.toLowerCase().contains(searchQuery);
-          final matchesDepartment = e.department.toLowerCase().contains(searchQuery);
-          final matchesPosition = e.position.toLowerCase().contains(searchQuery);
-          return searchQuery.isEmpty || matchesName || matchesId || matchesBranch || matchesDepartment || matchesPosition;
+          final matchesDepartment = e.department.toLowerCase().contains(
+            searchQuery,
+          );
+          final matchesPosition = e.position.toLowerCase().contains(
+            searchQuery,
+          );
+          return searchQuery.isEmpty ||
+              matchesName ||
+              matchesId ||
+              matchesBranch ||
+              matchesDepartment ||
+              matchesPosition;
         }).toList();
       } else if (selectedBranch != null && selectedDepartment == null) {
         // Branch selected but no department - search within branch only
         filteredEmployees = employees.where((e) {
           final matchesBranch = e.branch == selectedBranch!.name;
-          final matchesName = ('${e.firstName} ${e.lastName}').toLowerCase().contains(searchQuery);
+          final matchesName = ('${e.firstName} ${e.lastName}')
+              .toLowerCase()
+              .contains(searchQuery);
           final matchesId = e.employeeID.toLowerCase().contains(searchQuery);
-          final matchesDepartment = e.department.toLowerCase().contains(searchQuery);
-          final matchesPosition = e.position.toLowerCase().contains(searchQuery);
-          return matchesBranch && (searchQuery.isEmpty || matchesName || matchesId || matchesDepartment || matchesPosition);
+          final matchesDepartment = e.department.toLowerCase().contains(
+            searchQuery,
+          );
+          final matchesPosition = e.position.toLowerCase().contains(
+            searchQuery,
+          );
+          return matchesBranch &&
+              (searchQuery.isEmpty ||
+                  matchesName ||
+                  matchesId ||
+                  matchesDepartment ||
+                  matchesPosition);
         }).toList();
       } else {
         // Both branch and department selected - search within specific department
         if (selectedDepartment!.name == 'All') {
           // "Search All" from department selection - search all employees
           filteredEmployees = employees.where((e) {
-            final matchesName = ('${e.firstName} ${e.lastName}').toLowerCase().contains(searchQuery);
+            final matchesName = ('${e.firstName} ${e.lastName}')
+                .toLowerCase()
+                .contains(searchQuery);
             final matchesId = e.employeeID.toLowerCase().contains(searchQuery);
             final matchesBranch = e.branch.toLowerCase().contains(searchQuery);
-            final matchesDepartment = e.department.toLowerCase().contains(searchQuery);
-            final matchesPosition = e.position.toLowerCase().contains(searchQuery);
-            return searchQuery.isEmpty || matchesName || matchesId || matchesBranch || matchesDepartment || matchesPosition;
+            final matchesDepartment = e.department.toLowerCase().contains(
+              searchQuery,
+            );
+            final matchesPosition = e.position.toLowerCase().contains(
+              searchQuery,
+            );
+            return searchQuery.isEmpty ||
+                matchesName ||
+                matchesId ||
+                matchesBranch ||
+                matchesDepartment ||
+                matchesPosition;
           }).toList();
         } else {
           // Specific department selected - search within that department and branch
           filteredEmployees = employees.where((e) {
             final matchesBranch = e.branch == selectedBranch!.name;
             final matchesDepartment = e.department == selectedDepartment!.name;
-            final matchesName = ('${e.firstName} ${e.lastName}').toLowerCase().contains(searchQuery);
+            final matchesName = ('${e.firstName} ${e.lastName}')
+                .toLowerCase()
+                .contains(searchQuery);
             final matchesId = e.employeeID.toLowerCase().contains(searchQuery);
-            final matchesPosition = e.position.toLowerCase().contains(searchQuery);
-            return matchesBranch && matchesDepartment && (searchQuery.isEmpty || matchesName || matchesId || matchesPosition);
+            final matchesPosition = e.position.toLowerCase().contains(
+              searchQuery,
+            );
+            return matchesBranch &&
+                matchesDepartment &&
+                (searchQuery.isEmpty ||
+                    matchesName ||
+                    matchesId ||
+                    matchesPosition);
           }).toList();
         }
       }
@@ -543,9 +581,11 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     */
 
     // PLACEHOLDER: Show demo message
-    _showSnackBar("Demo Mode: Employee operations are currently disabled", isError: false);
+    _showSnackBar(
+      "Demo Mode: Employee operations are currently disabled",
+      isError: false,
+    );
   }
-
 
   void deleteEmployee(String id) async {
     // COMMENTED OUT: Delete operations disabled for demo
@@ -588,10 +628,11 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
     */
 
     // PLACEHOLDER: Show demo message
-    _showSnackBar("Demo Mode: Delete operations are currently disabled", isError: false);
+    _showSnackBar(
+      "Demo Mode: Delete operations are currently disabled",
+      isError: false,
+    );
   }
-
-
 
   Future<void> confirmDelete(BuildContext context, Employee emp) async {
     final confirm = await showDialog<bool>(
@@ -635,14 +676,10 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     if (errorMessage != null) {
-      return Scaffold(
-        body: Center(child: Text(errorMessage!)),
-      );
+      return Scaffold(body: Center(child: Text(errorMessage!)));
     }
 
     // For embedded mode (side navigation), show simplified view
@@ -699,9 +736,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                 onPressed: () async {
                   final result = await Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const ProfileEditPage(),
-                    ),
+                    MaterialPageRoute(builder: (_) => const ProfileEditPage()),
                   );
                   if (result != null && result['employee'] != null) {
                     addOrUpdateEmployee(result['employee']);
@@ -722,18 +757,18 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
 
   Widget _buildBranchSelection() {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     // If searching, show full-page search results
     if (searchQuery.isNotEmpty) {
       return _buildSearchResultsPage();
     }
-    
+
     return Scaffold(
       // appBar: AppBar(
       //   title: Row(
       //     children: [
-      //       Icon(Icons.business, 
-      //            color: colorScheme.onPrimaryContainer, 
+      //       Icon(Icons.business,
+      //            color: colorScheme.onPrimaryContainer,
       //            size: 24),
       //       const SizedBox(width: 8),
       //       const Text("Select Branch"),
@@ -766,7 +801,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                         fontSize: 16,
                       ),
                       prefixIcon: Icon(
-                        Icons.search_rounded, 
+                        Icons.search_rounded,
                         color: colorScheme.primary,
                         size: 24,
                       ),
@@ -794,7 +829,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                       filled: true,
                       fillColor: colorScheme.surface,
                       contentPadding: const EdgeInsets.symmetric(
-                        vertical: 16, 
+                        vertical: 16,
                         horizontal: 16,
                       ),
                     ),
@@ -809,7 +844,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
             ),
           ),
           const SizedBox(height: 16),
-          
+
           // Branch browsing section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -834,7 +869,9 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
           ),
           const SizedBox(height: 12),
           ...branches.map((branch) {
-            final branchEmployeeCount = employees.where((e) => e.branch == branch).length;
+            final branchEmployeeCount = employees
+                .where((e) => e.branch == branch)
+                .length;
             return Card(
               elevation: 2,
               margin: const EdgeInsets.only(bottom: 8),
@@ -842,7 +879,10 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 leading: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
@@ -881,7 +921,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                 }),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
       floatingActionButton: widget.role.toLowerCase() == 'admin'
@@ -889,9 +929,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
               onPressed: () async {
                 final result = await Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const ProfileEditPage(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const ProfileEditPage()),
                 );
                 if (result != null && result['employee'] != null) {
                   addOrUpdateEmployee(result['employee']);
@@ -907,13 +945,13 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
 
   Widget _buildSearchResultsPage() {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Scaffold(
       // appBar: AppBar(
       //   title: Row(
       //     children: [
-      //       Icon(Icons.search_rounded, 
-      //            color: colorScheme.onPrimaryContainer, 
+      //       Icon(Icons.search_rounded,
+      //            color: colorScheme.onPrimaryContainer,
       //            size: 24),
       //       const SizedBox(width: 8),
       //       const Text("Search Results"),
@@ -952,7 +990,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                       fontSize: 16,
                     ),
                     prefixIcon: Icon(
-                      Icons.search_rounded, 
+                      Icons.search_rounded,
                       color: colorScheme.primary,
                       size: 24,
                     ),
@@ -990,20 +1028,17 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                     filled: true,
                     fillColor: colorScheme.surface,
                     contentPadding: const EdgeInsets.symmetric(
-                      vertical: 16, 
+                      vertical: 16,
                       horizontal: 16,
                     ),
                   ),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: colorScheme.onSurface,
-                  ),
+                  style: TextStyle(fontSize: 16, color: colorScheme.onSurface),
                   onChanged: search,
                 ),
               ),
             ),
           ),
-          
+
           // Search results header
           Container(
             color: colorScheme.surface,
@@ -1027,7 +1062,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
               ],
             ),
           ),
-          
+
           // Search results list
           Expanded(
             child: filteredEmployees.isEmpty
@@ -1040,7 +1075,9 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                           Icon(
                             Icons.search_off_rounded,
                             size: 64,
-                            color: colorScheme.onSurfaceVariant.withOpacity(0.5),
+                            color: colorScheme.onSurfaceVariant.withOpacity(
+                              0.5,
+                            ),
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -1057,7 +1094,9 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                             'Try searching with different keywords like employee name, ID, position, department, or branch.',
                             style: TextStyle(
                               fontSize: 14,
-                              color: colorScheme.onSurfaceVariant.withOpacity(0.7),
+                              color: colorScheme.onSurfaceVariant.withOpacity(
+                                0.7,
+                              ),
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -1082,25 +1121,24 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
   Widget _buildSearchResultCard(Employee employee) {
     final colorScheme = Theme.of(context).colorScheme;
     final isCurrentUser = employee.employeeID == widget.employeeId;
-    
+
     return Card(
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         leading: CircleAvatar(
-          backgroundColor: isCurrentUser 
+          backgroundColor: isCurrentUser
               ? colorScheme.primary
               : colorScheme.primaryContainer,
           radius: 20,
           child: Icon(
-            isCurrentUser 
-                ? Icons.account_circle_rounded
-                : Icons.person_rounded,
-            color: isCurrentUser 
+            isCurrentUser ? Icons.account_circle_rounded : Icons.person_rounded,
+            color: isCurrentUser
                 ? colorScheme.onPrimary
                 : colorScheme.onPrimaryContainer,
             size: 24,
@@ -1180,7 +1218,10 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                   ),
                   if (!isCurrentUser)
                     IconButton(
-                      icon: Icon(Icons.delete_rounded, color: colorScheme.error),
+                      icon: Icon(
+                        Icons.delete_rounded,
+                        color: colorScheme.error,
+                      ),
                       onPressed: () => confirmDelete(context, employee),
                     ),
                 ],
@@ -1210,16 +1251,18 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
 
   Widget _buildDepartmentSelection() {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(Icons.apartment, 
-                 color: colorScheme.onPrimaryContainer, 
-                 size: 24),
+            Icon(
+              Icons.apartment,
+              color: colorScheme.onPrimaryContainer,
+              size: 24,
+            ),
             const SizedBox(width: 8),
-            Expanded(child: Text("${selectedBranch!.name}")),
+            Expanded(child: Text(selectedBranch!.name)),
           ],
         ),
         backgroundColor: colorScheme.primaryContainer,
@@ -1248,8 +1291,8 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
-                  Icons.search_rounded, 
-                  color: colorScheme.primary, 
+                  Icons.search_rounded,
+                  color: colorScheme.primary,
                   size: 24,
                 ),
               ),
@@ -1269,7 +1312,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                 ),
               ),
               trailing: Icon(
-                Icons.arrow_forward_ios_rounded, 
+                Icons.arrow_forward_ios_rounded,
                 color: colorScheme.primary,
                 size: 20,
               ),
@@ -1279,9 +1322,9 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
               }),
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Section Header for Department Selection
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -1305,10 +1348,14 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
             ),
           ),
           const SizedBox(height: 12),
-          
+
           ...departments.map((dept) {
-            final deptEmployeeCount = employees.where((e) => 
-                e.branch == selectedBranch!.name && e.department == dept).length;
+            final deptEmployeeCount = employees
+                .where(
+                  (e) =>
+                      e.branch == selectedBranch!.name && e.department == dept,
+                )
+                .length;
             return Card(
               elevation: 2,
               margin: const EdgeInsets.only(bottom: 8),
@@ -1316,7 +1363,10 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 leading: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
@@ -1355,7 +1405,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                 }),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
       floatingActionButton: widget.role.toLowerCase() == 'admin'
@@ -1363,9 +1413,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
               onPressed: () async {
                 final result = await Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const ProfileEditPage(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const ProfileEditPage()),
                 );
                 if (result != null && result['employee'] != null) {
                   addOrUpdateEmployee(result['employee']);
@@ -1381,24 +1429,32 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
 
   Widget _buildEmployeeList() {
     // Handle "Search All" case
-    final deptEmployees = selectedDepartment!.name == 'All' 
+    final deptEmployees = selectedDepartment!.name == 'All'
         ? filteredEmployees // Show all filtered employees across all departments/branches
-        : filteredEmployees.where((e) =>
-            e.branch == selectedBranch!.name &&
-            e.department == selectedDepartment!.name).toList();
+        : filteredEmployees
+              .where(
+                (e) =>
+                    e.branch == selectedBranch!.name &&
+                    e.department == selectedDepartment!.name,
+              )
+              .toList();
 
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(Icons.people, 
-                 color: Theme.of(context).colorScheme.onPrimaryContainer, 
-                 size: 24),
+            Icon(
+              Icons.people,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              size: 24,
+            ),
             const SizedBox(width: 8),
             Expanded(
-              child: Text(selectedDepartment!.name == 'All' 
-                  ? "All Employees" 
-                  : "${selectedDepartment!.name} - ${selectedBranch!.name}"),
+              child: Text(
+                selectedDepartment!.name == 'All'
+                    ? "All Employees"
+                    : "${selectedDepartment!.name} - ${selectedBranch!.name}",
+              ),
             ),
           ],
         ),
@@ -1417,21 +1473,21 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: selectedDepartment!.name == 'All' 
+                hintText: selectedDepartment!.name == 'All'
                     ? "Search by employee name or ID..."
                     : "Search employees in ${selectedDepartment!.name} by name or ID...",
                 hintStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant, 
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 14,
                 ),
                 prefixIcon: Icon(
-                  Icons.search_rounded, 
+                  Icons.search_rounded,
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 suffixIcon: searchQuery.isNotEmpty
                     ? IconButton(
                         icon: Icon(
-                          Icons.clear_rounded, 
+                          Icons.clear_rounded,
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                         onPressed: () {
@@ -1441,7 +1497,9 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                       )
                     : null,
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+                fillColor: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest.withOpacity(0.3),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -1449,12 +1507,12 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.primary, 
+                    color: Theme.of(context).colorScheme.primary,
                     width: 2,
                   ),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16, 
+                  horizontal: 16,
                   vertical: 12,
                 ),
               ),
@@ -1481,13 +1539,15 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          searchQuery.isNotEmpty ? Icons.search_off : Icons.people_outline,
+                          searchQuery.isNotEmpty
+                              ? Icons.search_off
+                              : Icons.people_outline,
                           size: 64,
                           color: Colors.grey[400],
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          searchQuery.isNotEmpty 
+                          searchQuery.isNotEmpty
                               ? "No employees found matching '$searchQuery'"
                               : "No employees found in this department.",
                           style: TextStyle(
@@ -1514,27 +1574,37 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                     itemBuilder: (context, index) {
                       final emp = deptEmployees[index];
                       final isCurrentUser = emp.employeeID == widget.employeeId;
-                      
+
                       return Card(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         elevation: 2,
-                        color: isCurrentUser 
-                            ? Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3)
+                        color: isCurrentUser
+                            ? Theme.of(
+                                context,
+                              ).colorScheme.primaryContainer.withOpacity(0.3)
                             : Theme.of(context).colorScheme.surface,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: isCurrentUser 
+                            backgroundColor: isCurrentUser
                                 ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.surfaceVariant,
+                                : Theme.of(
+                                    context,
+                                  ).colorScheme.surfaceContainerHighest,
                             child: Icon(
-                              isCurrentUser ? Icons.account_circle : Icons.person,
-                              color: isCurrentUser 
+                              isCurrentUser
+                                  ? Icons.account_circle
+                                  : Icons.person,
+                              color: isCurrentUser
                                   ? Theme.of(context).colorScheme.onPrimary
-                                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                               size: 24,
                             ),
                           ),
@@ -1552,15 +1622,22 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                                 Flexible(
                                   flex: 1,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Text(
                                       'You',
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onPrimary,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onPrimary,
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -1607,7 +1684,9 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                                 Text(
                                   "This is your profile",
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -1620,26 +1699,32 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                                     IconButton(
                                       icon: Icon(
                                         Icons.edit_rounded,
-                                        color: Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
                                       ),
                                       onPressed: () async {
-                                        final result =
-                                            await Navigator.push(
+                                        final result = await Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (_) =>
                                                 ProfileEditPage(employee: emp),
                                           ),
                                         );
-                                        if (result != null && result['employee'] != null) {
-                                          addOrUpdateEmployee(result['employee']);
+                                        if (result != null &&
+                                            result['employee'] != null) {
+                                          addOrUpdateEmployee(
+                                            result['employee'],
+                                          );
                                         }
                                       },
                                     ),
                                     IconButton(
                                       icon: Icon(
                                         Icons.delete_rounded,
-                                        color: Theme.of(context).colorScheme.error,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.error,
                                       ),
                                       onPressed: () =>
                                           confirmDelete(context, emp),
@@ -1659,9 +1744,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
               onPressed: () async {
                 final result = await Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const ProfileEditPage(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const ProfileEditPage()),
                 );
                 if (result != null && result['employee'] != null) {
                   addOrUpdateEmployee(result['employee']);
@@ -1722,10 +1805,7 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
               const SizedBox(height: 4),
               Text(
                 subtitle,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
                 textAlign: TextAlign.center,
               ),
             ],

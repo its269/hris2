@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class HRPage extends StatefulWidget {
   final bool showAppBar;
-  
+
   const HRPage({super.key, this.showAppBar = true});
 
   @override
@@ -12,7 +12,7 @@ class HRPage extends StatefulWidget {
 class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
   late TabController _tabController;
   bool isLoading = true;
-  
+
   List employees = [];
   List overtimeRequests = [];
   List undertimeRequests = [];
@@ -66,18 +66,58 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
 
   Future<void> _loadDummyData() async {
     await Future.delayed(const Duration(milliseconds: 1000));
-    
+
     setState(() {
       // Sample employees (unified with leave management)
       employees = [
-        {'id': 'EMP001', 'name': 'John Doe', 'department': 'Human Resources', 'position': 'HR Manager'},
-        {'id': 'EMP002', 'name': 'Jane Smith', 'department': 'Information Technology', 'position': 'Software Developer'},
-        {'id': 'EMP003', 'name': 'Mike Johnson', 'department': 'Finance', 'position': 'Financial Analyst'},
-        {'id': 'EMP004', 'name': 'Sarah Wilson', 'department': 'Marketing', 'position': 'Marketing Specialist'},
-        {'id': 'EMP005', 'name': 'David Brown', 'department': 'Operations', 'position': 'Operations Manager'},
-        {'id': 'EMP006', 'name': 'Emily Davis', 'department': 'Sales', 'position': 'Sales Representative'},
-        {'id': 'EMP007', 'name': 'Robert Miller', 'department': 'IT Support', 'position': 'Technical Support'},
-        {'id': 'EMP008', 'name': 'Lisa Anderson', 'department': 'Human Resources', 'position': 'HR Assistant'},
+        {
+          'id': 'EMP001',
+          'name': 'John Doe',
+          'department': 'Human Resources',
+          'position': 'HR Manager',
+        },
+        {
+          'id': 'EMP002',
+          'name': 'Jane Smith',
+          'department': 'Information Technology',
+          'position': 'Software Developer',
+        },
+        {
+          'id': 'EMP003',
+          'name': 'Mike Johnson',
+          'department': 'Finance',
+          'position': 'Financial Analyst',
+        },
+        {
+          'id': 'EMP004',
+          'name': 'Sarah Wilson',
+          'department': 'Marketing',
+          'position': 'Marketing Specialist',
+        },
+        {
+          'id': 'EMP005',
+          'name': 'David Brown',
+          'department': 'Operations',
+          'position': 'Operations Manager',
+        },
+        {
+          'id': 'EMP006',
+          'name': 'Emily Davis',
+          'department': 'Sales',
+          'position': 'Sales Representative',
+        },
+        {
+          'id': 'EMP007',
+          'name': 'Robert Miller',
+          'department': 'IT Support',
+          'position': 'Technical Support',
+        },
+        {
+          'id': 'EMP008',
+          'name': 'Lisa Anderson',
+          'department': 'Human Resources',
+          'position': 'HR Assistant',
+        },
       ];
 
       // Sample overtime requests
@@ -224,8 +264,14 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
               unselectedLabelColor: Colors.white70,
               indicatorColor: Colors.white,
               indicatorWeight: 3,
-              labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              labelStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
               dividerColor: Colors.transparent,
               tabs: const [
                 Tab(text: 'Pending'),
@@ -256,14 +302,16 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
     if (!widget.showAppBar) {
       return bodyContent();
     }
-    
+
     return bodyContent();
   }
 
   Widget _buildPendingTab() {
-    final pendingRequests = allHRRequests.where((req) => req['status'] == 'Pending').toList();
+    final pendingRequests = allHRRequests
+        .where((req) => req['status'] == 'Pending')
+        .toList();
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return pendingRequests.isEmpty
         ? _buildEmptyState(
             icon: Icons.assignment_outlined,
@@ -334,19 +382,23 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
-                
+
                 // Forms Grid
                 Expanded(
                   child: GridView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      childAspectRatio: 2.5,
-                      mainAxisSpacing: 12,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          childAspectRatio: 2.5,
+                          mainAxisSpacing: 12,
+                        ),
                     itemCount: pendingRequests.length,
                     itemBuilder: (context, index) {
-                      return _buildModernHRCard(pendingRequests[index], showActions: true);
+                      return _buildModernHRCard(
+                        pendingRequests[index],
+                        showActions: true,
+                      );
                     },
                   ),
                 ),
@@ -357,7 +409,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
 
   Widget _buildHistoryTab() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return allHRRequests.isEmpty
         ? _buildEmptyState(
             icon: Icons.history_outlined,
@@ -402,7 +454,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                 //       //   //   ],
                 //       //   // ),
                 //       // ),
-                      
+
                 //       // Stats Cards
                 //       Container(
                 //         padding: const EdgeInsets.all(16),
@@ -475,7 +527,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                 //     ],
                 //   ),
                 // ),
-                
+
                 // Timeline List
                 Expanded(
                   child: Container(
@@ -531,10 +583,11 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                       Expanded(
                         child: Text(
                           "Submit HR Form Request",
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                       ),
                     ],
@@ -542,10 +595,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                   const SizedBox(height: 6),
                   Text(
                     "Submit various HR forms on behalf of employees",
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
                   ),
                 ],
               ),
@@ -555,84 +605,105 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
             // Employee Selection
             Text(
               "Employee",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
               value: _selectedEmployee,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 hintText: "Select Employee",
                 prefixIcon: const Icon(Icons.person),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 16,
+                ),
               ),
               isExpanded: true,
-              items: employees.map((emp) => DropdownMenuItem<String>(
-                value: emp['id'],
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Text(
-                        emp['name'] ?? 'Unknown',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                        overflow: TextOverflow.ellipsis,
+              items: employees
+                  .map(
+                    (emp) => DropdownMenuItem<String>(
+                      value: emp['id'],
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              emp['name'] ?? 'Unknown',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              emp['department'] ?? '',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        emp['department'] ?? '',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              )).toList(),
+                  )
+                  .toList(),
               onChanged: (value) => setState(() => _selectedEmployee = value),
-              validator: (value) => value == null ? "Please select an employee" : null,
+              validator: (value) =>
+                  value == null ? "Please select an employee" : null,
             ),
             const SizedBox(height: 16),
 
             // Form Type
             Text(
               "Form Type",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
               value: _formType,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 hintText: "Select Form Type",
                 prefixIcon: const Icon(Icons.assignment),
               ),
-              items: _formTypes.map((type) => DropdownMenuItem<String>(
-                value: type,
-                child: Text(type),
-              )).toList(),
+              items: _formTypes
+                  .map(
+                    (type) => DropdownMenuItem<String>(
+                      value: type,
+                      child: Text(type),
+                    ),
+                  )
+                  .toList(),
               onChanged: (value) => setState(() => _formType = value),
-              validator: (value) => value == null ? "Please select form type" : null,
+              validator: (value) =>
+                  value == null ? "Please select form type" : null,
             ),
             const SizedBox(height: 16),
 
             // Conditional fields based on form type
-            if (_formType == 'Overtime Request' || _formType == 'Undertime Request' || _formType == 'Time Adjustment') ...[
+            if (_formType == 'Overtime Request' ||
+                _formType == 'Undertime Request' ||
+                _formType == 'Time Adjustment') ...[
               // Date Selection
               Text(
                 "Date",
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               InkWell(
@@ -654,7 +725,8 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
               ),
               const SizedBox(height: 16),
 
-              if (_formType == 'Overtime Request' || _formType == 'Undertime Request') ...[
+              if (_formType == 'Overtime Request' ||
+                  _formType == 'Undertime Request') ...[
                 // Time Selection
                 Row(
                   children: [
@@ -664,9 +736,8 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                         children: [
                           Text(
                             "Time From",
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 8),
                           InkWell(
@@ -696,9 +767,8 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                         children: [
                           Text(
                             "Time To",
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 8),
                           InkWell(
@@ -756,25 +826,33 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
               // Certificate Type
               Text(
                 "Certificate Type",
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 value: _certificateType,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   hintText: "Select Certificate Type",
                   prefixIcon: const Icon(Icons.description),
                 ),
-                items: _certificateTypes.map((type) => DropdownMenuItem<String>(
-                  value: type,
-                  child: Text(type),
-                )).toList(),
+                items: _certificateTypes
+                    .map(
+                      (type) => DropdownMenuItem<String>(
+                        value: type,
+                        child: Text(type),
+                      ),
+                    )
+                    .toList(),
                 onChanged: (value) => setState(() => _certificateType = value),
-                validator: (value) => _formType == 'Certificate Request' && value == null 
-                    ? "Please select certificate type" : null,
+                validator: (value) =>
+                    _formType == 'Certificate Request' && value == null
+                    ? "Please select certificate type"
+                    : null,
               ),
               const SizedBox(height: 16),
             ],
@@ -782,35 +860,40 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
             // Reason
             Text(
               "Reason/Purpose",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             TextFormField(
               maxLines: 3,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 hintText: "Enter reason or purpose",
                 prefixIcon: const Icon(Icons.edit_note),
               ),
               onSaved: (value) => _reason = value,
-              validator: (value) => value?.isEmpty ?? true ? "Please enter reason" : null,
+              validator: (value) =>
+                  value?.isEmpty ?? true ? "Please enter reason" : null,
             ),
             const SizedBox(height: 16),
 
             // Admin Notes
             Text(
               "Admin Notes (Optional)",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             TextFormField(
               maxLines: 2,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 hintText: "Additional notes for this request",
                 prefixIcon: const Icon(Icons.note_add),
               ),
@@ -850,10 +933,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
-                  "Reset Form",
-                  style: TextStyle(fontSize: 16),
-                ),
+                child: const Text("Reset Form", style: TextStyle(fontSize: 16)),
               ),
             ),
           ],
@@ -865,9 +945,15 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
   Widget _buildAnalyticsTab() {
     // Calculate analytics from requests
     int totalRequests = allHRRequests.length;
-    int approvedRequests = allHRRequests.where((req) => req['status'] == 'Approved').length;
-    int pendingRequests = allHRRequests.where((req) => req['status'] == 'Pending').length;
-    int overtimeCount = allHRRequests.where((req) => req['form_type'] == 'Overtime Request').length;
+    int approvedRequests = allHRRequests
+        .where((req) => req['status'] == 'Approved')
+        .length;
+    int pendingRequests = allHRRequests
+        .where((req) => req['status'] == 'Pending')
+        .length;
+    int overtimeCount = allHRRequests
+        .where((req) => req['form_type'] == 'Overtime Request')
+        .length;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
@@ -923,9 +1009,9 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
               //   ],
               // ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Hexagonal Stats
             Row(
               children: [
@@ -948,9 +1034,9 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             Row(
               children: [
                 Expanded(
@@ -972,22 +1058,24 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Form Type Breakdown with Different Design
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: isDark ? Colors.grey[850] : Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: isDark ? null : [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
+                boxShadow: isDark
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 15,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1017,28 +1105,34 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  ..._getFormTypeBreakdown().map((item) => 
-                    _buildAdvancedBreakdownItem(item['type'], item['count'], item['color'])
-                  ).toList(),
+                  ..._getFormTypeBreakdown().map(
+                    (item) => _buildAdvancedBreakdownItem(
+                      item['type'],
+                      item['count'],
+                      item['color'],
+                    ),
+                  ),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Activity Feed with Modern Design
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: isDark ? Colors.grey[850] : Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: isDark ? null : [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
+                boxShadow: isDark
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 15,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1068,9 +1162,9 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  ...allHRRequests.take(4).map((req) => 
-                    _buildActivityFeedItem(req)
-                  ).toList(),
+                  ...allHRRequests
+                      .take(4)
+                      .map((req) => _buildActivityFeedItem(req)),
                 ],
               ),
             ),
@@ -1084,7 +1178,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
   Widget _buildModernHRCard(Map req, {bool showActions = false}) {
     final statusColor = _getStatusColor(req['status']);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
@@ -1094,13 +1188,15 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
           color: isDark ? Colors.grey[700]! : statusColor.withOpacity(0.2),
           width: 1,
         ),
-        boxShadow: isDark ? null : [
-          BoxShadow(
-            color: statusColor.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: statusColor.withOpacity(0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
@@ -1118,7 +1214,9 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                         radius: 25,
                         backgroundColor: statusColor.withOpacity(0.1),
                         child: Text(
-                          (req['employee_name'] ?? 'U').substring(0, 1).toUpperCase(),
+                          (req['employee_name'] ?? 'U')
+                              .substring(0, 1)
+                              .toUpperCase(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: statusColor,
@@ -1146,9 +1244,9 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              
+
               const SizedBox(width: 16),
-              
+
               // Center - Main Info
               Expanded(
                 child: Column(
@@ -1156,7 +1254,10 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                   children: [
                     // Form Type Badge
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.blue.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -1171,9 +1272,9 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 8),
-                    
+
                     // Employee Name
                     Text(
                       req['employee_name'] ?? 'Unknown Employee',
@@ -1185,13 +1286,17 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    
+
                     const SizedBox(height: 4),
-                    
+
                     // Details Row
                     Row(
                       children: [
-                        Icon(Icons.calendar_today, size: 12, color: isDark ? Colors.grey[400] : Colors.grey[600]),
+                        Icon(
+                          Icons.calendar_today,
+                          size: 12,
+                          color: isDark ? Colors.grey[400] : Colors.grey[600],
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           req['date'] ?? req['submitted_date'] ?? 'No date',
@@ -1202,7 +1307,11 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                         ),
                         if (req['hours'] != null) ...[
                           const SizedBox(width: 12),
-                          Icon(Icons.access_time, size: 12, color: Colors.grey[600]),
+                          Icon(
+                            Icons.access_time,
+                            size: 12,
+                            color: Colors.grey[600],
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             '${req['hours'].toStringAsFixed(1)}h',
@@ -1218,7 +1327,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              
+
               // Right Side - Actions
               if (showActions && req['status'] == 'Pending')
                 Row(
@@ -1268,63 +1377,10 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildCircularStatCard(String title, String value, IconData icon, Color color, double progress) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(
-                  value: progress,
-                  strokeWidth: 6,
-                  backgroundColor: color.withOpacity(0.2),
-                  valueColor: AlwaysStoppedAnimation<Color>(color),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Icon(icon, color: color, size: 20),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildTimelineCard(Map req, int index) {
     final statusColor = _getStatusColor(req['status']);
-    final isEven = index % 2 == 0;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -1339,7 +1395,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                   color: statusColor,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: isDark ? Colors.grey[700]! : Colors.white, 
+                    color: isDark ? Colors.grey[700]! : Colors.white,
                     width: 3,
                   ),
                 ),
@@ -1357,9 +1413,9 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                 ),
             ],
           ),
-          
+
           const SizedBox(width: 16),
-          
+
           // Card content
           Expanded(
             child: Container(
@@ -1368,7 +1424,9 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                 color: isDark ? Colors.grey[850] : Colors.grey[50],
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: isDark ? Colors.grey[700]! : statusColor.withOpacity(0.3),
+                  color: isDark
+                      ? Colors.grey[700]!
+                      : statusColor.withOpacity(0.3),
                 ),
               ),
               child: Column(
@@ -1425,21 +1483,28 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildHexagonalStat(String title, String value, IconData icon, Color color) {
+  Widget _buildHexagonalStat(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark ? Colors.grey[850] : Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: isDark ? null : [
-          BoxShadow(
-            color: color.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: color.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: Column(
         children: [
@@ -1450,10 +1515,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  color.withOpacity(0.8),
-                  color,
-                ],
+                colors: [color.withOpacity(0.8), color],
               ),
               borderRadius: BorderRadius.circular(30),
             ),
@@ -1484,9 +1546,11 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
   }
 
   Widget _buildAdvancedBreakdownItem(String type, int count, Color color) {
-    final percentage = allHRRequests.isNotEmpty ? (count / allHRRequests.length) : 0.0;
+    final percentage = allHRRequests.isNotEmpty
+        ? (count / allHRRequests.length)
+        : 0.0;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: Column(
@@ -1546,7 +1610,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
   Widget _buildActivityFeedItem(Map req) {
     final statusColor = _getStatusColor(req['status']);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -1588,7 +1652,10 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: statusColor.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(8),
@@ -1644,7 +1711,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
   Future<void> _pickTime(BuildContext context, bool isTimeFrom) async {
     final newTime = await showTimePicker(
       context: context,
-      initialTime: isTimeFrom 
+      initialTime: isTimeFrom
           ? (_timeFrom ?? TimeOfDay.now())
           : (_timeTo ?? TimeOfDay.now()),
     );
@@ -1677,10 +1744,10 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
 
   double _calculateHours() {
     if (_timeFrom == null || _timeTo == null) return 0.0;
-    
+
     final from = _timeFrom!.hour + _timeFrom!.minute / 60.0;
     final to = _timeTo!.hour + _timeTo!.minute / 60.0;
-    
+
     return to > from ? to - from : (24 - from) + to;
   }
 
@@ -1694,14 +1761,23 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
       try {
         // Create new request with dummy data
         final newRequest = {
-          'id': '${_formType?.substring(0, 3).toUpperCase()}${(allHRRequests.length + 1).toString().padLeft(3, '0')}',
+          'id':
+              '${_formType?.substring(0, 3).toUpperCase()}${(allHRRequests.length + 1).toString().padLeft(3, '0')}',
           'employee_id': _selectedEmployee,
-          'employee_name': employees.firstWhere((emp) => emp['id'] == _selectedEmployee)['name'],
-          'department': employees.firstWhere((emp) => emp['id'] == _selectedEmployee)['department'],
+          'employee_name': employees.firstWhere(
+            (emp) => emp['id'] == _selectedEmployee,
+          )['name'],
+          'department': employees.firstWhere(
+            (emp) => emp['id'] == _selectedEmployee,
+          )['department'],
           'form_type': _formType,
           'date': _formatDate(_selectedDate),
-          'time_from': _timeFrom != null ? '${_timeFrom!.hour.toString().padLeft(2, '0')}:${_timeFrom!.minute.toString().padLeft(2, '0')}' : null,
-          'time_to': _timeTo != null ? '${_timeTo!.hour.toString().padLeft(2, '0')}:${_timeTo!.minute.toString().padLeft(2, '0')}' : null,
+          'time_from': _timeFrom != null
+              ? '${_timeFrom!.hour.toString().padLeft(2, '0')}:${_timeFrom!.minute.toString().padLeft(2, '0')}'
+              : null,
+          'time_to': _timeTo != null
+              ? '${_timeTo!.hour.toString().padLeft(2, '0')}:${_timeTo!.minute.toString().padLeft(2, '0')}'
+              : null,
           'hours': _calculateHours(),
           'certificate_type': _certificateType,
           'reason': _reason,
@@ -1761,7 +1837,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
   Future<void> _updateStatus(String id, String status, {String? notes}) async {
     // Simulate API call delay
     await Future.delayed(const Duration(milliseconds: 800));
-    
+
     try {
       // Update the status in dummy data
       for (int i = 0; i < allHRRequests.length; i++) {
@@ -1769,13 +1845,15 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
           setState(() {
             allHRRequests[i]['status'] = status;
             allHRRequests[i]['admin_notes'] = notes ?? '';
-            allHRRequests[i]['${status.toLowerCase()}_date'] = _formatDate(DateTime.now());
+            allHRRequests[i]['${status.toLowerCase()}_date'] = _formatDate(
+              DateTime.now(),
+            );
             allHRRequests[i]['${status.toLowerCase()}_by'] = 'Admin';
           });
           break;
         }
       }
-      
+
       _showSuccessMessage("Request $status successfully");
     } catch (e) {
       _showErrorMessage("Error updating request status");
@@ -1852,16 +1930,24 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
               _buildDetailRow('Department', req['department']),
               _buildDetailRow('Form Type', req['form_type']),
               if (req['date'] != null) _buildDetailRow('Date', req['date']),
-              if (req['time_from'] != null) _buildDetailRow('Time From', req['time_from']),
-              if (req['time_to'] != null) _buildDetailRow('Time To', req['time_to']),
-              if (req['hours'] != null) _buildDetailRow('Hours', req['hours'].toString()),
-              if (req['certificate_type'] != null) _buildDetailRow('Certificate Type', req['certificate_type']),
+              if (req['time_from'] != null)
+                _buildDetailRow('Time From', req['time_from']),
+              if (req['time_to'] != null)
+                _buildDetailRow('Time To', req['time_to']),
+              if (req['hours'] != null)
+                _buildDetailRow('Hours', req['hours'].toString()),
+              if (req['certificate_type'] != null)
+                _buildDetailRow('Certificate Type', req['certificate_type']),
               _buildDetailRow('Status', req['status']),
               _buildDetailRow('Submitted', req['submitted_date']),
-              if (req['admin_notes'] != null && req['admin_notes'].toString().isNotEmpty)
+              if (req['admin_notes'] != null &&
+                  req['admin_notes'].toString().isNotEmpty)
                 _buildDetailRow('Admin Notes', req['admin_notes']),
               const SizedBox(height: 8),
-              const Text('Reason:', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Reason:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 4),
               Text(req['reason'] ?? 'No reason provided'),
             ],
@@ -1890,9 +1976,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
-          Expanded(
-            child: Text(value ?? 'N/A'),
-          ),
+          Expanded(child: Text(value ?? 'N/A')),
         ],
       ),
     );
@@ -1901,7 +1985,7 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
   void _showApprovalDialog(Map req, String action) {
     final TextEditingController notesController = TextEditingController();
     final String actionStatus = action == "Approve" ? "Approved" : "Rejected";
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -1963,10 +2047,16 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              _updateStatus(req['id'], actionStatus, notes: notesController.text);
+              _updateStatus(
+                req['id'],
+                actionStatus,
+                notes: notesController.text,
+              );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: actionStatus == "Approved" ? Colors.green : Colors.red,
+              backgroundColor: actionStatus == "Approved"
+                  ? Colors.green
+                  : Colors.red,
               foregroundColor: Colors.white,
             ),
             child: Text(action),
@@ -1983,17 +2073,20 @@ class _HRPageState extends State<HRPage> with TickerProviderStateMixin {
       formTypes[type] = (formTypes[type] ?? 0) + 1;
     }
 
-    final colors = [Colors.blue, Colors.green, Colors.orange, Colors.purple, Colors.red, Colors.teal];
+    final colors = [
+      Colors.blue,
+      Colors.green,
+      Colors.orange,
+      Colors.purple,
+      Colors.red,
+      Colors.teal,
+    ];
     int colorIndex = 0;
 
     return formTypes.entries.map((entry) {
       final color = colors[colorIndex % colors.length];
       colorIndex++;
-      return {
-        'type': entry.key,
-        'count': entry.value,
-        'color': color,
-      };
+      return {'type': entry.key, 'count': entry.value, 'color': color};
     }).toList();
   }
 }

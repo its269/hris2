@@ -119,24 +119,24 @@ class _EmployeeAttendancePageState extends State<EmployeeAttendancePage> {
   }
 
   List<AttendanceRecord> _getFilteredRecords() {
-    final EmployeeMonth? selected = employeeAttendance.firstWhere(
+    final EmployeeMonth selected = employeeAttendance.firstWhere(
       (element) => element.monthName == selectedMonth,
       orElse: () => EmployeeMonth(monthName: '', attendanceRecords: []),
     );
 
     switch (selectedStatus) {
       case 'All':
-        return selected!.attendanceRecords;
+        return selected.attendanceRecords;
       case 'Late':
-        return selected!.attendanceRecords
+        return selected.attendanceRecords
             .where((r) => r.status == 'Present' && r.lateMinutes > 0)
             .toList();
       case 'Undertime':
-        return selected!.attendanceRecords
+        return selected.attendanceRecords
             .where((r) => r.status == 'Present' && r.undertimeMinutes > 0)
             .toList();
       default:
-        return selected!.attendanceRecords
+        return selected.attendanceRecords
             .where((r) => r.status == selectedStatus)
             .toList();
     }
@@ -144,7 +144,6 @@ class _EmployeeAttendancePageState extends State<EmployeeAttendancePage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final records = _getFilteredRecords();
 
     return Scaffold(
